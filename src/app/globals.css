@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Brand Colors */
+    --color-primary-light: #0F8A36;
+    --color-primary: #0D6D2B;
+    --color-primary-dark: #075520;
+    --color-primary-soft: #E6F2EB;
+    --color-primary-muted: #9BBFA9;
+
+    /* Neutral (Light Mode) */
+    --color-background: #FAFBF9;
+    --color-surface: #FFFFFF;
+    --color-border: #E4EAE6;
+    --color-text-primary: #1A1F1C;
+    --color-text-secondary: #5E6B63;
+
+    /* Secondary Accent */
+    --color-accent-secondary: #EDE7DB;
+
+    /* Gradient Stops - Light/Brand */
+    --gradient-brand-start: var(--color-primary);
+    --gradient-brand-end: var(--color-primary-dark);
+
+    --gradient-light-start: var(--color-background);
+    --gradient-light-end: var(--color-surface);
+
+    --gradient-accent-start: var(--color-background);
+    --gradient-accent-end: var(--color-accent-secondary);
+
+    /* Shadcn UI Default Mapping (for compatibility if needed later) */
+    --background: 140 33% 98%;
+    /* #FAFBF9 */
+    --foreground: 140 10% 11%;
+    /* #1A1F1C */
+    --card: 0 0% 100%;
+    /* #FFFFFF */
+    --card-foreground: 140 10% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 140 10% 11%;
+    --primary: 139 79% 23%;
+    /* #0D6D2B */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 41 40% 89%;
+    /* #EDE7DB */
+    --secondary-foreground: 140 10% 11%;
+    --muted: 143 50% 95%;
+    /* #E6F2EB */
+    --muted-foreground: 143 7% 38%;
+    /* #5E6B63 */
+    --accent: 41 40% 89%;
+    /* #EDE7DB */
+    --accent-foreground: 140 10% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 140 14% 91%;
+    /* #E4EAE6 */
+    --input: 140 14% 91%;
+    --ring: 139 79% 23%;
+    /* #0D6D2B */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Neutral (Dark Mode) overrides */
+    --color-background: #0E1110;
+    --color-surface: #141A17;
+    --color-text-primary: #E7ECE9;
+    --color-text-muted: #9AA5A0;
+    --color-accent-secondary: #2FA86A;
+    /* Replaces brand color as accent */
+
+    /* Gradient Stops - Dark */
+    --gradient-dark-start: var(--color-background);
+    --gradient-dark-end: var(--color-surface);
+
+    /* Shadcn UI Default Mapping (Dark) */
+    --background: 160 9% 6%;
+    /* #0E1110 */
+    --foreground: 144 10% 91%;
+    /* #E7ECE9 */
+    --card: 150 12% 9%;
+    /* #141A17 */
+    --card-foreground: 144 10% 91%;
+    --popover: 150 12% 9%;
+    --popover-foreground: 144 10% 91%;
+    --primary: 149 56% 42%;
+    /* #2FA86A */
+    --primary-foreground: 160 9% 6%;
+    --secondary: 150 12% 9%;
+    /* #141A17 */
+    --secondary-foreground: 144 10% 91%;
+    --muted: 150 12% 9%;
+    --muted-foreground: 150 5% 62%;
+    /* #9AA5A0 */
+    --accent: 150 12% 9%;
+    --accent-foreground: 144 10% 91%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 144 10% 91%;
+    --border: 150 12% 9%;
+    --input: 150 12% 9%;
+    --ring: 149 56% 42%;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+  }
+}
+
+@layer utilities {
+
+  /* Gradients */
+  .bg-gradient-brand {
+    background: linear-gradient(135deg, var(--gradient-brand-start) 0%, var(--gradient-brand-end) 100%);
+  }
+
+  .bg-gradient-light {
+    background: linear-gradient(135deg, var(--gradient-light-start) 0%, var(--gradient-light-end) 100%);
+  }
+
+  .bg-gradient-dark {
+    background: linear-gradient(135deg, var(--gradient-dark-start) 0%, var(--gradient-dark-end) 100%);
+  }
+
+  .bg-gradient-accent {
+    background: linear-gradient(135deg, var(--gradient-accent-start) 0%, var(--gradient-accent-end) 100%);
+  }
+
+  /* Patterns */
+  .bg-pattern-light {
+    background-image: url('/assets/patterns/pattern-light.svg');
+    background-repeat: repeat;
+    opacity: 0.5;
+  }
+
+  .bg-pattern-dark {
+    background-image: url('/assets/patterns/pattern-dark.svg');
+    background-repeat: repeat;
+    opacity: 0.5;
+  }
+}
