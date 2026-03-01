@@ -110,6 +110,12 @@
   body {
     background-color: var(--color-background);
     color: var(--color-text-primary);
+    cursor: url('/assets/logos/light-theme/Symbol.svg') 16 16, auto;
+  }
+
+  /* when tailwind applies dark class (next-themes default on html element) */
+  .dark body {
+    cursor: url('/assets/logos/dark-theme/Lespa/Symbol.svg') 16 16, auto;
   }
 }
 
