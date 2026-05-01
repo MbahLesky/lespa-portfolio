@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #FAFBF9;
+  --color-surface: #FFFFFF;
+  --color-border: #E4EAE6;
+  --color-text-primary: #1A1F1C;
+  --color-text-secondary: #5E6B63;
+  --color-primary: #0D6D2B;
+  --color-primary-deep: #075520;
+  --gradient-light: linear-gradient(to bottom, #FAFBF9, #EDE7DB);
+  --gradient-dark: linear-gradient(135deg, #0E1110, #141A17);
+}
+
+.dark {
+  --color-bg: #0E1110;
+  --color-surface: #141A17;
+  --color-surface-elevated: #1A221F;
+  --color-border: #222B27;
+  --color-text-primary: #E7ECE9;
+  --color-text-secondary: #9AA5A0;
+  --color-primary: #2FA86A;
+  --color-primary-deep: #2FA86A;
+}
+
+.theme-light {
+  --color-bg: #FAFBF9;
+  --color-surface: #FFFFFF;
+  --color-border: #E4EAE6;
+  --color-text-primary: #1A1F1C;
+  --color-text-secondary: #5E6B63;
+  --color-primary: #0D6D2B;
+  --color-primary-deep: #075520;
+}
+
+.theme-dark {
+  --color-bg: #0E1110;
+  --color-surface: #141A17;
+  --color-surface-elevated: #1A221F;
+  --color-border: #222B27;
+  --color-text-primary: #E7ECE9;
+  --color-text-secondary: #9AA5A0;
+  --color-primary: #2FA86A;
+  --color-primary-deep: #2FA86A;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  cursor: url("/assets/cursor/cursor-dark.svg"), auto;
+}
+
+.dark body {
+  cursor: url("/assets/cursor/cursor-light.svg"), auto;
+}
+
+.bg-pattern-light {
+  background-image: url("/assets/pattern/pattern-light.svg");
+}
+
+.bg-pattern-dark {
+  background-image: url("/assets/pattern/pattern-dark.svg");
+}
