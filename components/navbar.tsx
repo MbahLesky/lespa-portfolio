@@ -65,18 +65,18 @@ export function Navbar() {
     >
       <div
         className={cn(
-          "container pointer-events-auto flex max-w-[1200px] items-center justify-between gap-4 rounded-lg border px-4 py-4 transition-colors md:px-6",
-          isScrolled ? "border-border bg-surface" : "border-transparent bg-surface"
+          "nav-glass container pointer-events-auto flex max-w-[1200px] items-center justify-between gap-4 rounded-lg border px-4 py-4 transition-colors md:px-6",
+          isScrolled ? "border-border" : "border-transparent"
         )}
       >
         <a href="#top" aria-label="Go to top" className="shrink-0">
           <Image
             src={assets.logo.dark}
             alt="Portfolio wordmark"
-            width={170}
-            height={70}
+            width={140}
+            height={50}
             priority
-            className="h-10 w-auto dark:hidden"
+            className="h-8 w-auto dark:hidden"
           />
           <Image
             src={assets.logo.light}
@@ -84,7 +84,7 @@ export function Navbar() {
             width={170}
             height={70}
             priority
-            className="hidden h-10 w-auto dark:block"
+            className="hidden h-8 w-auto dark:block"
           />
         </a>
         <div className="flex items-center gap-2">
@@ -120,7 +120,7 @@ export function Navbar() {
         id="mobile-navigation"
         aria-label="Mobile navigation"
         className={cn(
-          "container pointer-events-auto mt-2 grid max-w-[1200px] gap-2 rounded-lg border border-border bg-surface p-4 transition-colors md:hidden",
+          "nav-glass container pointer-events-auto mt-2 grid max-w-[1200px] gap-2 rounded-lg border border-border p-4 transition-colors md:hidden",
           isMenuOpen ? "grid" : "hidden"
         )}
       >

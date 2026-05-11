@@ -52,7 +52,7 @@ export function Section({
     >
       <div
         className={cn(
-          "pointer-events-none absolute inset-0 opacity-50",
+          "pointer-events-none absolute inset-0 opacity-30",
           patterns[variant]
         )}
       />
