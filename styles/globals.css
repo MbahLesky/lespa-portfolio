@@ -3,14 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --color-bg: #FAFBF9;
-  --color-surface: #FFFFFF;
-  --color-border: #E4EAE6;
-  --color-text-primary: #1A1F1C;
-  --color-text-secondary: #5E6B63;
+  --color-bg: #F7F9F5;
+  --color-surface: #FCFCF8;
+  --color-surface-elevated: #F1F4EE;
+  --color-border: #DDE5DC;
+  --color-text-primary: #18211B;
+  --color-text-secondary: #5B675F;
   --color-primary: #0D6D2B;
   --color-primary-deep: #075520;
-  --gradient-light: linear-gradient(to bottom, #FAFBF9, #EDE7DB);
+  --color-section-white: #FCFCF8;
+  --color-section-black: #0E1110;
+  --gradient-light: linear-gradient(135deg, #F7F9F5, #EEF2EA);
   --gradient-dark: linear-gradient(135deg, #0E1110, #141A17);
 }
 
@@ -26,11 +29,12 @@
 }
 
 .theme-light {
-  --color-bg: #FAFBF9;
-  --color-surface: #FFFFFF;
-  --color-border: #E4EAE6;
-  --color-text-primary: #1A1F1C;
-  --color-text-secondary: #5E6B63;
+  --color-bg: #F7F9F5;
+  --color-surface: #FCFCF8;
+  --color-surface-elevated: #F1F4EE;
+  --color-border: #DDE5DC;
+  --color-text-primary: #18211B;
+  --color-text-secondary: #5B675F;
   --color-primary: #0D6D2B;
   --color-primary-deep: #075520;
 }
@@ -71,4 +75,12 @@ body {
 
 .bg-pattern-dark {
   background-image: url("/assets/pattern/pattern-dark.svg");
+}
+
+.bg-section-white {
+  background-color: var(--color-section-white);
+}
+
+.bg-section-black {
+  background-color: var(--color-section-black);
 }

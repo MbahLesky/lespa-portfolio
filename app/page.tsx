@@ -1,3 +1,5 @@
+"use client"
+
 import { ArrowRight, ArrowUpRight, Send } from "lucide-react"
 import { Footer } from "@/components/footer"
 import { Navbar } from "@/components/navbar"
@@ -8,13 +10,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { siteContent } from "@/content/content"
+import { useTheme } from "@/lib/use-theme"
+
+type SectionVariant = "light" | "dark" | "white" | "black"
 
 export default function Home() {
+  const { theme } = useTheme()
+  const variants: SectionVariant[] =
+    theme === "dark"
+      ? ["dark", "black", "dark", "black", "dark", "black", "dark", "black"]
+      : ["light", "white", "light", "white", "light", "white", "light", "white"]
+
   return (
     <>
       <Navbar />
       <main id="top">
-        <Section variant="dark" size="lg">
+        <Section variant={variants[0]} size="lg">
           <Reveal className="grid gap-10 py-12 md:grid-cols-12 md:items-end">
             <div className="space-y-8 md:col-span-8">
               <p className="text-caption font-medium uppercase text-primary">
@@ -55,7 +66,7 @@ export default function Home() {
           </Reveal>
         </Section>
 
-        <Section variant="light">
+        <Section variant={variants[1]}>
           <Reveal className="mx-auto max-w-3xl space-y-6" >
             <div id="about" className="space-y-4">
               <p className="text-caption font-medium uppercase text-primary">
@@ -73,7 +84,7 @@ export default function Home() {
           </Reveal>
         </Section>
 
-        <Section variant="light">
+        <Section variant={variants[2]}>
           <Reveal className="space-y-10">
             <div id="services" className="max-w-2xl space-y-4">
               <p className="text-caption font-medium uppercase text-primary">
@@ -100,7 +111,7 @@ export default function Home() {
           </Reveal>
         </Section>
 
-        <Section variant="dark" size="lg">
+        <Section variant={variants[3]} size="lg">
           <Reveal className="space-y-10">
             <div id="work" className="grid gap-6 md:grid-cols-12 md:items-end">
               <div className="space-y-4 md:col-span-7">
@@ -139,7 +150,7 @@ export default function Home() {
           </Reveal>
         </Section>
 
-        <Section variant="light">
+        <Section variant={variants[4]}>
           <Reveal className="space-y-10">
             <div id="process" className="max-w-2xl space-y-4">
               <p className="text-caption font-medium uppercase text-primary">
@@ -169,7 +180,7 @@ export default function Home() {
           </Reveal>
         </Section>
 
-        <Section variant="dark">
+        <Section variant={variants[5]}>
           <Reveal className="mx-auto max-w-3xl space-y-6 text-center">
             <p className="text-caption font-medium uppercase text-primary">
               {siteContent.proof.label}
@@ -183,7 +194,7 @@ export default function Home() {
           </Reveal>
         </Section>
 
-        <Section variant="dark">
+        <Section variant={variants[6]}>
           <Reveal className="mx-auto max-w-3xl space-y-8 text-center">
             <h2 className="font-heading text-h2 font-semibold text-text-primary">
               {siteContent.cta.heading}
@@ -197,7 +208,7 @@ export default function Home() {
           </Reveal>
         </Section>
 
-        <Section variant="light">
+        <Section variant={variants[7]}>
           <Reveal className="mx-auto grid max-w-3xl gap-8">
             <div id="contact" className="space-y-4">
               <p className="text-caption font-medium uppercase text-primary">

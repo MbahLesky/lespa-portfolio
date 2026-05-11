@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 
 type SectionProps = {
   children: React.ReactNode
-  variant?: "light" | "dark"
+  variant?: "light" | "dark" | "white" | "black"
   size?: "sm" | "md" | "lg"
   className?: string
 }
@@ -16,16 +16,22 @@ const spacing = {
 const gradients = {
   light: "bg-gradient-light",
   dark: "bg-gradient-dark",
+  white: "bg-section-white",
+  black: "bg-section-black",
 }
 
 const patterns = {
   light: "bg-pattern-light",
   dark: "bg-pattern-dark",
+  white: "bg-pattern-light",
+  black: "bg-pattern-dark",
 }
 
 const themes = {
   light: "theme-light",
   dark: "theme-dark",
+  white: "theme-light",
+  black: "theme-dark",
 }
 
 export function Section({
