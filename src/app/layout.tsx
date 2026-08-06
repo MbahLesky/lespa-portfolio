@@ -30,7 +30,15 @@ const ibmPlexSans = localFont({
   fallback: ["system-ui", "sans-serif"],
 });
 
+/**
+ * Canonical URLs have to be absolute, so metadata needs to know where the site
+ * lives. Set NEXT_PUBLIC_SITE_URL in the deployment environment; the fallback
+ * is a placeholder until the real domain is registered.
+ */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lespa.dev"; // [MOCK] domain
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default:
       "Lespa — Brand & Product Designer, Developer | Bamenda, Cameroon",
