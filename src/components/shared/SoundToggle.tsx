@@ -3,7 +3,7 @@
 import { Volume2, VolumeX } from "lucide-react";
 
 import { Button } from "@/components/shared/Button";
-import { useSoundPreference } from "@/hooks/useSoundPreference";
+import { useSound } from "@/components/shared/SoundProvider";
 
 /**
  * Sound on/off. Appears in the nav and the footer.
@@ -12,7 +12,7 @@ import { useSoundPreference } from "@/hooks/useSoundPreference";
  * is disabled outright — a toggle for something that cannot happen is noise.
  */
 export function SoundToggle() {
-  const { isAvailable, enabled, toggle } = useSoundPreference();
+  const { isAvailable, enabled, toggle, play } = useSound();
 
   if (!isAvailable) return null;
 
@@ -20,7 +20,11 @@ export function SoundToggle() {
     <Button
       variant="ghost"
       icon
-      onClick={toggle}
+      onClick={() => {
+        // Confirm the choice audibly, but only when turning it on.
+        if (!enabled) setTimeout(() => play("buttonClick"), 120);
+        toggle();
+      }}
       aria-label={enabled ? "Turn sound off" : "Turn sound on"}
       aria-pressed={enabled}
     >

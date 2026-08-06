@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { ProjectImage } from "@/components/shared/ProjectImage";
+import { useSound } from "@/components/shared/SoundProvider";
 import { useHoverCapable } from "@/hooks/useHoverCapable";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +39,7 @@ export function CardMedia({
   hint = false,
 }: CardMediaProps) {
   const canHover = useHoverCapable();
+  const { play } = useSound();
   const [sketchReady, setSketchReady] = useState(false);
   const [showSketch, setShowSketch] = useState(false);
 
@@ -62,6 +64,7 @@ export function CardMedia({
         featured ? "ratio-16-9" : "ratio-4-3",
       )}
       data-sketch-ready={sketchReady ? "true" : "false"}
+      onMouseEnter={() => play("cardHover")}
     >
       <ProjectImage
         src={final}

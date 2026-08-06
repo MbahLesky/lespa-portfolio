@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { AppChrome } from "@/components/shared/AppChrome";
+import { SoundProvider } from "@/components/shared/SoundProvider";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import "./globals.css";
 
@@ -71,6 +72,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
+          <SoundProvider>
           {/* First focusable element on every page. */}
           <a href="#main" className="skip-link">
             Skip to content
@@ -79,6 +81,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Footer />
+          </SoundProvider>
         </ThemeProvider>
       </body>
     </html>

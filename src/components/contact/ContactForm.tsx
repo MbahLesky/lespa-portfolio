@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Check, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/shared/Button";
+import { useSound } from "@/components/shared/SoundProvider";
 import { Heading } from "@/components/shared/Heading";
 import { Text } from "@/components/shared/Text";
 import { site } from "@/content/copy";
@@ -31,6 +32,7 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
+  const { play } = useSound();
 
   const {
     register,
@@ -58,6 +60,7 @@ export function ContactForm() {
       });
       if (!response.ok) throw new Error(`Request failed: ${response.status}`);
       setStatus("sent");
+      play("formSuccess");
     } catch {
       // Every field stays populated so nothing has to be retyped.
       setStatus("failed");
