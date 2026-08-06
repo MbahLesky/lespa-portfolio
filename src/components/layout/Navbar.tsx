@@ -59,7 +59,7 @@ export function Navbar() {
         <div className="nav-inner flex items-center justify-between gap-6">
           <Link
             href="/"
-            className="flex items-center rounded-sm"
+            className="flex min-h-11 items-center rounded-sm"
             aria-label="Lespa — home"
           >
             <Wordmark height={26} />
