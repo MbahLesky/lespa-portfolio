@@ -51,6 +51,13 @@ export default function RootLayout({
       className={`${saira.variable} ${ibmPlexSans.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Scroll reveals start at opacity 0 and are only ever un-hidden by
+            script. Without JS the content must still be readable. */}
+        <noscript>
+          <style>{".reveal{opacity:1;transform:none}"}</style>
+        </noscript>
+      </head>
       <body className="font-body antialiased">
         <ThemeProvider>{children}</ThemeProvider>
       </body>

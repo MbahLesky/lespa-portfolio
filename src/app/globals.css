@@ -62,6 +62,21 @@
     --content-max:        1200px;
     --reading-max:        760px;
     --nav-height:         72px;
+
+    /* ---------- CONTROLS ---------- *
+       Added during the build: the spec names these values (secondary button
+       border 15% -> 30%, hover fill 8%, nav scrim at 92%) but the original
+       token set had no home for them, and components may not carry raw values.
+       Light theme tints from Text Primary; dark theme tints from white.        */
+    --control-border:       rgba(26, 31, 28, 0.15);
+    --control-border-hover: rgba(26, 31, 28, 0.30);
+    --control-fill-hover:   rgba(26, 31, 28, 0.06);
+    --nav-scrim:            rgba(250, 251, 249, 0.92);
+
+    /* Green-as-foreground, resolved per surface. Light surfaces take the brand
+       green; #2FA86A on #FAFBF9 is only 2.9:1 and fails AA. Dark surfaces
+       invert this, and Brand Deep overrides it again to white below. */
+    --accent-fg:            var(--brand);
   }
 
   .dark {
@@ -87,6 +102,12 @@
 
     --elevation-1:        inset 0 0 0 1px rgba(255, 255, 255, 0.10);
     --elevation-2:        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+
+    --control-border:       rgba(255, 255, 255, 0.15);
+    --control-border-hover: rgba(255, 255, 255, 0.30);
+    --control-fill-hover:   rgba(255, 255, 255, 0.08);
+    --nav-scrim:            rgba(14, 17, 16, 0.92);
+    --accent-fg:            var(--brand-accent);
   }
 
   @media (max-width: 767px) {
@@ -148,6 +169,28 @@
     background-image: var(--gradient-brand-deep);
     color: #FFFFFF;
     isolation: isolate;
+
+    /* Brand Deep is dark in both themes, so controls sitting on it always tint
+       from white — otherwise light mode would draw dark borders on dark green. */
+    --control-border:       rgba(255, 255, 255, 0.15);
+    --control-border-hover: rgba(255, 255, 255, 0.30);
+    --control-fill-hover:   rgba(255, 255, 255, 0.08);
+    --focus-ring:           #FFFFFF;
+
+    /* Accent resolves to white on this surface. #2FA86A on #0D6D2B measures
+       2.14:1 — it fails AA at every size, so green-on-green cannot carry
+       emphasis here. Emphasis comes from brightness instead: accent text is
+       pure white and the copy around it sits at 72%, which reads as clearly
+       and passes comfortably. */
+    --brand-accent:         #FFFFFF;
+    --accent-fg:            #FFFFFF;
+    --text-primary:         #FFFFFF;
+    --text-secondary:       rgba(255, 255, 255, 0.72);
+
+    /* Brand Deep is a dark surface in both themes, so it always takes the dark
+       pattern. The light pattern is white, and white at 50% over deep green
+       is loud enough to fight the copy sitting on it. */
+    --pattern-url:          url('/assets/pattern-dark.svg');
   }
 
   .surface-warm {
@@ -195,6 +238,107 @@
     .section-standard { padding-block: 6rem; }    /* 96px */
   }
 
+  /* ---------- ELEVATION ---------- */
+  /* Inset borders stand in for shadows, which the brand rejects. */
+
+  .elevated   { box-shadow: var(--elevation-1); }
+  .elevated-2 { box-shadow: var(--elevation-2); }
+
+  /* ---------- CONTROLS ---------- */
+  /* Expressed as component classes because their tints are alpha values, and
+     components are not allowed to carry raw colour. */
+
+  .btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;       /* touch target floor, everywhere */
+    min-width: 44px;
+    padding: 1rem 2rem;     /* 16px / 32px */
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition:
+      background-color var(--duration-fast) var(--ease-in-out),
+      border-color     var(--duration-fast) var(--ease-in-out),
+      color            var(--duration-fast) var(--ease-in-out),
+      transform        100ms var(--ease-in-out);
+  }
+  /* Press only. No lift, no shadow. */
+  .btn-base:active:not(:disabled) { transform: scale(0.98); }
+
+  .btn-base:disabled {
+    cursor: not-allowed;
+    background-color: transparent;
+    border-color: var(--control-border);
+    color: var(--brand-muted);
+  }
+
+  /* Foreground colour for the accent role. Resolves per surface via --accent-fg
+     so a label never has to know which background it landed on. */
+  .text-accent-fg { color: var(--accent-fg); }
+
+  .btn-primary {
+    background-color: var(--action);
+    color: var(--action-fg);
+  }
+  .btn-primary:hover { background-color: var(--action-hover); }
+
+  .btn-secondary {
+    background-color: transparent;
+    border-color: var(--control-border);
+    color: var(--text-primary);
+  }
+  .btn-secondary:hover {
+    border-color: var(--control-border-hover);
+    background-color: var(--control-fill-hover);
+  }
+  .surface-brand .btn-secondary { color: #FFFFFF; }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--text-primary);
+    padding-inline: 1rem;
+  }
+  .btn-ghost:hover { background-color: var(--control-fill-hover); }
+
+  /* Square control for icon-only buttons — theme and sound toggles. */
+  .btn-icon {
+    padding: 0;
+    width: 44px;
+    height: 44px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--control-border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    transition: border-color var(--duration-fast) var(--ease-in-out);
+  }
+  /* Not clickable in v1 — the border brighten is the whole interaction. */
+  .tag:hover { border-color: var(--control-border-hover); }
+
+  /* Underline draws left-to-right. Never combined with .highlight. */
+  .link-underline {
+    position: relative;
+    color: var(--accent-fg);
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 0;
+    background-color: currentColor;
+    transition: width 200ms var(--ease-out);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after { width: 100%; }
+
   /* ---------- TEXT HIGHLIGHT ---------- */
   /* Max 3 per section. Positioning phrases only. Never on links. */
 
@@ -240,6 +384,13 @@
       transform var(--duration-slow) var(--ease-out);
   }
   .reveal.is-visible { opacity: 1; transform: none; }
+
+  /* Without JavaScript nothing ever adds .is-visible, so the reveal must not
+     be allowed to hide content. The layout ships a <noscript> copy of this for
+     browsers that don't support the scripting media feature. */
+  @media (scripting: none) {
+    .reveal { opacity: 1; transform: none; }
+  }
 
   .reveal-stagger > *   { transition-delay: 0ms; }
   .reveal-stagger > *:nth-child(2) { transition-delay: 60ms; }
