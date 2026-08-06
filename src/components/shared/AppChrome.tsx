@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
-import { BootScreen } from "@/components/shared/BootScreen";
 import { useSound } from "@/components/shared/SoundProvider";
 import { useScrollRestoration } from "@/hooks/useScrollRestoration";
 
@@ -26,5 +25,5 @@ export function AppChrome() {
     play("pageTransition");
   }, [pathname, play]);
 
-  return <BootScreen />;
+  return null;
 }

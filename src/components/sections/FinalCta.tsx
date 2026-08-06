@@ -11,7 +11,7 @@ import { finalCta } from "@/content/copy";
 export function FinalCta() {
   return (
     <Section
-      variant="brand"
+      variant="gradient"
       pattern
       spacing="major"
       id="contact-cta"

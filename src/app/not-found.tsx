@@ -12,7 +12,7 @@ export const metadata = {
 export default function NotFound() {
   return (
     <main id="main">
-      <Section variant="brand" pattern spacing="major" className="below-nav">
+      <Section variant="gradient" pattern spacing="major" className="below-nav">
         <div className="flex max-w-reading flex-col gap-6">
           <Heading as="h1">{errors.notFound.heading}</Heading>
           <Text size="lg" className="text-content-secondary">

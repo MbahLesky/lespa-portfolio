@@ -51,9 +51,13 @@ export function SectionLabel({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("font-body text-body-sm uppercase text-accent-fg", className)}
+      className={cn(
+        "section-label font-body text-body-sm uppercase text-accent-fg",
+        className,
+      )}
       {...props}
     >
+      <span className="section-label-rule" aria-hidden="true" />
       {children}
     </p>
   );

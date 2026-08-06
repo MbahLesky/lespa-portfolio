@@ -1,65 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Image from "next/image";
 
-import { Wordmark } from "@/components/shared/Wordmark";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { BOOT_EXIT_MS, BOOT_HOLD_MS } from "@/lib/boot-timing";
 
-const SESSION_KEY = "lespa:booted";
-/** Under this and the screen is pure theatre, so it never appears. */
-const SKIP_UNDER_MS = 400;
-/** Hard ceiling. Content is never held behind this. */
-const MAX_MS = 800;
 
 /**
- * First-visit loading transition: the wordmark on the dark background.
+ * First-visit loading transition: the Lespa mark assembling on the dark
+ * background, then lifting away as the page enters behind it.
  *
- * Shows once per session, never again. Skipped entirely when the page is
- * already loaded in under 400ms — a loading screen for a site that has already
- * loaded is theatre — and skipped under reduced motion.
+ * The markup is server-rendered and hidden by default. Whether it runs is
+ * decided by the inline script in the document head, before the first paint —
+ * mounting this on the client instead meant a visible flash of the page before
+ * the loader appeared.
  *
- * Rendered above the content rather than in place of it, so nothing is ever
- * gated behind this component.
+ * This component only drives the exit; it never gates the content behind it.
  */
 export function BootScreen() {
-  const prefersReducedMotion = useReducedMotion();
-  const [visible, setVisible] = useState(false);
-  const [leaving, setLeaving] = useState(false);
-
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    const root = document.documentElement;
+    if (!root.classList.contains("boot-active")) return;
 
-    let seen = true;
-    try {
-      seen = window.sessionStorage.getItem(SESSION_KEY) === "1";
-      window.sessionStorage.setItem(SESSION_KEY, "1");
-    } catch {
-      // Storage blocked: treat it as already seen rather than showing it on
-      // every navigation.
-    }
-    if (seen) return;
+    const exit = setTimeout(() => {
+      root.dataset.bootLeaving = "true";
+    }, BOOT_HOLD_MS);
 
-    // How long the document actually took. If it was quick, show nothing.
-    const elapsed = performance.now();
-    if (elapsed < SKIP_UNDER_MS && document.readyState === "complete") return;
-
-    setVisible(true);
-
-    const remaining = Math.max(0, MAX_MS - elapsed);
-    const hold = setTimeout(() => setLeaving(true), remaining);
-    const clear = setTimeout(() => setVisible(false), remaining + 250);
+    const done = setTimeout(() => {
+      root.classList.remove("boot-active");
+      delete root.dataset.bootLeaving;
+      root.style.setProperty("--enter-delay", "0ms");
+    }, BOOT_HOLD_MS + BOOT_EXIT_MS);
 
     return () => {
-      clearTimeout(hold);
-      clearTimeout(clear);
+      clearTimeout(exit);
+      clearTimeout(done);
     };
-  }, [prefersReducedMotion]);
-
-  if (!visible) return null;
+  }, []);
 
   return (
-    <div className="boot" data-leaving={leaving ? "true" : undefined} aria-hidden="true">
-      <Wordmark height={40} forceDark />
+    <div className="boot" aria-hidden="true">
+      <div className="boot-lockup">
+        <Image
+          src="/assets/logos/dark-theme/Lespa/Icon.svg"
+          alt=""
+          width={36}
+          height={36}
+          priority
+          className="boot-icon"
+        />
+        <Image
+          src="/assets/logos/dark-theme/Lespa/Wordmark.svg"
+          alt=""
+          width={112}
+          height={46}
+          priority
+          className="boot-word"
+        />
+        <span className="boot-rule" />
+      </div>
     </div>
   );
 }
