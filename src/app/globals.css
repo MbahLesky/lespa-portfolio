@@ -229,7 +229,7 @@
   @media (min-width: 1024px) { .container-base { padding-inline: 5rem; } }   /* 80px */
   @media (min-width: 1280px) { .container-base { padding-inline: 7.5rem; } } /* 120px */
 
-  .container-reading { max-width: var(--reading-max); margin-inline: auto; }
+  .container-reading { width: 100%; max-width: var(--reading-max); margin-inline: auto; }
 
   .nav-inner { height: var(--nav-height); }
 
@@ -268,6 +268,16 @@
     background-color: var(--nav-scrim);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Transparent bar sitting on a project hero: the scrim beneath is dark in
+     both themes, so everything in the bar renders on-dark. */
+  .nav-over-hero {
+    --text-primary:   #FFFFFF;
+    --brand-accent:   #FFFFFF;
+    --accent-fg:      #FFFFFF;
+    --focus-ring:     #FFFFFF;
+    --control-fill-hover: rgba(255, 255, 255, 0.08);
   }
 
   .nav-link {
@@ -315,6 +325,254 @@
 
   @keyframes menu-item-in {
     to { opacity: 1; transform: none; }
+  }
+
+  /* ---------- FORM ---------- */
+
+  .field {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--control-border);
+    border-radius: 8px;
+    background-color: var(--surface);
+    color: var(--text-primary);
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 1rem;
+    transition: border-color var(--duration-base) var(--ease-in-out);
+  }
+  .field:hover { border-color: var(--control-border-hover); }
+  .field:focus-visible {
+    border-color: var(--brand-accent);
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .field[aria-invalid="true"] { border-color: var(--brand-accent); }
+  textarea.field { min-height: 8rem; resize: vertical; }
+
+  /* Error text pairs an icon with the message — never colour alone. */
+  .field-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: var(--accent-fg);
+  }
+
+  /* Off-screen rather than display:none: bots commonly skip hidden inputs,
+     and this one only works if they fill it in. */
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .confirm-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-image: var(--gradient-brand-lift);
+    color: #FFFFFF;
+  }
+
+  /* ---------- CASE STUDY ---------- */
+
+  .project-hero {
+    height: 70vh;
+    min-height: 420px;
+    padding-top: var(--nav-height);
+  }
+  /* Dark enough that both the overlaid title and the transparent nav above it
+     hold against any hero image, light or dark. The top stop covers the nav. */
+  .project-hero-scrim {
+    background: linear-gradient(
+      to top,
+      rgba(14, 17, 16, 0.85) 0%,
+      rgba(14, 17, 16, 0.40) 55%,
+      rgba(14, 17, 16, 0.55) 100%
+    );
+  }
+  .project-hero .container-base { color: #FFFFFF; }
+  .project-hero { --text-secondary: rgba(255, 255, 255, 0.78); }
+
+  /* Body sits at the reading measure; images break out wider so they punctuate
+     the text rather than interrupt it.
+
+     width: 100% is load-bearing. These sit inside a flex column, where an auto
+     inline margin disables cross-axis stretch — without it the block shrinks to
+     its content and any w-full grid child resolves against a zero-width track. */
+  .case-body  { width: 100%; max-width: var(--reading-max); margin-inline: auto; }
+  .case-wide  { width: 100%; max-width: 1000px; margin-inline: auto; }
+
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 60;
+    pointer-events: none;
+  }
+  .reading-progress-bar {
+    height: 100%;
+    width: 100%;
+    transform-origin: left;
+    /* Transform rather than width — it stays off the layout thread. */
+    will-change: transform;
+  }
+
+  .meta-bar {
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 30;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .meta-bar-list {
+    display: flex;
+    gap: 2rem;
+    padding-block: 0.75rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .meta-bar-list::-webkit-scrollbar { display: none; }
+  .meta-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    white-space: nowrap;
+  }
+
+  /* ---------- KEY DECISIONS ---------- */
+
+  .decision {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--surface);
+  }
+  .decision-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 44px;
+    padding: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .decision-summary::-webkit-details-marker { display: none; }
+
+  /* A plus that becomes a minus. Never colour alone. */
+  .decision-marker {
+    position: relative;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+  .decision-marker::before,
+  .decision-marker::after {
+    content: '';
+    position: absolute;
+    background-color: var(--accent-fg);
+    transition: transform var(--duration-fast) var(--ease-in-out);
+  }
+  .decision-marker::before { inset: 7px 0; height: 2px; }
+  .decision-marker::after  { inset: 0 7px; width: 2px; }
+  .decision[open] .decision-marker::after { transform: scaleY(0); }
+
+  .decision-body {
+    padding: 0 1rem 1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  /* ---------- BEFORE / AFTER SLIDER ---------- */
+
+  .ba-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--brand-accent);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  /* The range input is the drag surface: invisible, full-bleed, and keyboard
+     operable, with a focus ring that lands on the whole comparison. */
+  .ba-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    appearance: none;
+    background: transparent;
+  }
+  .ba-range:focus-visible { opacity: 1; }
+  .ba-range:focus-visible + * { outline: none; }
+  .ba-slider:focus-within { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ---------- NEXT PROJECT ---------- */
+
+  .next-project-scrim {
+    background-color: rgba(14, 17, 16, 0.60);
+    transition: background-color var(--duration-base) var(--ease-in-out);
+  }
+  .next-project:hover .next-project-scrim,
+  .next-project:focus-visible .next-project-scrim {
+    background-color: rgba(14, 17, 16, 0.20);
+  }
+  .next-project-image {
+    transition: transform var(--duration-base) var(--ease-in-out);
+  }
+  .next-project:hover .next-project-image,
+  .next-project:focus-visible .next-project-image { transform: scale(1.02); }
+
+  /* ---------- STICKY NEXT BAR ---------- */
+
+  .sticky-next {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 35;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--nav-scrim);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateY(100%);
+    transition:
+      opacity   var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+  .sticky-next.is-visible { opacity: 1; transform: none; }
+  .sticky-next-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text-primary);
+  }
+  @media (min-width: 768px) {
+    .sticky-next {
+      left: auto;
+      right: 2rem;
+      bottom: 2rem;
+      min-width: 320px;
+    }
   }
 
   /* ---------- METHODOLOGY TIMELINE ---------- */

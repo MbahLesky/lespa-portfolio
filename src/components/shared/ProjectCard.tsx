@@ -13,6 +13,12 @@ interface ProjectCardProps {
   /** Featured cards run 16:9 and span the grid; the rest are 4:3. */
   featured?: boolean;
   priority?: boolean;
+  /**
+   * Semantic level for the project name. The homepage nests cards under a
+   * section h2, so h3 is right there; on /projects the page h1 is the only
+   * heading above them and h2 keeps the outline unbroken.
+   */
+  headingLevel?: "h2" | "h3";
   className?: string;
 }
 
@@ -26,6 +32,7 @@ export function ProjectCard({
   project,
   featured = false,
   priority = false,
+  headingLevel = "h3",
   className,
 }: ProjectCardProps) {
   return (
@@ -59,7 +66,7 @@ export function ProjectCard({
           ))}
         </div>
 
-        <Heading as="h3" size="h4" className="project-card-title">
+        <Heading as={headingLevel} size="h4" className="project-card-title">
           {project.name}
         </Heading>
 

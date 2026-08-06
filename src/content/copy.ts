@@ -113,6 +113,78 @@ export const services = {
   cta: { label: "See how I work", href: "/services" },
 } as const;
 
+/* ---------- Services page ---------- */
+
+/**
+ * The detailed offer. Publishing a starting-from number filters unserious
+ * enquiries before they cost time — but every figure below is [MOCK] and needs
+ * replacing with real numbers before launch.
+ */
+export const servicesPage = {
+  heading: "What working with me actually looks like.",
+  intro:
+    "Three services. Each one ends with you understanding the thing you now own.",
+  offers: [
+    {
+      title: "Brand Systems",
+      forWho: "Founders and small businesses who need an identity that holds up across every surface.",
+      includes: [
+        "Logo, wordmark, and symbol",
+        "Colour palette documented as design tokens",
+        "Type scale and spacing rules",
+        "Brand guidelines, written to be used rather than filed",
+        "Social and print templates",
+      ],
+      timeline: "3–4 weeks",
+      needed: "Your story, a sense of who you are talking to, and any existing material — even if you dislike it.",
+      price: "Projects typically start at 400,000 XAF", // [MOCK]
+    },
+    {
+      title: "Web & Mobile Development",
+      forWho: "Anyone who needs a site or app that is fast today and maintainable next year.",
+      includes: [
+        "Custom-coded in Next.js on the web, Flutter on mobile",
+        "Component library and design tokens",
+        "Responsive breakpoints tested on real devices",
+        "WCAG AA accessibility checked, not assumed",
+        "Documentation and a handover walkthrough",
+      ],
+      timeline: "4–6 weeks",
+      needed: "Content, or a plan for getting it. Missing copy is the single most common reason projects slip.",
+      price: "Projects typically start at 700,000 XAF", // [MOCK]
+    },
+    {
+      title: "Design Mentorship",
+      forWho: "Designers and developers who want to build systems, not copy layouts.",
+      includes: [
+        "One-on-one or small-group sessions",
+        "Design system and token reviews",
+        "Code review with written feedback",
+        "Portfolio critique",
+      ],
+      timeline: "Ongoing, or a fixed block of six sessions",
+      needed: "Work in progress. Bring something real — a live project teaches more than an exercise.",
+      price: "Get a quote in 24 hours", // [MOCK]
+    },
+  ],
+  notFor: {
+    heading: "Who this isn't for",
+    items: [
+      "People who want a fast, cheap, template-based site",
+      "Anyone needing WordPress or page-builder work",
+      "Rushed, last-minute projects",
+    ],
+  },
+  workingTogether: {
+    heading: "What's it like to work with me?",
+    body: [
+      "You hear from me at least twice a week, whether or not there is something to show. Silence is where projects go wrong, so I would rather send a short update than a polished one.",
+      "Two rounds of revisions are included at each stage, and I will tell you plainly when I think a change makes the work worse. Everything is done in the open — you see the structure before the visuals, and the visuals before the code.",
+      "At the end you get the files, the documentation, and a walkthrough. If you want to run it yourself afterwards, that was the point.",
+    ],
+  },
+} as const;
+
 /* ---------- 5 · Tools & Systems ---------- */
 
 export const tools = {

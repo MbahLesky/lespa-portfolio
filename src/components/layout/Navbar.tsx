@@ -25,6 +25,15 @@ export function Navbar() {
   // Close the overlay on navigation so the menu never survives a route change.
   useEffect(() => setMenuOpen(false), [pathname]);
 
+  /**
+   * Project detail pages open on a full-bleed hero behind a transparent nav.
+   * The hero scrim is dark in both themes, so the bar has to render on-dark
+   * there — in light mode its normal dark-on-light text would disappear into
+   * the image. Once the nav takes its own scrim, the usual treatment applies.
+   */
+  const overHero =
+    /^\/projects\/[^/]+$/.test(pathname) && !isScrolled && !menuOpen;
+
   // Lock the page behind the full-screen menu.
   useEffect(() => {
     if (!menuOpen) return;
@@ -53,6 +62,7 @@ export function Navbar() {
         // back in one gesture. Never hides while the menu is open.
         isHidden && !menuOpen ? "-translate-y-full" : "translate-y-0",
         (isScrolled || menuOpen) && "nav-scrim",
+        overHero && "nav-over-hero",
       )}
     >
       <Container>
@@ -62,7 +72,7 @@ export function Navbar() {
             className="flex min-h-11 items-center rounded-sm"
             aria-label="Lespa — home"
           >
-            <Wordmark height={26} />
+            <Wordmark height={26} forceDark={overHero} />
           </Link>
 
           <nav aria-label="Primary" className="hidden md:block">

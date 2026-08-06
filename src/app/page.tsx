@@ -10,10 +10,33 @@ import { Proof } from "@/components/sections/Proof";
 import { SelectedWork } from "@/components/sections/SelectedWork";
 import { Services } from "@/components/sections/Services";
 import { ToolsAndSystems } from "@/components/sections/ToolsAndSystems";
-import { microCtas } from "@/content/copy";
+import { microCtas, site } from "@/content/copy";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
+};
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Mbah Lesky",
+  alternateName: "Lespa",
+  jobTitle: "Brand & Product Designer, Software Engineer",
+  email: `mailto:${site.email}`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Bamenda",
+    addressCountry: "CM",
+  },
+  url: "/",
+  sameAs: site.socials.map((social) => social.href),
+  knowsAbout: [
+    "Brand identity",
+    "Design systems",
+    "Next.js",
+    "Flutter",
+    "Design mentorship",
+  ],
 };
 
 /**
@@ -24,6 +47,10 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main id="main">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
       <Hero />
       <Approach />
       <SelectedWork />

@@ -8,6 +8,11 @@ const ASPECT = { width: 170, height: 70 };
 interface WordmarkProps {
   /** Rendered height in px; width follows the 170:70 ratio. */
   height?: number;
+  /**
+   * Pin to the on-dark variant regardless of theme. Needed where the mark sits
+   * on a dark surface in both themes — over a project hero, for instance.
+   */
+  forceDark?: boolean;
   className?: string;
 }
 
@@ -18,7 +23,11 @@ interface WordmarkProps {
  * variants render and CSS picks one, rather than swapping `src` after mount:
  * that keeps it correct in server output and avoids a flash of the wrong mark.
  */
-export function Wordmark({ height = 28, className }: WordmarkProps) {
+export function Wordmark({
+  height = 28,
+  forceDark = false,
+  className,
+}: WordmarkProps) {
   const width = Math.round((height * ASPECT.width) / ASPECT.height);
   const shared = "h-auto w-auto";
 
@@ -37,7 +46,7 @@ export function Wordmark({ height = 28, className }: WordmarkProps) {
         width={width}
         height={height}
         priority
-        className={cn(shared, "dark:hidden")}
+        className={cn(shared, forceDark ? "hidden" : "dark:hidden")}
       />
       <Image
         src="/assets/logos/dark-theme/Lespa/Wordmark.svg"
@@ -45,7 +54,7 @@ export function Wordmark({ height = 28, className }: WordmarkProps) {
         width={width}
         height={height}
         priority
-        className={cn(shared, "hidden dark:block")}
+        className={cn(shared, forceDark ? "block" : "hidden dark:block")}
       />
     </span>
   );
