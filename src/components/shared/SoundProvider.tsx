@@ -8,6 +8,7 @@ import {
   useMemo,
 } from "react";
 
+import { SoundDelegate } from "@/components/shared/SoundDelegate";
 import { useSoundPreference } from "@/hooks/useSoundPreference";
 import { soundEngine, type SoundName } from "@/lib/sound-engine";
 
@@ -57,7 +58,12 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     [isAvailable, enabled, toggle, play],
   );
 
-  return <SoundContext.Provider value={value}>{children}</SoundContext.Provider>;
+  return (
+    <SoundContext.Provider value={value}>
+      <SoundDelegate />
+      {children}
+    </SoundContext.Provider>
+  );
 }
 
 export function useSound() {

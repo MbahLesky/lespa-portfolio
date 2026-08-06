@@ -1,8 +1,4 @@
-"use client";
-
 import Link from "next/link";
-
-import { useSound } from "@/components/shared/SoundProvider";
 
 import { cn } from "@/lib/utils";
 import type { ButtonVariant } from "@/types";
@@ -50,8 +46,6 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const { play } = useSound();
-
   const classes = cn(
     "btn-base",
     TYPE_CLASS,
@@ -61,58 +55,28 @@ export function Button({
   );
 
   if ("href" in props && props.href !== undefined) {
-    const { href, onMouseEnter, onClick, ...rest } = props as ButtonAsLink;
+    const { href, ...rest } = props as ButtonAsLink;
     const isExternal = href.startsWith("http") || href.startsWith("mailto:");
-
-    // Compose rather than spread-over: a caller's own handler must still run,
-    // and spreading it after ours would silently replace the sound trigger.
-    const handlers = {
-      onMouseEnter: (event: React.MouseEvent<HTMLAnchorElement>) => {
-        play("buttonHover");
-        onMouseEnter?.(event);
-      },
-      onClick: (event: React.MouseEvent<HTMLAnchorElement>) => {
-        play("buttonClick");
-        onClick?.(event);
-      },
-    };
 
     if (isExternal) {
       return (
-        <a href={href} className={classes} {...rest} {...handlers}>
+        <a href={href} className={classes} {...rest}>
           {children}
         </a>
       );
     }
 
     return (
-      <Link href={href} className={classes} {...rest} {...handlers}>
+      <Link href={href} className={classes} {...rest}>
         {children}
       </Link>
     );
   }
 
-  const {
-    type = "button",
-    onMouseEnter,
-    onClick,
-    ...rest
-  } = props as ButtonAsButton;
+  const { type = "button", ...rest } = props as ButtonAsButton;
 
   return (
-    <button
-      type={type}
-      className={classes}
-      {...rest}
-      onMouseEnter={(event) => {
-        play("buttonHover");
-        onMouseEnter?.(event);
-      }}
-      onClick={(event) => {
-        play("buttonClick");
-        onClick?.(event);
-      }}
-    >
+    <button type={type} className={classes} {...rest}>
       {children}
     </button>
   );

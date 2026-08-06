@@ -527,12 +527,18 @@
   }
   /* Dark enough that both the overlaid title and the transparent nav above it
      hold against any hero image, light or dark. The top stop covers the nav. */
+  /* Vignetted top and bottom so the image still breathes through the middle.
+     The bottom band carries the title; the top band carries the transparent
+     nav. The top stop is 0.80 rather than something lighter because nav links
+     sit at 70% opacity: over a white hero a 0.55 scrim composites to rgb(124),
+     where even pure white measures 4.13:1 and 70% white only 2.92:1. At 0.80
+     the backdrop drops to rgb(62) and the dimmed links clear 5.9:1. */
   .project-hero-scrim {
     background: linear-gradient(
       to top,
       rgba(14, 17, 16, 0.85) 0%,
-      rgba(14, 17, 16, 0.40) 55%,
-      rgba(14, 17, 16, 0.55) 100%
+      rgba(14, 17, 16, 0.35) 45%,
+      rgba(14, 17, 16, 0.80) 100%
     );
   }
   .project-hero .container-base { color: #FFFFFF; }

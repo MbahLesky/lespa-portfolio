@@ -44,6 +44,8 @@ export const roleSwap = {
   inMs: 250,
   holdMs: 3500,
   firstSwapMs: 1400,
+  /** Quiet period after load before the sequence starts. See RoleSwap. */
+  settleAfterLoadMs: 2000,
   /** Stops after four cycles, resting on State A. Infinite loops irritate. */
   cycles: 4,
 } as const;

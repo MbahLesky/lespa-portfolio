@@ -50,9 +50,22 @@ export function RoleSwap() {
       }, delay);
     };
 
-    scheduleNext(roleSwap.firstSwapMs);
+    // Held until the page has finished loading. Animating a large
+    // above-the-fold element re-triggers the browser's largest-contentful-paint
+    // candidate on every swap, which charges the page for motion the reader has
+    // already seen settle. Waiting also means the headline is never moving
+    // while the rest of the page is still arriving.
+    let startTimer: ReturnType<typeof setTimeout>;
+    const begin = () => {
+      startTimer = setTimeout(() => scheduleNext(roleSwap.firstSwapMs), roleSwap.settleAfterLoadMs);
+    };
+
+    if (document.readyState === "complete") begin();
+    else window.addEventListener("load", begin, { once: true });
 
     return () => {
+      window.removeEventListener("load", begin);
+      clearTimeout(startTimer);
       clearTimeout(swapTimer);
       clearTimeout(settleTimer);
     };

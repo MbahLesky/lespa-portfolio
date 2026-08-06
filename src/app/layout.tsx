@@ -51,6 +51,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  /**
+   * The browser chrome colour. This is HTML metadata rather than a style, so it
+   * cannot reference a CSS custom property — the value is duplicated from
+   * --background in the dark theme and must be kept in step with it. Dark is
+   * the default theme regardless of OS preference, so one value is correct.
+   */
   themeColor: "#0E1110",
 };
 

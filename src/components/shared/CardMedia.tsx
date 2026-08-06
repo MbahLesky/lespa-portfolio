@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 import { ProjectImage } from "@/components/shared/ProjectImage";
-import { useSound } from "@/components/shared/SoundProvider";
 import { useHoverCapable } from "@/hooks/useHoverCapable";
 import { cn } from "@/lib/utils";
 
@@ -39,19 +38,35 @@ export function CardMedia({
   hint = false,
 }: CardMediaProps) {
   const canHover = useHoverCapable();
-  const { play } = useSound();
   const [sketchReady, setSketchReady] = useState(false);
   const [showSketch, setShowSketch] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-    const image = new window.Image();
-    image.onload = () => {
-      if (!cancelled) setSketchReady(true);
+
+    // Deferred to idle and marked low priority. The reveal cannot happen before
+    // the page is interactive, so this has no reason to compete with first
+    // paint — and while the project images are missing every one of these
+    // requests pulls back a full 404 page instead of a small error.
+    const preload = () => {
+      if (cancelled) return;
+      const image = new window.Image();
+      image.fetchPriority = "low";
+      image.onload = () => {
+        if (!cancelled) setSketchReady(true);
+      };
+      image.src = sketch;
     };
-    image.src = sketch;
+
+    const hasIdle = typeof window.requestIdleCallback === "function";
+    const handle = hasIdle
+      ? window.requestIdleCallback(preload, { timeout: 3000 })
+      : window.setTimeout(preload, 1500);
+
     return () => {
       cancelled = true;
+      if (hasIdle) window.cancelIdleCallback(handle);
+      else window.clearTimeout(handle);
     };
   }, [sketch]);
 
@@ -64,7 +79,6 @@ export function CardMedia({
         featured ? "ratio-16-9" : "ratio-4-3",
       )}
       data-sketch-ready={sketchReady ? "true" : "false"}
-      onMouseEnter={() => play("cardHover")}
     >
       <ProjectImage
         src={final}
