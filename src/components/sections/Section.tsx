@@ -1,52 +1,75 @@
-import * as React from "react";
+import { Container } from "@/components/layout/Container";
+import { Reveal } from "@/components/shared/Reveal";
 import { cn } from "@/lib/utils";
+import type { SectionSpacing, SurfaceVariant } from "@/types";
+
+const SURFACE_CLASS: Record<SurfaceVariant, string> = {
+  gradient: "surface-gradient",
+  brand: "surface-brand",
+  warm: "surface-warm",
+  flat: "surface-flat",
+  raised: "surface-raised",
+};
+
+/** Pattern is permitted on gradient surfaces only — never on flat or raised. */
+const PATTERNABLE: ReadonlySet<SurfaceVariant> = new Set<SurfaceVariant>([
+  "gradient",
+  "brand",
+  "warm",
+]);
+
+const SPACING_CLASS: Record<SectionSpacing, string> = {
+  major: "section-major",
+  standard: "section-standard",
+};
 
 interface SectionProps extends React.HTMLAttributes<HTMLElement> {
-    variant?: "light" | "dark" | "brand";
-    spacing?: "small" | "medium" | "large" | "none";
-    children: React.ReactNode;
+  variant?: SurfaceVariant;
+  /** Requires a gradient variant; silently ignored on flat and raised. */
+  pattern?: boolean;
+  spacing?: SectionSpacing;
+  /** Set false to lay out the children yourself, e.g. for full-bleed content. */
+  contained?: boolean;
+  /**
+   * Scroll reveal, on by default — one per section is the rule, and defaulting
+   * to on is what keeps it to one. Turn it off for anything above the fold,
+   * which would otherwise fade in on a page the reader is already looking at.
+   */
+  reveal?: boolean;
 }
 
-export const Section = React.forwardRef<HTMLElement, SectionProps>(
-    ({ className, variant, spacing = "medium", children, ...props }, ref) => {
-        // Base styles
-        const baseStyles = "relative w-full overflow-hidden";
+/**
+ * A page section and its surface treatment.
+ *
+ * Stacking order is fixed by globals.css: gradient background, then the pattern
+ * pseudo-element at 50%, then content. Children never carry the pattern's
+ * opacity because the pattern is a ::before, not a wrapper.
+ */
+export function Section({
+  variant = "flat",
+  pattern = false,
+  spacing = "standard",
+  contained = true,
+  reveal = true,
+  className,
+  children,
+  ...props
+}: SectionProps) {
+  const withPattern = pattern && PATTERNABLE.has(variant);
+  const body = reveal ? <Reveal>{children}</Reveal> : children;
 
-        // Gradient modes
-        const modeStyles = {
-            light: "bg-gradient-light text-primary",
-            dark: "bg-gradient-dark text-accentSecondary",
-            brand: "bg-gradient-brand text-accentSecondary",
-        };
-
-        const spacingStyles = {
-            small: "py-8",
-            medium: "py-16",
-            large: "py-24",
-            none: "py-0",
-        };
-
-        const activeModeStyle = variant ? modeStyles[variant] : "";
-        const activeSpacingStyle = spacingStyles[spacing];
-
-        return (
-            <section
-                ref={ref}
-                className={cn(baseStyles, activeModeStyle, activeSpacingStyle, className)}
-                {...props}
-            >
-                {/* Pattern Underlay */}
-                {variant === 'light' && <div className="absolute inset-0 bg-pattern-light pointer-events-none z-0" />}
-                {variant === 'dark' && <div className="absolute inset-0 bg-pattern-dark pointer-events-none z-0" />}
-                {variant === 'brand' && <div className="absolute inset-0 bg-pattern-dark pointer-events-none z-0" />}
-
-                {/* Content Container */}
-                <div className="relative z-10 mx-auto w-full max-w-7xl px-4 md:px-8">
-                    {children}
-                </div>
-            </section>
-        );
-    }
-);
-
-Section.displayName = "Section";
+  return (
+    <section
+      className={cn(
+        "snap-section relative",
+        SURFACE_CLASS[variant],
+        SPACING_CLASS[spacing],
+        withPattern && "has-pattern",
+        className,
+      )}
+      {...props}
+    >
+      {contained ? <Container>{body}</Container> : body}
+    </section>
+  );
+}

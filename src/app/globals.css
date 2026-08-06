@@ -1,153 +1,958 @@
-@import "tailwindcss";
+/* ============================================================
+   LESPA — DESIGN TOKENS
+   src/app/globals.css
+   Source of truth: CORE VISUAL.md + Design Spec v2
+   No hex values anywhere outside this file.
+   ============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
-    /* Brand Colors */
-    --color-primary-light: #0F8A36;
-    --color-primary: #0D6D2B;
-    --color-primary-dark: #075520;
-    --color-primary-soft: #E6F2EB;
-    --color-primary-muted: #9BBFA9;
+    /* ---------- BRAND ---------- */
+    --brand-light:        #0F8A36;
+    --brand:              #0D6D2B;
+    --brand-dark:         #075520;
+    --brand-soft:         #E6F2EB;
+    --brand-muted:        #9BBFA9;
+    --brand-accent:       #2FA86A;  /* the green used on dark surfaces */
 
-    /* Neutral (Light Mode) */
-    --color-background: #FAFBF9;
-    --color-surface: #FFFFFF;
-    --color-border: #E4EAE6;
-    --color-text-primary: #1A1F1C;
-    --color-text-secondary: #5E6B63;
+    /* ---------- LIGHT THEME (default) ---------- */
+    --background:         #FAFBF9;
+    --surface:            #FFFFFF;
+    --border:             #E4EAE6;
+    --text-primary:       #1A1F1C;
+    --text-secondary:     #5E6B63;
+    --accent-warm:        #EDE7DB;
 
-    /* Secondary Accent */
-    --color-accent-secondary: #EDE7DB;
+    /* interactive — light */
+    --action:             var(--brand);
+    --action-hover:       var(--brand-light);
+    --action-active:      var(--brand-dark);
+    --action-fg:          #FFFFFF;
+    --focus-ring:         var(--brand);
 
-    /* Gradient Stops - Light/Brand */
-    --gradient-brand-start: var(--color-primary);
-    --gradient-brand-end: var(--color-primary-dark);
+    /* ---------- GRADIENTS ---------- */
+    --gradient-brand-deep: linear-gradient(135deg, #0D6D2B 0%, #075520 100%);
+    --gradient-brand-lift: linear-gradient(135deg, #0D6D2B 0%, #2FA86A 100%);
+    --gradient-surface:    linear-gradient(135deg, #FAFBF9 0%, #FFFFFF 100%);
+    --gradient-warm:       linear-gradient(135deg, #FAFBF9 0%, #EDE7DB 100%);
 
-    --gradient-light-start: var(--color-background);
-    --gradient-light-end: var(--color-surface);
+    /* ---------- PATTERN ---------- */
+    --pattern-url:        url('/assets/pattern-light.svg');
+    --pattern-opacity:    0.5;
 
-    --gradient-accent-start: var(--color-background);
-    --gradient-accent-end: var(--color-accent-secondary);
+    /* ---------- MOTION ---------- */
+    --duration-fast:      150ms;
+    --duration-base:      250ms;
+    --duration-slow:      400ms;
+    --duration-reveal:    350ms;
+    --duration-section:   600ms;
+    --ease-out:           cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out:        cubic-bezier(0.65, 0, 0.35, 1);
 
-    /* Shadcn UI Default Mapping (for compatibility if needed later) */
-    --background: 140 33% 98%;
-    /* #FAFBF9 */
-    --foreground: 140 10% 11%;
-    /* #1A1F1C */
-    --card: 0 0% 100%;
-    /* #FFFFFF */
-    --card-foreground: 140 10% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 140 10% 11%;
-    --primary: 139 79% 23%;
-    /* #0D6D2B */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 41 40% 89%;
-    /* #EDE7DB */
-    --secondary-foreground: 140 10% 11%;
-    --muted: 143 50% 95%;
-    /* #E6F2EB */
-    --muted-foreground: 143 7% 38%;
-    /* #5E6B63 */
-    --accent: 41 40% 89%;
-    /* #EDE7DB */
-    --accent-foreground: 140 10% 11%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 140 14% 91%;
-    /* #E4EAE6 */
-    --input: 140 14% 91%;
-    --ring: 139 79% 23%;
-    /* #0D6D2B */
-    --radius: 0.5rem;
+    /* ---------- ELEVATION ---------- */
+    /* Borders, not shadows. Brand rejects drop shadows. */
+    --elevation-1:        inset 0 0 0 1px var(--border);
+    --elevation-2:        inset 0 0 0 1px var(--border);
+
+    /* ---------- LAYOUT ---------- */
+    --content-max:        1200px;
+    --reading-max:        760px;
+    --nav-height:         72px;
+
+    /* ---------- CONTROLS ---------- *
+       Added during the build: the spec names these values (secondary button
+       border 15% -> 30%, hover fill 8%, nav scrim at 92%) but the original
+       token set had no home for them, and components may not carry raw values.
+       Light theme tints from Text Primary; dark theme tints from white.        */
+    --control-border:       rgba(26, 31, 28, 0.15);
+    --control-border-hover: rgba(26, 31, 28, 0.30);
+    --control-fill-hover:   rgba(26, 31, 28, 0.06);
+    --nav-scrim:            rgba(250, 251, 249, 0.92);
+
+    /* Green-as-foreground, resolved per surface. Light surfaces take the brand
+       green; #2FA86A on #FAFBF9 is only 2.9:1 and fails AA. Dark surfaces
+       invert this, and Brand Deep overrides it again to white below. */
+    --accent-fg:            var(--brand);
   }
 
   .dark {
-    /* Neutral (Dark Mode) overrides */
-    --color-background: #0E1110;
-    --color-surface: #141A17;
-    --color-text-primary: #E7ECE9;
-    --color-text-muted: #9AA5A0;
-    --color-accent-secondary: #2FA86A;
-    /* Replaces brand color as accent */
+    --background:         #0E1110;
+    --surface:            #141A17;
+    --border:             rgba(255, 255, 255, 0.10);
+    --text-primary:       #E7ECE9;
+    --text-secondary:     #9AA5A0;
 
-    /* Gradient Stops - Dark */
-    --gradient-dark-start: var(--color-background);
-    --gradient-dark-end: var(--color-surface);
+    /* On dark, green foregrounds are ALWAYS --brand-accent.
+       --brand (#0D6D2B) fails contrast as text on #0E1110.
+       It may only be used as a fill behind white text. */
+    --action:             var(--brand);
+    --action-hover:       var(--brand-light);
+    --action-active:      var(--brand-dark);
+    --action-fg:          #FFFFFF;
+    --focus-ring:         var(--brand-accent);
 
-    /* Shadcn UI Default Mapping (Dark) */
-    --background: 160 9% 6%;
-    /* #0E1110 */
-    --foreground: 144 10% 91%;
-    /* #E7ECE9 */
-    --card: 150 12% 9%;
-    /* #141A17 */
-    --card-foreground: 144 10% 91%;
-    --popover: 150 12% 9%;
-    --popover-foreground: 144 10% 91%;
-    --primary: 149 56% 42%;
-    /* #2FA86A */
-    --primary-foreground: 160 9% 6%;
-    --secondary: 150 12% 9%;
-    /* #141A17 */
-    --secondary-foreground: 144 10% 91%;
-    --muted: 150 12% 9%;
-    --muted-foreground: 150 5% 62%;
-    /* #9AA5A0 */
-    --accent: 150 12% 9%;
-    --accent-foreground: 144 10% 91%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 144 10% 91%;
-    --border: 150 12% 9%;
-    --input: 150 12% 9%;
-    --ring: 149 56% 42%;
+    --gradient-surface:   linear-gradient(135deg, #0E1110 0%, #141A17 100%);
+    --gradient-warm:      linear-gradient(135deg, #0E1110 0%, #141A17 100%);
+
+    --pattern-url:        url('/assets/pattern-dark.svg');
+
+    --elevation-1:        inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+    --elevation-2:        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+
+    --control-border:       rgba(255, 255, 255, 0.15);
+    --control-border-hover: rgba(255, 255, 255, 0.30);
+    --control-fill-hover:   rgba(255, 255, 255, 0.08);
+    --nav-scrim:            rgba(14, 17, 16, 0.92);
+    --accent-fg:            var(--brand-accent);
   }
 
-  * {
-    border-color: var(--border);
+  @media (max-width: 767px) {
+    :root { --nav-height: 64px; }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-text-primary);
-    cursor: url('/assets/logos/light-theme/Symbol.svg') 16 16, auto;
+    /* --page-tint is set by SectionTint while scrolling; it falls back to the
+       plain background whenever that is not running. */
+    background-color: var(--page-tint, var(--background));
+    transition: background-color var(--duration-section) var(--ease-in-out);
+    color: var(--text-primary);
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  /* when tailwind applies dark class (next-themes default on html element) */
-  .dark body {
-    cursor: url('/assets/logos/dark-theme/Lespa/Symbol.svg') 16 16, auto;
+  /* Dark UI needs slightly more leading */
+  .dark body { line-height: 1.65; }
+
+  ::selection {
+    background-color: var(--brand-accent);
+    color: #0E1110;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  :focus:not(:focus-visible) { outline: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-@layer utilities {
+@layer components {
 
-  /* Gradients */
-  .bg-gradient-brand {
-    background: linear-gradient(135deg, var(--gradient-brand-start) 0%, var(--gradient-brand-end) 100%);
+  /* ---------- SECTION SURFACES ---------- */
+
+  .surface-gradient {
+    position: relative;
+    background-image: var(--gradient-surface);
+    isolation: isolate;
   }
 
-  .bg-gradient-light {
-    background: linear-gradient(135deg, var(--gradient-light-start) 0%, var(--gradient-light-end) 100%);
+  .surface-brand {
+    position: relative;
+    background-image: var(--gradient-brand-deep);
+    color: #FFFFFF;
+    isolation: isolate;
+
+    /* Brand Deep is dark in both themes, so controls sitting on it always tint
+       from white — otherwise light mode would draw dark borders on dark green. */
+    --control-border:       rgba(255, 255, 255, 0.15);
+    --control-border-hover: rgba(255, 255, 255, 0.30);
+    --control-fill-hover:   rgba(255, 255, 255, 0.08);
+    --focus-ring:           #FFFFFF;
+
+    /* Accent resolves to white on this surface. #2FA86A on #0D6D2B measures
+       2.14:1 — it fails AA at every size, so green-on-green cannot carry
+       emphasis here. Emphasis comes from brightness instead: accent text is
+       pure white and the copy around it sits at 72%, which reads as clearly
+       and passes comfortably. */
+    --brand-accent:         #FFFFFF;
+    --accent-fg:            #FFFFFF;
+    --text-primary:         #FFFFFF;
+    --text-secondary:       rgba(255, 255, 255, 0.72);
+
+    /* Brand Deep is a dark surface in both themes, so it always takes the dark
+       pattern. The light pattern is white, and white at 50% over deep green
+       is loud enough to fight the copy sitting on it. */
+    --pattern-url:          url('/assets/pattern-dark.svg');
   }
 
-  .bg-gradient-dark {
-    background: linear-gradient(135deg, var(--gradient-dark-start) 0%, var(--gradient-dark-end) 100%);
+  .surface-warm {
+    position: relative;
+    background-image: var(--gradient-warm);
+    isolation: isolate;
   }
 
-  .bg-gradient-accent {
-    background: linear-gradient(135deg, var(--gradient-accent-start) 0%, var(--gradient-accent-end) 100%);
-  }
+  .surface-flat  { background-color: var(--background); }
+  .surface-raised { background-color: var(--surface); }
 
-  /* Patterns */
-  .bg-pattern-light {
-    background-image: url('/assets/patterns/pattern-light.svg');
+  /* Once SectionTint is running, the neutral surfaces hand their colour to the
+     page canvas so it can interpolate between them instead of cutting. */
+  .tint-active .surface-flat,
+  .tint-active .surface-raised { background-color: transparent; }
+
+  /* Pattern overlay: gradient → pattern (50%) → content.
+     Pseudo-element keeps child opacity untouched. */
+  .has-pattern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--pattern-url);
     background-repeat: repeat;
-    opacity: 0.5;
+    background-size: 480px auto;
+    opacity: var(--pattern-opacity);
+    pointer-events: none;
+  }
+  .has-pattern > * { position: relative; z-index: 1; }
+
+  /* ---------- LAYOUT ---------- */
+
+  .container-base {
+    width: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding-inline: 1.5rem;   /* 24px  mobile */
+  }
+  @media (min-width: 768px)  { .container-base { padding-inline: 3rem; } }   /* 48px */
+  @media (min-width: 1024px) { .container-base { padding-inline: 5rem; } }   /* 80px */
+  @media (min-width: 1280px) { .container-base { padding-inline: 7.5rem; } } /* 120px */
+
+  .container-reading { width: 100%; max-width: var(--reading-max); margin-inline: auto; }
+
+  .nav-inner { height: var(--nav-height); }
+
+  /* Image ratios. Reserved on the container so nothing shifts as images load. */
+  .ratio-4-3  { aspect-ratio: 4 / 3; }
+  .ratio-16-9 { aspect-ratio: 16 / 9; }
+  .aspect-4-5 { aspect-ratio: 4 / 5; }
+
+  /* Beliefs read as a text list with rules above and below — not as cards. */
+  .belief-list {
+    border-block: 1px solid var(--border);
+    padding-block: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .belief-row { grid-template-columns: 10rem 1fr; }
   }
 
-  .bg-pattern-dark {
-    background-image: url('/assets/patterns/pattern-dark.svg');
-    background-repeat: repeat;
-    opacity: 0.5;
+  .section-major    { padding-block: 5rem; }   /* 80px mobile */
+  .section-standard { padding-block: 4rem; }   /* 64px mobile */
+  @media (min-width: 768px) {
+    .section-major    { padding-block: 7.5rem; }  /* 120px */
+    .section-standard { padding-block: 6rem; }    /* 96px */
   }
+
+  /* First section on a page. The nav is fixed and transparent at the top, so
+     the surface bleeds up behind it while the content clears it. Declared
+     after the spacing classes so it wins on source order. */
+  .below-nav { padding-top: calc(var(--nav-height) + 5rem); }
+  @media (min-width: 768px) {
+    .below-nav { padding-top: calc(var(--nav-height) + 7.5rem); }
+  }
+
+  /* ---------- NAVIGATION ---------- */
+
+  .nav-scrim {
+    background-color: var(--nav-scrim);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Transparent bar sitting on a project hero: the scrim beneath is dark in
+     both themes, so everything in the bar renders on-dark. */
+  .nav-over-hero {
+    --text-primary:   #FFFFFF;
+    --brand-accent:   #FFFFFF;
+    --accent-fg:      #FFFFFF;
+    --focus-ring:     #FFFFFF;
+    --control-fill-hover: rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Short labels like "Work" are only 36px wide on their own. */
+    min-width: 44px;
+    min-height: 44px;
+    color: var(--text-primary);
+    opacity: 0.7;
+    transition: opacity var(--duration-fast) var(--ease-in-out);
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible { opacity: 1; }
+
+  /* Active page marker: 2px accent underline. */
+  .nav-link.is-active { opacity: 1; }
+  .nav-link.is-active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    height: 2px;
+    background-color: var(--brand-accent);
+  }
+
+  /* Sits above the fixed header so it covers the bar's own scrim. */
+  .mobile-menu {
+    position: fixed;
+    inset: var(--nav-height) 0 0 0;
+    z-index: 45;
+    padding-block: 2rem;
+    background-color: var(--background);
+    overflow-y: auto;
+  }
+
+  .mobile-menu-item {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: menu-item-in var(--duration-base) var(--ease-out) forwards;
+  }
+
+  @keyframes menu-item-in {
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ---------- PROJECT CARD ---------- */
+  /* Crossfade, title to accent, arrow shift. No lift, no scale, no shadow —
+     the crossfade alone is the interaction. */
+
+  .project-card-title {
+    transition: color var(--duration-fast) var(--ease-in-out);
+  }
+  .project-card:hover .project-card-title,
+  .project-card:focus-visible .project-card-title { color: var(--accent-fg); }
+
+  .project-card-arrow {
+    transition: transform var(--duration-fast) var(--ease-in-out);
+  }
+  .project-card:hover .project-card-arrow,
+  .project-card:focus-visible .project-card-arrow { transform: translateX(4px); }
+
+  /* The sketch sits above the final frame and fades in. Only ever revealed
+     once the sketch has actually loaded — a half-drawn reveal is worse than
+     none, so the interaction is gated on [data-sketch-ready]. */
+  .card-sketch {
+    opacity: 0;
+    transition: opacity var(--duration-reveal) var(--ease-out);
+    will-change: opacity;
+  }
+  /* The readiness flag sits on the media container inside the card, so hover is
+     matched on the card and readiness on the descendant. */
+  .project-card:hover [data-sketch-ready="true"] .card-sketch,
+  .project-card:focus-visible [data-sketch-ready="true"] .card-sketch { opacity: 1; }
+  /* Touch: driven by the Final/Sketch pill instead of hover. */
+  .card-sketch[data-shown="true"] { opacity: 1; }
+
+  .card-toggle {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    z-index: 2;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 0.25rem;
+    padding-inline: 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.30);
+    background-color: rgba(14, 17, 16, 0.72);
+    color: #FFFFFF;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Images fade up as they decode rather than snapping in. */
+  .img-fade { opacity: 0; transition: opacity var(--duration-base) var(--ease-out); }
+  .img-fade[data-loaded="true"] { opacity: 1; }
+
+  /* ---------- PAGE TRANSITION ---------- */
+
+  .page-enter { animation: page-in var(--duration-base) var(--ease-out) both; }
+  @keyframes page-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ---------- PROGRESS RAIL ---------- */
+
+  .progress-rail {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    /* No gap: each dot already carries a 44px hit box, so spacing it further
+       would stretch the rail down the whole viewport. */
+    gap: 0;
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-in-out);
+  }
+  /* Desktop only, and only where a pointer can reach it. */
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+    .progress-rail { display: flex; }
+  }
+  .progress-rail.is-active { opacity: 1; }
+
+  .rail-dot {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rail-dot::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--text-secondary);
+    opacity: 0.4;
+    transition:
+      opacity   var(--duration-fast) var(--ease-in-out),
+      transform var(--duration-fast) var(--ease-in-out),
+      background-color var(--duration-fast) var(--ease-in-out);
+  }
+  .rail-dot:hover::after { opacity: 0.8; }
+  .rail-dot[aria-current="true"]::after {
+    background-color: var(--brand-accent);
+    opacity: 1;
+    transform: scale(1.4);
+  }
+
+  /* ---------- SOFT SNAP ---------- */
+  /* Sections clear the fixed nav when snapped to. */
+  .snap-section { scroll-margin-top: var(--nav-height); }
+
+  /* ---------- LOADING TRANSITION ---------- */
+
+  .boot {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0E1110;
+    animation: boot-in 300ms var(--ease-out) both;
+  }
+  .boot[data-leaving="true"] {
+    animation: boot-out var(--duration-base) var(--ease-out) both;
+  }
+  @keyframes boot-in  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes boot-out { from { opacity: 1; } to { opacity: 0; } }
+
+  /* ---------- FORM ---------- */
+
+  .field {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--control-border);
+    border-radius: 8px;
+    background-color: var(--surface);
+    color: var(--text-primary);
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 1rem;
+    transition: border-color var(--duration-base) var(--ease-in-out);
+  }
+  .field:hover { border-color: var(--control-border-hover); }
+  .field:focus-visible {
+    border-color: var(--brand-accent);
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .field[aria-invalid="true"] { border-color: var(--brand-accent); }
+  textarea.field { min-height: 8rem; resize: vertical; }
+
+  /* Error text pairs an icon with the message — never colour alone. */
+  .field-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: var(--accent-fg);
+  }
+
+  /* Off-screen rather than display:none: bots commonly skip hidden inputs,
+     and this one only works if they fill it in. */
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .confirm-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-image: var(--gradient-brand-lift);
+    color: #FFFFFF;
+  }
+
+  /* ---------- CASE STUDY ---------- */
+
+  .project-hero {
+    height: 70vh;
+    min-height: 420px;
+    padding-top: var(--nav-height);
+  }
+  /* Dark enough that both the overlaid title and the transparent nav above it
+     hold against any hero image, light or dark. The top stop covers the nav. */
+  /* Vignetted top and bottom so the image still breathes through the middle.
+     The bottom band carries the title; the top band carries the transparent
+     nav. The top stop is 0.80 rather than something lighter because nav links
+     sit at 70% opacity: over a white hero a 0.55 scrim composites to rgb(124),
+     where even pure white measures 4.13:1 and 70% white only 2.92:1. At 0.80
+     the backdrop drops to rgb(62) and the dimmed links clear 5.9:1. */
+  .project-hero-scrim {
+    background: linear-gradient(
+      to top,
+      rgba(14, 17, 16, 0.85) 0%,
+      rgba(14, 17, 16, 0.35) 45%,
+      rgba(14, 17, 16, 0.80) 100%
+    );
+  }
+  .project-hero .container-base { color: #FFFFFF; }
+  .project-hero { --text-secondary: rgba(255, 255, 255, 0.78); }
+
+  /* Body sits at the reading measure; images break out wider so they punctuate
+     the text rather than interrupt it.
+
+     width: 100% is load-bearing. These sit inside a flex column, where an auto
+     inline margin disables cross-axis stretch — without it the block shrinks to
+     its content and any w-full grid child resolves against a zero-width track. */
+  .case-body  { width: 100%; max-width: var(--reading-max); margin-inline: auto; }
+  .case-wide  { width: 100%; max-width: 1000px; margin-inline: auto; }
+
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 60;
+    pointer-events: none;
+  }
+  .reading-progress-bar {
+    height: 100%;
+    width: 100%;
+    transform-origin: left;
+    /* Transform rather than width — it stays off the layout thread. */
+    will-change: transform;
+  }
+
+  .meta-bar {
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 30;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .meta-bar-list {
+    display: flex;
+    gap: 2rem;
+    padding-block: 0.75rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .meta-bar-list::-webkit-scrollbar { display: none; }
+  .meta-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    white-space: nowrap;
+  }
+
+  /* ---------- KEY DECISIONS ---------- */
+
+  .decision {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--surface);
+  }
+  .decision-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 44px;
+    padding: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .decision-summary::-webkit-details-marker { display: none; }
+
+  /* A plus that becomes a minus. Never colour alone. */
+  .decision-marker {
+    position: relative;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+  .decision-marker::before,
+  .decision-marker::after {
+    content: '';
+    position: absolute;
+    background-color: var(--accent-fg);
+    transition: transform var(--duration-fast) var(--ease-in-out);
+  }
+  .decision-marker::before { inset: 7px 0; height: 2px; }
+  .decision-marker::after  { inset: 0 7px; width: 2px; }
+  .decision[open] .decision-marker::after { transform: scaleY(0); }
+
+  .decision-body {
+    padding: 0 1rem 1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  /* ---------- BEFORE / AFTER SLIDER ---------- */
+
+  .ba-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--brand-accent);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  /* The range input is the drag surface: invisible, full-bleed, and keyboard
+     operable, with a focus ring that lands on the whole comparison. */
+  .ba-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    appearance: none;
+    background: transparent;
+  }
+  .ba-range:focus-visible { opacity: 1; }
+  .ba-range:focus-visible + * { outline: none; }
+  .ba-slider:focus-within { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ---------- NEXT PROJECT ---------- */
+
+  .next-project-scrim {
+    background-color: rgba(14, 17, 16, 0.60);
+    transition: background-color var(--duration-base) var(--ease-in-out);
+  }
+  .next-project:hover .next-project-scrim,
+  .next-project:focus-visible .next-project-scrim {
+    background-color: rgba(14, 17, 16, 0.20);
+  }
+  .next-project-image {
+    transition: transform var(--duration-base) var(--ease-in-out);
+  }
+  .next-project:hover .next-project-image,
+  .next-project:focus-visible .next-project-image { transform: scale(1.02); }
+
+  /* ---------- STICKY NEXT BAR ---------- */
+
+  .sticky-next {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 35;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--nav-scrim);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateY(100%);
+    transition:
+      opacity   var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+  .sticky-next.is-visible { opacity: 1; transform: none; }
+  .sticky-next-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text-primary);
+  }
+  @media (min-width: 768px) {
+    .sticky-next {
+      left: auto;
+      right: 2rem;
+      bottom: 2rem;
+      min-width: 320px;
+    }
+  }
+
+  /* ---------- METHODOLOGY TIMELINE ---------- */
+  /* Left rail with the phase number sitting on it. */
+
+  .methodology-phase {
+    position: relative;
+    padding-left: 1rem;
+  }
+  .methodology-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateX(-50%);
+    padding-block: 0.25rem;
+    background-color: var(--background);
+  }
+
+  /* ---------- HERO ROLE SWAP ---------- */
+  /* Both states share one grid cell, so the box is always sized to the wider
+     of the two and the alternation cannot shift the layout. */
+
+  .role-swap {
+    display: inline-grid;
+    grid-template-areas: "line";
+  }
+  .role-swap-state {
+    grid-area: line;
+    opacity: 0;
+    /* In: fade and rise from 8px over 250ms. */
+    transform: translateY(8px);
+    transition:
+      opacity   250ms var(--ease-out),
+      transform 250ms var(--ease-out);
+  }
+  .role-swap-state[data-current="true"] {
+    opacity: 1;
+    transform: none;
+  }
+  /* Out: fade and lift 8px over 200ms, on the ease-in curve. */
+  .role-swap-state.is-leaving {
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity   200ms var(--ease-in-out),
+      transform 200ms var(--ease-in-out);
+  }
+
+  /* ---------- ELEVATION ---------- */
+  /* Inset borders stand in for shadows, which the brand rejects. */
+
+  .elevated   { box-shadow: var(--elevation-1); }
+  .elevated-2 { box-shadow: var(--elevation-2); }
+
+  /* ---------- CONTROLS ---------- */
+  /* Expressed as component classes because their tints are alpha values, and
+     components are not allowed to carry raw colour. */
+
+  .btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;       /* touch target floor, everywhere */
+    min-width: 44px;
+    padding: 1rem 2rem;     /* 16px / 32px */
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition:
+      background-color var(--duration-fast) var(--ease-in-out),
+      border-color     var(--duration-fast) var(--ease-in-out),
+      color            var(--duration-fast) var(--ease-in-out),
+      transform        100ms var(--ease-in-out);
+  }
+  /* Press only. No lift, no shadow. */
+  .btn-base:active:not(:disabled) { transform: scale(0.98); }
+
+  .btn-base:disabled {
+    cursor: not-allowed;
+    background-color: transparent;
+    border-color: var(--control-border);
+    color: var(--brand-muted);
+  }
+
+  /* Foreground colour for the accent role. Resolves per surface via --accent-fg
+     so a label never has to know which background it landed on. */
+  .text-accent-fg { color: var(--accent-fg); }
+
+  .btn-primary {
+    background-color: var(--action);
+    color: var(--action-fg);
+  }
+  .btn-primary:hover { background-color: var(--action-hover); }
+
+  .btn-secondary {
+    background-color: transparent;
+    border-color: var(--control-border);
+    color: var(--text-primary);
+  }
+  .btn-secondary:hover {
+    border-color: var(--control-border-hover);
+    background-color: var(--control-fill-hover);
+  }
+  .surface-brand .btn-secondary { color: #FFFFFF; }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--text-primary);
+    padding-inline: 1rem;
+  }
+  .btn-ghost:hover { background-color: var(--control-fill-hover); }
+
+  /* Square control for icon-only buttons — theme and sound toggles. */
+  .btn-icon {
+    padding: 0;
+    width: 44px;
+    height: 44px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--control-border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    transition: border-color var(--duration-fast) var(--ease-in-out);
+  }
+  /* Not clickable in v1 — the border brighten is the whole interaction. */
+  .tag:hover { border-color: var(--control-border-hover); }
+
+  /* Underline draws left-to-right. Never combined with .highlight.
+     These are standalone links rather than links inside a sentence, so they
+     carry vertical padding to reach a 44px hit area. The underline is offset
+     by the same amount so it still sits against the text rather than at the
+     bottom of the padding box. */
+  .link-underline {
+    position: relative;
+    display: inline-block;
+    padding-block: 0.75rem;
+    /* Short labels in the footer list ("Work") are only 36px wide. */
+    min-width: 44px;
+    color: var(--accent-fg);
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: calc(0.75rem - 2px);
+    height: 1px;
+    width: 0;
+    background-color: currentColor;
+    transition: width 200ms var(--ease-out);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after { width: 100%; }
+
+  /* ---------- TEXT HIGHLIGHT ---------- */
+  /* Max 3 per section. Positioning phrases only. Never on links. */
+
+  .highlight {
+    background-image: linear-gradient(
+      rgba(47, 168, 106, 0.20),
+      rgba(47, 168, 106, 0.20)
+    );
+    background-size: 0% 100%;
+    background-position: 0 88%;
+    background-repeat: no-repeat;
+    transition: background-size var(--duration-slow) var(--ease-out);
+    padding-inline: 2px;
+    /* Emphasis takes the primary text colour. Highlighted phrases usually sit
+       inside muted body copy, and muted text under the green wash drops to
+       3.8:1 in light mode. */
+    color: var(--text-primary);
+  }
+  .highlight:hover,
+  .highlight.is-visible { background-size: 100% 100%; }
+
+  .highlight-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .highlight-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 2px;
+    width: 0;
+    background-color: var(--brand-accent);
+    transition: width var(--duration-slow) var(--ease-out);
+  }
+  .highlight-underline:hover::after,
+  .highlight-underline.is-visible::after { width: 100%; }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  /* One per section, fires once. */
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity   var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+
+  /* Without JavaScript nothing ever adds .is-visible, so the reveal must not
+     be allowed to hide content. The layout ships a <noscript> copy of this for
+     browsers that don't support the scripting media feature. */
+  @media (scripting: none) {
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  .reveal-stagger > *   { transition-delay: 0ms; }
+  .reveal-stagger > *:nth-child(2) { transition-delay: 60ms; }
+  .reveal-stagger > *:nth-child(3) { transition-delay: 120ms; }
+  .reveal-stagger > *:nth-child(4) { transition-delay: 180ms; }
+
+  /* ---------- SOFT SNAP ---------- */
+  /* proximity, never mandatory — mandatory hijacks the scroll wheel. */
+
+  .snap-container { scroll-snap-type: y proximity; }
+  .snap-section   { scroll-snap-align: start; scroll-snap-stop: normal; }
+
+  /* ---------- SKIP LINK ---------- */
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    color: var(--text-primary);
+    border-radius: 8px;
+  }
+  .skip-link:focus { left: 1rem; top: 1rem; }
 }

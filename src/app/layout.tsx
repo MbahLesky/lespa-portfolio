@@ -1,49 +1,93 @@
-import type { Metadata } from "next";
-import { Saira, IBM_Plex_Sans } from "next/font/google";
-import { ThemeProvider } from "@/components/shared/ThemeProvider";
-import { Navbar } from "@/components/layout/Navbar";
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
+
 import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
+import { AppChrome } from "@/components/shared/AppChrome";
+import { SoundProvider } from "@/components/shared/SoundProvider";
+import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import "./globals.css";
 
-const saira = Saira({
-  subsets: ["latin"],
-  variable: "--font-saira",
+/**
+ * Self-hosted, latin-subset variable fonts. Nicomedia is deliberately absent —
+ * the wordmark is an SVG and the face is never loaded as a web font.
+ */
+const saira = localFont({
+  src: "../fonts/Saira-Variable-latin.woff2",
+  variable: "--font-heading",
+  weight: "400 600",
+  style: "normal",
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "sans-serif"],
 });
 
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"], // Light, Regular, Medium from CORE VISUAL
-  variable: "--font-ibm",
+const ibmPlexSans = localFont({
+  src: "../fonts/IBMPlexSans-Variable-latin.woff2",
+  variable: "--font-body",
+  weight: "400 500",
+  style: "normal",
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "sans-serif"],
 });
+
+/**
+ * Canonical URLs have to be absolute, so metadata needs to know where the site
+ * lives. Set NEXT_PUBLIC_SITE_URL in the deployment environment; the fallback
+ * is a placeholder until the real domain is registered.
+ */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lespa.dev"; // [MOCK] domain
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Senior Frontend Systems Engineer",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default:
+      "Lespa — Brand & Product Designer, Developer | Bamenda, Cameroon",
+    template: "%s | Lespa",
+  },
+  description:
+    "I design brands, build the websites and mobile apps they live in, and teach you to run them. Custom-coded. Based in Bamenda, working worldwide.",
+};
+
+export const viewport: Viewport = {
+  /**
+   * The browser chrome colour. This is HTML metadata rather than a style, so it
+   * cannot reference a CSS custom property — the value is duplicated from
+   * --background in the dark theme and must be kept in step with it. Dark is
+   * the default theme regardless of OS preference, so one value is correct.
+   */
+  themeColor: "#0E1110",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${saira.variable} ${ibmPlexSans.variable} font-sans antialiased bg-background text-textPrimary flex flex-col min-h-screen`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
+    <html
+      lang="en"
+      className={`${saira.variable} ${ibmPlexSans.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Scroll reveals start at opacity 0 and are only ever un-hidden by
+            script. Without JS the content must still be readable. */}
+        <noscript>
+          <style>{".reveal{opacity:1;transform:none}"}</style>
+        </noscript>
+      </head>
+      <body className="font-body antialiased">
+        <ThemeProvider>
+          <SoundProvider>
+          {/* First focusable element on every page. */}
+          <a href="#main" className="skip-link">
+            Skip to content
+          </a>
+          <AppChrome />
+          <Navbar />
+          {children}
+          <Footer />
+          </SoundProvider>
         </ThemeProvider>
       </body>
     </html>

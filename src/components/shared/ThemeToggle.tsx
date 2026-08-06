@@ -1,36 +1,43 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/shared/Button";
 import { Moon, Sun } from "lucide-react";
 
+import { Button } from "@/components/shared/Button";
+
+/**
+ * Dark/light toggle. Lives in both the nav and the footer.
+ *
+ * Renders a fixed-size placeholder until mounted: the resolved theme is unknown
+ * during SSR, and swapping the icon after hydration would otherwise shift the
+ * layout around it.
+ */
 export function ThemeToggle() {
-    const { setTheme, theme } = useTheme();
-    const [mounted, setMounted] = React.useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-    React.useEffect(() => {
-        setMounted(true);
-    }, []);
+  useEffect(() => setMounted(true), []);
 
-    if (!mounted) {
-        return (
-            <Button variant="ghost" size="icon" className="text-textSecondary" disabled>
-                <span className="sr-only">Loading theme</span>
-            </Button>
-        );
-    }
+  if (!mounted) {
+    return <span className="block h-11 w-11" aria-hidden="true" />;
+  }
 
-    return (
-        <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            className="text-textSecondary hover:text-primary dark:hover:text-accentSecondary transition-colors"
-        >
-            <Sun className="h-24 w-24 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-24 w-24 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-        </Button>
-    );
+  const isDark = resolvedTheme === "dark";
+
+  return (
+    <Button
+      variant="ghost"
+      icon
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      aria-pressed={isDark}
+    >
+      {isDark ? (
+        <Sun className="h-5 w-5" aria-hidden="true" />
+      ) : (
+        <Moon className="h-5 w-5" aria-hidden="true" />
+      )}
+    </Button>
+  );
 }
