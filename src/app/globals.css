@@ -1,153 +1,267 @@
-@import "tailwindcss";
+/* ============================================================
+   LESPA — DESIGN TOKENS
+   src/app/globals.css
+   Source of truth: CORE VISUAL.md + Design Spec v2
+   No hex values anywhere outside this file.
+   ============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
-    /* Brand Colors */
-    --color-primary-light: #0F8A36;
-    --color-primary: #0D6D2B;
-    --color-primary-dark: #075520;
-    --color-primary-soft: #E6F2EB;
-    --color-primary-muted: #9BBFA9;
+    /* ---------- BRAND ---------- */
+    --brand-light:        #0F8A36;
+    --brand:              #0D6D2B;
+    --brand-dark:         #075520;
+    --brand-soft:         #E6F2EB;
+    --brand-muted:        #9BBFA9;
+    --brand-accent:       #2FA86A;  /* the green used on dark surfaces */
 
-    /* Neutral (Light Mode) */
-    --color-background: #FAFBF9;
-    --color-surface: #FFFFFF;
-    --color-border: #E4EAE6;
-    --color-text-primary: #1A1F1C;
-    --color-text-secondary: #5E6B63;
+    /* ---------- LIGHT THEME (default) ---------- */
+    --background:         #FAFBF9;
+    --surface:            #FFFFFF;
+    --border:             #E4EAE6;
+    --text-primary:       #1A1F1C;
+    --text-secondary:     #5E6B63;
+    --accent-warm:        #EDE7DB;
 
-    /* Secondary Accent */
-    --color-accent-secondary: #EDE7DB;
+    /* interactive — light */
+    --action:             var(--brand);
+    --action-hover:       var(--brand-light);
+    --action-active:      var(--brand-dark);
+    --action-fg:          #FFFFFF;
+    --focus-ring:         var(--brand);
 
-    /* Gradient Stops - Light/Brand */
-    --gradient-brand-start: var(--color-primary);
-    --gradient-brand-end: var(--color-primary-dark);
+    /* ---------- GRADIENTS ---------- */
+    --gradient-brand-deep: linear-gradient(135deg, #0D6D2B 0%, #075520 100%);
+    --gradient-brand-lift: linear-gradient(135deg, #0D6D2B 0%, #2FA86A 100%);
+    --gradient-surface:    linear-gradient(135deg, #FAFBF9 0%, #FFFFFF 100%);
+    --gradient-warm:       linear-gradient(135deg, #FAFBF9 0%, #EDE7DB 100%);
 
-    --gradient-light-start: var(--color-background);
-    --gradient-light-end: var(--color-surface);
+    /* ---------- PATTERN ---------- */
+    --pattern-url:        url('/assets/pattern-light.svg');
+    --pattern-opacity:    0.5;
 
-    --gradient-accent-start: var(--color-background);
-    --gradient-accent-end: var(--color-accent-secondary);
+    /* ---------- MOTION ---------- */
+    --duration-fast:      150ms;
+    --duration-base:      250ms;
+    --duration-slow:      400ms;
+    --duration-reveal:    350ms;
+    --duration-section:   600ms;
+    --ease-out:           cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out:        cubic-bezier(0.65, 0, 0.35, 1);
 
-    /* Shadcn UI Default Mapping (for compatibility if needed later) */
-    --background: 140 33% 98%;
-    /* #FAFBF9 */
-    --foreground: 140 10% 11%;
-    /* #1A1F1C */
-    --card: 0 0% 100%;
-    /* #FFFFFF */
-    --card-foreground: 140 10% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 140 10% 11%;
-    --primary: 139 79% 23%;
-    /* #0D6D2B */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 41 40% 89%;
-    /* #EDE7DB */
-    --secondary-foreground: 140 10% 11%;
-    --muted: 143 50% 95%;
-    /* #E6F2EB */
-    --muted-foreground: 143 7% 38%;
-    /* #5E6B63 */
-    --accent: 41 40% 89%;
-    /* #EDE7DB */
-    --accent-foreground: 140 10% 11%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 140 14% 91%;
-    /* #E4EAE6 */
-    --input: 140 14% 91%;
-    --ring: 139 79% 23%;
-    /* #0D6D2B */
-    --radius: 0.5rem;
+    /* ---------- ELEVATION ---------- */
+    /* Borders, not shadows. Brand rejects drop shadows. */
+    --elevation-1:        inset 0 0 0 1px var(--border);
+    --elevation-2:        inset 0 0 0 1px var(--border);
+
+    /* ---------- LAYOUT ---------- */
+    --content-max:        1200px;
+    --reading-max:        760px;
+    --nav-height:         72px;
   }
 
   .dark {
-    /* Neutral (Dark Mode) overrides */
-    --color-background: #0E1110;
-    --color-surface: #141A17;
-    --color-text-primary: #E7ECE9;
-    --color-text-muted: #9AA5A0;
-    --color-accent-secondary: #2FA86A;
-    /* Replaces brand color as accent */
+    --background:         #0E1110;
+    --surface:            #141A17;
+    --border:             rgba(255, 255, 255, 0.10);
+    --text-primary:       #E7ECE9;
+    --text-secondary:     #9AA5A0;
 
-    /* Gradient Stops - Dark */
-    --gradient-dark-start: var(--color-background);
-    --gradient-dark-end: var(--color-surface);
+    /* On dark, green foregrounds are ALWAYS --brand-accent.
+       --brand (#0D6D2B) fails contrast as text on #0E1110.
+       It may only be used as a fill behind white text. */
+    --action:             var(--brand);
+    --action-hover:       var(--brand-light);
+    --action-active:      var(--brand-dark);
+    --action-fg:          #FFFFFF;
+    --focus-ring:         var(--brand-accent);
 
-    /* Shadcn UI Default Mapping (Dark) */
-    --background: 160 9% 6%;
-    /* #0E1110 */
-    --foreground: 144 10% 91%;
-    /* #E7ECE9 */
-    --card: 150 12% 9%;
-    /* #141A17 */
-    --card-foreground: 144 10% 91%;
-    --popover: 150 12% 9%;
-    --popover-foreground: 144 10% 91%;
-    --primary: 149 56% 42%;
-    /* #2FA86A */
-    --primary-foreground: 160 9% 6%;
-    --secondary: 150 12% 9%;
-    /* #141A17 */
-    --secondary-foreground: 144 10% 91%;
-    --muted: 150 12% 9%;
-    --muted-foreground: 150 5% 62%;
-    /* #9AA5A0 */
-    --accent: 150 12% 9%;
-    --accent-foreground: 144 10% 91%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 144 10% 91%;
-    --border: 150 12% 9%;
-    --input: 150 12% 9%;
-    --ring: 149 56% 42%;
+    --gradient-surface:   linear-gradient(135deg, #0E1110 0%, #141A17 100%);
+    --gradient-warm:      linear-gradient(135deg, #0E1110 0%, #141A17 100%);
+
+    --pattern-url:        url('/assets/pattern-dark.svg');
+
+    --elevation-1:        inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+    --elevation-2:        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
   }
 
-  * {
-    border-color: var(--border);
+  @media (max-width: 767px) {
+    :root { --nav-height: 64px; }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-text-primary);
-    cursor: url('/assets/logos/light-theme/Symbol.svg') 16 16, auto;
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  /* when tailwind applies dark class (next-themes default on html element) */
-  .dark body {
-    cursor: url('/assets/logos/dark-theme/Lespa/Symbol.svg') 16 16, auto;
+  /* Dark UI needs slightly more leading */
+  .dark body { line-height: 1.65; }
+
+  ::selection {
+    background-color: var(--brand-accent);
+    color: #0E1110;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  :focus:not(:focus-visible) { outline: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-@layer utilities {
+@layer components {
 
-  /* Gradients */
-  .bg-gradient-brand {
-    background: linear-gradient(135deg, var(--gradient-brand-start) 0%, var(--gradient-brand-end) 100%);
+  /* ---------- SECTION SURFACES ---------- */
+
+  .surface-gradient {
+    position: relative;
+    background-image: var(--gradient-surface);
+    isolation: isolate;
   }
 
-  .bg-gradient-light {
-    background: linear-gradient(135deg, var(--gradient-light-start) 0%, var(--gradient-light-end) 100%);
+  .surface-brand {
+    position: relative;
+    background-image: var(--gradient-brand-deep);
+    color: #FFFFFF;
+    isolation: isolate;
   }
 
-  .bg-gradient-dark {
-    background: linear-gradient(135deg, var(--gradient-dark-start) 0%, var(--gradient-dark-end) 100%);
+  .surface-warm {
+    position: relative;
+    background-image: var(--gradient-warm);
+    isolation: isolate;
   }
 
-  .bg-gradient-accent {
-    background: linear-gradient(135deg, var(--gradient-accent-start) 0%, var(--gradient-accent-end) 100%);
-  }
+  .surface-flat  { background-color: var(--background); }
+  .surface-raised { background-color: var(--surface); }
 
-  /* Patterns */
-  .bg-pattern-light {
-    background-image: url('/assets/patterns/pattern-light.svg');
+  /* Pattern overlay: gradient → pattern (50%) → content.
+     Pseudo-element keeps child opacity untouched. */
+  .has-pattern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--pattern-url);
     background-repeat: repeat;
-    opacity: 0.5;
+    background-size: 480px auto;
+    opacity: var(--pattern-opacity);
+    pointer-events: none;
+  }
+  .has-pattern > * { position: relative; z-index: 1; }
+
+  /* ---------- LAYOUT ---------- */
+
+  .container-base {
+    width: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding-inline: 1.5rem;   /* 24px  mobile */
+  }
+  @media (min-width: 768px)  { .container-base { padding-inline: 3rem; } }   /* 48px */
+  @media (min-width: 1024px) { .container-base { padding-inline: 5rem; } }   /* 80px */
+  @media (min-width: 1280px) { .container-base { padding-inline: 7.5rem; } } /* 120px */
+
+  .container-reading { max-width: var(--reading-max); margin-inline: auto; }
+
+  .section-major    { padding-block: 5rem; }   /* 80px mobile */
+  .section-standard { padding-block: 4rem; }   /* 64px mobile */
+  @media (min-width: 768px) {
+    .section-major    { padding-block: 7.5rem; }  /* 120px */
+    .section-standard { padding-block: 6rem; }    /* 96px */
   }
 
-  .bg-pattern-dark {
-    background-image: url('/assets/patterns/pattern-dark.svg');
-    background-repeat: repeat;
-    opacity: 0.5;
+  /* ---------- TEXT HIGHLIGHT ---------- */
+  /* Max 3 per section. Positioning phrases only. Never on links. */
+
+  .highlight {
+    background-image: linear-gradient(
+      rgba(47, 168, 106, 0.20),
+      rgba(47, 168, 106, 0.20)
+    );
+    background-size: 0% 100%;
+    background-position: 0 88%;
+    background-repeat: no-repeat;
+    transition: background-size var(--duration-slow) var(--ease-out);
+    padding-inline: 2px;
   }
+  .highlight:hover,
+  .highlight.is-visible { background-size: 100% 100%; }
+
+  .highlight-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .highlight-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 2px;
+    width: 0;
+    background-color: var(--brand-accent);
+    transition: width var(--duration-slow) var(--ease-out);
+  }
+  .highlight-underline:hover::after,
+  .highlight-underline.is-visible::after { width: 100%; }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  /* One per section, fires once. */
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity   var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+
+  .reveal-stagger > *   { transition-delay: 0ms; }
+  .reveal-stagger > *:nth-child(2) { transition-delay: 60ms; }
+  .reveal-stagger > *:nth-child(3) { transition-delay: 120ms; }
+  .reveal-stagger > *:nth-child(4) { transition-delay: 180ms; }
+
+  /* ---------- SOFT SNAP ---------- */
+  /* proximity, never mandatory — mandatory hijacks the scroll wheel. */
+
+  .snap-container { scroll-snap-type: y proximity; }
+  .snap-section   { scroll-snap-align: start; scroll-snap-stop: normal; }
+
+  /* ---------- SKIP LINK ---------- */
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    color: var(--text-primary);
+    border-radius: 8px;
+  }
+  .skip-link:focus { left: 1rem; top: 1rem; }
 }

@@ -1,50 +1,58 @@
-import type { Metadata } from "next";
-import { Saira, IBM_Plex_Sans } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
+
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
-const saira = Saira({
-  subsets: ["latin"],
-  variable: "--font-saira",
+/**
+ * Self-hosted, latin-subset variable fonts. Nicomedia is deliberately absent —
+ * the wordmark is an SVG and the face is never loaded as a web font.
+ */
+const saira = localFont({
+  src: "../fonts/Saira-Variable-latin.woff2",
+  variable: "--font-heading",
+  weight: "400 600",
+  style: "normal",
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "sans-serif"],
 });
 
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"], // Light, Regular, Medium from CORE VISUAL
-  variable: "--font-ibm",
+const ibmPlexSans = localFont({
+  src: "../fonts/IBMPlexSans-Variable-latin.woff2",
+  variable: "--font-body",
+  weight: "400 500",
+  style: "normal",
   display: "swap",
+  preload: true,
+  fallback: ["system-ui", "sans-serif"],
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Senior Frontend Systems Engineer",
+  title: {
+    default:
+      "Lespa — Brand & Product Designer, Developer | Bamenda, Cameroon",
+    template: "%s | Lespa",
+  },
+  description:
+    "I design brands, build the websites and mobile apps they live in, and teach you to run them. Custom-coded. Based in Bamenda, working worldwide.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0E1110",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${saira.variable} ${ibmPlexSans.variable} font-sans antialiased bg-background text-textPrimary flex flex-col min-h-screen`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </ThemeProvider>
+    <html
+      lang="en"
+      className={`${saira.variable} ${ibmPlexSans.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="font-body antialiased">
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
