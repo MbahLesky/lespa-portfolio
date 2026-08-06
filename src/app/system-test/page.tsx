@@ -41,7 +41,7 @@ function Row({ title, children }: { title: string; children: React.ReactNode }) 
 export default function SystemTest() {
   return (
     <main id="main">
-      <Section variant="flat" spacing="standard">
+      <Section variant="flat" spacing="standard" className="below-nav">
         <div className="flex items-center justify-between gap-6">
           <Heading as="h1">System test</Heading>
           <ThemeToggle />

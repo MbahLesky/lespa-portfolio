@@ -231,11 +231,73 @@
 
   .container-reading { max-width: var(--reading-max); margin-inline: auto; }
 
+  .nav-inner { height: var(--nav-height); }
+
   .section-major    { padding-block: 5rem; }   /* 80px mobile */
   .section-standard { padding-block: 4rem; }   /* 64px mobile */
   @media (min-width: 768px) {
     .section-major    { padding-block: 7.5rem; }  /* 120px */
     .section-standard { padding-block: 6rem; }    /* 96px */
+  }
+
+  /* First section on a page. The nav is fixed and transparent at the top, so
+     the surface bleeds up behind it while the content clears it. Declared
+     after the spacing classes so it wins on source order. */
+  .below-nav { padding-top: calc(var(--nav-height) + 5rem); }
+  @media (min-width: 768px) {
+    .below-nav { padding-top: calc(var(--nav-height) + 7.5rem); }
+  }
+
+  /* ---------- NAVIGATION ---------- */
+
+  .nav-scrim {
+    background-color: var(--nav-scrim);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text-primary);
+    opacity: 0.7;
+    transition: opacity var(--duration-fast) var(--ease-in-out);
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible { opacity: 1; }
+
+  /* Active page marker: 2px accent underline. */
+  .nav-link.is-active { opacity: 1; }
+  .nav-link.is-active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    height: 2px;
+    background-color: var(--brand-accent);
+  }
+
+  /* Sits above the fixed header so it covers the bar's own scrim. */
+  .mobile-menu {
+    position: fixed;
+    inset: var(--nav-height) 0 0 0;
+    z-index: 45;
+    padding-block: 2rem;
+    background-color: var(--background);
+    overflow-y: auto;
+  }
+
+  .mobile-menu-item {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: menu-item-in var(--duration-base) var(--ease-out) forwards;
+  }
+
+  @keyframes menu-item-in {
+    to { opacity: 1; transform: none; }
   }
 
   /* ---------- ELEVATION ---------- */
