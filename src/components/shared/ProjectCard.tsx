@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-import { ProjectImage } from "@/components/shared/ProjectImage";
+import { CardMedia } from "@/components/shared/CardMedia";
 import { Heading } from "@/components/shared/Heading";
 import { Tag } from "@/components/shared/Tag";
 import { Text } from "@/components/shared/Text";
@@ -19,20 +19,23 @@ interface ProjectCardProps {
    * heading above them and h2 keeps the outline unbroken.
    */
   headingLevel?: "h2" | "h3";
+  /** Shows the "hover to see the sketch" label. First card on a page only. */
+  hint?: boolean;
   className?: string;
 }
 
 /**
  * A project card. The whole card is the link, not just the title.
  *
- * Shows the final image only in this phase — the hover-reveal crossfade to the
- * sketch is Phase 6.
+ * The media handles the hover-reveal crossfade and its touch equivalent; see
+ * CardMedia.
  */
 export function ProjectCard({
   project,
   featured = false,
   priority = false,
   headingLevel = "h3",
+  hint = false,
   className,
 }: ProjectCardProps) {
   return (
@@ -40,24 +43,15 @@ export function ProjectCard({
       href={`/projects/${project.slug}`}
       className={cn("project-card group flex flex-col gap-4", className)}
     >
-      <div
-        className={cn(
-          "relative w-full overflow-hidden rounded-md",
-          featured ? "ratio-16-9" : "ratio-4-3",
-        )}
-      >
-        <ProjectImage
-          src={project.images.final}
-          alt={`${project.name} — ${project.outcome}`}
-          name={project.name}
-          priority={priority}
-          sizes={
-            featured
-              ? "(min-width: 768px) 1200px, 100vw"
-              : "(min-width: 768px) 600px, 100vw"
-          }
-        />
-      </div>
+      <CardMedia
+        final={project.images.final}
+        sketch={project.images.sketch}
+        name={project.name}
+        outcome={project.outcome}
+        featured={featured}
+        priority={priority}
+        hint={hint}
+      />
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-2">

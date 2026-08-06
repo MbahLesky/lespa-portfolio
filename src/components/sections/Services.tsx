@@ -8,7 +8,13 @@ import { services } from "@/content/copy";
 
 export function Services() {
   return (
-    <Section variant="gradient" spacing="standard" aria-labelledby="services-heading">
+    <Section
+      variant="gradient"
+      spacing="standard"
+      id="services"
+      data-tint="flat"
+      aria-labelledby="services-heading"
+    >
       <div className="flex flex-col gap-4">
         <SectionLabel>{services.label}</SectionLabel>
         <Heading as="h2" id="services-heading">

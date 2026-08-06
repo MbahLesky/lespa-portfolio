@@ -6,7 +6,13 @@ import { approach } from "@/content/copy";
 
 export function Approach() {
   return (
-    <Section variant="gradient" spacing="standard" aria-labelledby="approach-heading">
+    <Section
+      variant="gradient"
+      spacing="standard"
+      id="approach"
+      data-tint="flat"
+      aria-labelledby="approach-heading"
+    >
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         <div className="flex flex-col gap-6">
           <SectionLabel>{approach.label}</SectionLabel>

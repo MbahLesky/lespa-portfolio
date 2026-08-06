@@ -11,6 +11,9 @@ export function Hero() {
       variant="brand"
       pattern
       spacing="major"
+      reveal={false}
+      id="hero"
+      data-tint="flat"
       className="below-nav"
       aria-labelledby="hero-heading"
     >

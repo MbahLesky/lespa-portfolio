@@ -37,6 +37,7 @@ export default function ProjectsPage() {
               project={project}
               headingLevel="h2"
               priority={index < 2}
+              hint={index === 0}
             />
           ))}
         </div>

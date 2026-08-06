@@ -22,6 +22,7 @@ export function SelectedWork() {
       variant="flat"
       spacing="major"
       id="work"
+      data-tint="flat"
       aria-labelledby="work-heading"
     >
       <div className="flex flex-col gap-4">
@@ -35,7 +36,7 @@ export function SelectedWork() {
       </div>
 
       <div className="mt-12 flex flex-col gap-8">
-        <ProjectCard project={lead} featured priority />
+        <ProjectCard project={lead} featured priority hint />
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {rest.map((project) => (

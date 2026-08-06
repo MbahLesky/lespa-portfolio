@@ -120,7 +120,10 @@
   }
 
   body {
-    background-color: var(--background);
+    /* --page-tint is set by SectionTint while scrolling; it falls back to the
+       plain background whenever that is not running. */
+    background-color: var(--page-tint, var(--background));
+    transition: background-color var(--duration-section) var(--ease-in-out);
     color: var(--text-primary);
     font-family: var(--font-body), system-ui, sans-serif;
     font-weight: 400;
@@ -201,6 +204,11 @@
 
   .surface-flat  { background-color: var(--background); }
   .surface-raised { background-color: var(--surface); }
+
+  /* Once SectionTint is running, the neutral surfaces hand their colour to the
+     page canvas so it can interpolate between them instead of cutting. */
+  .tint-active .surface-flat,
+  .tint-active .surface-raised { background-color: transparent; }
 
   /* Pattern overlay: gradient → pattern (50%) → content.
      Pseudo-element keeps child opacity untouched. */
@@ -326,6 +334,137 @@
   @keyframes menu-item-in {
     to { opacity: 1; transform: none; }
   }
+
+  /* ---------- PROJECT CARD ---------- */
+  /* Crossfade, title to accent, arrow shift. No lift, no scale, no shadow —
+     the crossfade alone is the interaction. */
+
+  .project-card-title {
+    transition: color var(--duration-fast) var(--ease-in-out);
+  }
+  .project-card:hover .project-card-title,
+  .project-card:focus-visible .project-card-title { color: var(--accent-fg); }
+
+  .project-card-arrow {
+    transition: transform var(--duration-fast) var(--ease-in-out);
+  }
+  .project-card:hover .project-card-arrow,
+  .project-card:focus-visible .project-card-arrow { transform: translateX(4px); }
+
+  /* The sketch sits above the final frame and fades in. Only ever revealed
+     once the sketch has actually loaded — a half-drawn reveal is worse than
+     none, so the interaction is gated on [data-sketch-ready]. */
+  .card-sketch {
+    opacity: 0;
+    transition: opacity var(--duration-reveal) var(--ease-out);
+    will-change: opacity;
+  }
+  /* The readiness flag sits on the media container inside the card, so hover is
+     matched on the card and readiness on the descendant. */
+  .project-card:hover [data-sketch-ready="true"] .card-sketch,
+  .project-card:focus-visible [data-sketch-ready="true"] .card-sketch { opacity: 1; }
+  /* Touch: driven by the Final/Sketch pill instead of hover. */
+  .card-sketch[data-shown="true"] { opacity: 1; }
+
+  .card-toggle {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    z-index: 2;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 0.25rem;
+    padding-inline: 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.30);
+    background-color: rgba(14, 17, 16, 0.72);
+    color: #FFFFFF;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Images fade up as they decode rather than snapping in. */
+  .img-fade { opacity: 0; transition: opacity var(--duration-base) var(--ease-out); }
+  .img-fade[data-loaded="true"] { opacity: 1; }
+
+  /* ---------- PAGE TRANSITION ---------- */
+
+  .page-enter { animation: page-in var(--duration-base) var(--ease-out) both; }
+  @keyframes page-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ---------- PROGRESS RAIL ---------- */
+
+  .progress-rail {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    /* No gap: each dot already carries a 44px hit box, so spacing it further
+       would stretch the rail down the whole viewport. */
+    gap: 0;
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-in-out);
+  }
+  /* Desktop only, and only where a pointer can reach it. */
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+    .progress-rail { display: flex; }
+  }
+  .progress-rail.is-active { opacity: 1; }
+
+  .rail-dot {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rail-dot::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--text-secondary);
+    opacity: 0.4;
+    transition:
+      opacity   var(--duration-fast) var(--ease-in-out),
+      transform var(--duration-fast) var(--ease-in-out),
+      background-color var(--duration-fast) var(--ease-in-out);
+  }
+  .rail-dot:hover::after { opacity: 0.8; }
+  .rail-dot[aria-current="true"]::after {
+    background-color: var(--brand-accent);
+    opacity: 1;
+    transform: scale(1.4);
+  }
+
+  /* ---------- SOFT SNAP ---------- */
+  /* Sections clear the fixed nav when snapped to. */
+  .snap-section { scroll-margin-top: var(--nav-height); }
+
+  /* ---------- LOADING TRANSITION ---------- */
+
+  .boot {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0E1110;
+    animation: boot-in 300ms var(--ease-out) both;
+  }
+  .boot[data-leaving="true"] {
+    animation: boot-out var(--duration-base) var(--ease-out) both;
+  }
+  @keyframes boot-in  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes boot-out { from { opacity: 1; } to { opacity: 0; } }
 
   /* ---------- FORM ---------- */
 
@@ -602,9 +741,24 @@
   .role-swap-state {
     grid-area: line;
     opacity: 0;
-    transition: opacity var(--duration-base) var(--ease-out);
+    /* In: fade and rise from 8px over 250ms. */
+    transform: translateY(8px);
+    transition:
+      opacity   250ms var(--ease-out),
+      transform 250ms var(--ease-out);
   }
-  .role-swap-state[data-current="true"] { opacity: 1; }
+  .role-swap-state[data-current="true"] {
+    opacity: 1;
+    transform: none;
+  }
+  /* Out: fade and lift 8px over 200ms, on the ease-in curve. */
+  .role-swap-state.is-leaving {
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity   200ms var(--ease-in-out),
+      transform 200ms var(--ease-in-out);
+  }
 
   /* ---------- ELEVATION ---------- */
   /* Inset borders stand in for shadows, which the brand rejects. */

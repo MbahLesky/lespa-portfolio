@@ -14,7 +14,13 @@ import { about } from "@/content/copy";
  */
 export function About() {
   return (
-    <Section variant="warm" spacing="major" aria-labelledby="about-heading">
+    <Section
+      variant="warm"
+      spacing="major"
+      id="about"
+      data-tint="flat"
+      aria-labelledby="about-heading"
+    >
       <div className="grid gap-12 md:grid-cols-5 md:gap-16">
         {/* [MOCK] Portrait pending. Dimensions reserved at 4:5.
             self-start matters: a stretched grid item takes the row's height,

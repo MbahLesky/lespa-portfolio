@@ -13,7 +13,13 @@ import { tools } from "@/content/copy";
  */
 export function ToolsAndSystems() {
   return (
-    <Section variant="raised" spacing="standard" aria-labelledby="tools-heading">
+    <Section
+      variant="raised"
+      spacing="standard"
+      id="tools"
+      data-tint="raised"
+      aria-labelledby="tools-heading"
+    >
       <SectionLabel>{tools.label}</SectionLabel>
 
       <div className="mt-8 grid gap-16 lg:grid-cols-2">

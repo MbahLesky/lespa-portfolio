@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { AppChrome } from "@/components/shared/AppChrome";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import "./globals.css";
 
@@ -74,6 +75,7 @@ export default function RootLayout({
           <a href="#main" className="skip-link">
             Skip to content
           </a>
+          <AppChrome />
           <Navbar />
           {children}
           <Footer />

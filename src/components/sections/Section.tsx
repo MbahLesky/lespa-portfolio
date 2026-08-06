@@ -1,4 +1,5 @@
 import { Container } from "@/components/layout/Container";
+import { Reveal } from "@/components/shared/Reveal";
 import { cn } from "@/lib/utils";
 import type { SectionSpacing, SurfaceVariant } from "@/types";
 
@@ -29,6 +30,12 @@ interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   spacing?: SectionSpacing;
   /** Set false to lay out the children yourself, e.g. for full-bleed content. */
   contained?: boolean;
+  /**
+   * Scroll reveal, on by default — one per section is the rule, and defaulting
+   * to on is what keeps it to one. Turn it off for anything above the fold,
+   * which would otherwise fade in on a page the reader is already looking at.
+   */
+  reveal?: boolean;
 }
 
 /**
@@ -43,11 +50,13 @@ export function Section({
   pattern = false,
   spacing = "standard",
   contained = true,
+  reveal = true,
   className,
   children,
   ...props
 }: SectionProps) {
   const withPattern = pattern && PATTERNABLE.has(variant);
+  const body = reveal ? <Reveal>{children}</Reveal> : children;
 
   return (
     <section
@@ -60,7 +69,7 @@ export function Section({
       )}
       {...props}
     >
-      {contained ? <Container>{children}</Container> : children}
+      {contained ? <Container>{body}</Container> : body}
     </section>
   );
 }

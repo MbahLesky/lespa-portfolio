@@ -6,6 +6,9 @@ import { FinalCta } from "@/components/sections/FinalCta";
 import { Hero } from "@/components/sections/Hero";
 import { Methodology } from "@/components/sections/Methodology";
 import { MicroCta } from "@/components/shared/MicroCta";
+import { ProgressRail } from "@/components/shared/ProgressRail";
+import { SectionTint } from "@/components/shared/SectionTint";
+import { SoftSnap } from "@/components/shared/SoftSnap";
 import { Proof } from "@/components/sections/Proof";
 import { SelectedWork } from "@/components/sections/SelectedWork";
 import { Services } from "@/components/sections/Services";
@@ -15,6 +18,19 @@ import { microCtas, site } from "@/content/copy";
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
+
+/** One dot per section, in scroll order. */
+const RAIL_SECTIONS = [
+  { id: "hero", label: "Hero" },
+  { id: "approach", label: "Approach" },
+  { id: "work", label: "Selected work" },
+  { id: "services", label: "Services" },
+  { id: "tools", label: "Tools and systems" },
+  { id: "methodology", label: "Methodology" },
+  { id: "proof", label: "Currently" },
+  { id: "about", label: "About" },
+  { id: "contact-cta", label: "Contact" },
+];
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -51,6 +67,11 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
       />
+
+      <SoftSnap />
+      <SectionTint />
+      <ProgressRail sections={RAIL_SECTIONS} />
+
       <Hero />
       <Approach />
       <SelectedWork />

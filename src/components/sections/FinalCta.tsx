@@ -10,7 +10,14 @@ import { finalCta } from "@/content/copy";
  */
 export function FinalCta() {
   return (
-    <Section variant="brand" pattern spacing="major" aria-labelledby="cta-heading">
+    <Section
+      variant="brand"
+      pattern
+      spacing="major"
+      id="contact-cta"
+      data-tint="flat"
+      aria-labelledby="cta-heading"
+    >
       <div className="mx-auto flex max-w-reading flex-col items-center gap-6 text-center">
         <Heading as="h2" id="cta-heading">
           {finalCta.heading}

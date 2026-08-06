@@ -10,7 +10,13 @@ import { proof } from "@/content/copy";
  */
 export function Proof() {
   return (
-    <Section variant="warm" spacing="standard" aria-labelledby="proof-heading">
+    <Section
+      variant="warm"
+      spacing="standard"
+      id="proof"
+      data-tint="flat"
+      aria-labelledby="proof-heading"
+    >
       <div className="flex max-w-reading flex-col gap-4">
         <SectionLabel>{proof.label}</SectionLabel>
         <Heading as="h2" id="proof-heading">

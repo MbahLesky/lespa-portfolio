@@ -1,3 +1,4 @@
+import { CountUp } from "@/components/shared/CountUp";
 import { Heading } from "@/components/shared/Heading";
 import { Section } from "@/components/sections/Section";
 import { SectionLabel, Text } from "@/components/shared/Text";
@@ -15,6 +16,8 @@ export function Methodology() {
       variant="gradient"
       pattern
       spacing="standard"
+      id="methodology"
+      data-tint="flat"
       aria-labelledby="methodology-heading"
     >
       <div className="flex flex-col gap-4">
@@ -40,7 +43,7 @@ export function Methodology() {
             }
           >
             <span className="methodology-number font-heading text-h5 text-accent-fg">
-              {phase.number}
+              <CountUp value={phase.number} />
             </span>
             <div className="flex flex-col gap-2 pb-12 pl-8">
               <Heading as="h3" size="h4">
