@@ -254,6 +254,13 @@
   .nav-inner { height: var(--nav-height); }
 
   /* Image ratios. Reserved on the container so nothing shifts as images load. */
+  /* Landscape when stacked under the copy, portrait once it sits beside it —
+     a full-width 4:5 would swallow a phone screen. */
+  .hero-media { aspect-ratio: 4 / 3; }
+  @media (min-width: 1024px) {
+    .hero-media { aspect-ratio: 4 / 5; }
+  }
+
   .ratio-4-3  { aspect-ratio: 4 / 3; }
   .ratio-16-9 { aspect-ratio: 16 / 9; }
   .aspect-4-5 { aspect-ratio: 4 / 5; }
