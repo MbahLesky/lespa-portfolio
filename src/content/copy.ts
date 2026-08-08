@@ -55,6 +55,27 @@ export const hero = {
   primaryCta: { label: "See the work", href: "/projects" },
   secondaryCta: { label: "Start a project", href: "/contact" },
   trust: "Bamenda, Cameroon · Remote worldwide · @iamlespa",
+  /**
+   * [MOCK] The hero visual. Nothing exists at this path yet, so the slot renders
+   * its reserved frame instead — the box is already the right size, so dropping
+   * the real file in cannot shift the page.
+   *
+   * Wants a portrait-orientation frame: a working shot, or a piece of brand
+   * work strong enough to carry the top of the page. The alt text below
+   * describes the placeholder and must be rewritten to describe the real image.
+   */
+  image: {
+    /**
+     * Null until a real file exists. Pointing this at a path that 404s made the
+     * slot preload a missing resource at top priority, which put a failed
+     * request on the critical path and cost roughly half the performance score.
+     * Set the path and alt text together when the image is ready.
+     */
+    src: null as string | null,
+    alt: "",
+    label: "Hero image",
+    ratio: "Portrait · 4:5",
+  },
 } as const;
 
 /* ---------- 2 · Approach ---------- */
