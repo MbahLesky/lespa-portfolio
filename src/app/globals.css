@@ -494,7 +494,8 @@
   }
 
   .intro-word,
-  .intro-title {
+  .intro-name,
+  .intro-role {
     position: fixed;
     opacity: 0;
     transform-origin: center center;
@@ -508,11 +509,19 @@
     background: var(--wordmark-url) left center / contain no-repeat;
   }
 
-  .intro-title {
+  /* The name is one line by definition, and held to one: a wrap mid-word while
+     it types would move the card it is centred as. */
+  .intro-name {
     display: flex;
     align-items: center;
     white-space: nowrap;
-    opacity: 0;
+  }
+
+  /* The role line is laid over the box it will occupy in the hero and wraps
+     exactly as it will there, with the untyped remainder holding the rest of
+     its space. */
+  .intro-role {
+    display: block;
   }
 
   /* ---------- TYPEWRITER ---------- */
@@ -608,6 +617,15 @@
   @media (scripting: none) {
     .enter, .enter-line > *, .enter-rule { animation: none; opacity: 1; transform: none; }
   }
+
+  /* The entrance parks these elements below their resting place until it runs,
+     so measuring one while it waits reports a box that is displaced by its own
+     animation — and a stand-in laid over that box lands in the wrong spot. The
+     opening sequence adds this for the one frame in which it measures, then
+     removes it again, so the elements are read where they will actually sit. */
+  .intro-measuring .enter,
+  .intro-measuring .enter-line > *,
+  .intro-measuring .enter-rule { animation: none !important; }
 
   /* ---------- FORM ---------- */
 
