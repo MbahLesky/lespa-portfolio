@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Button } from "@/components/shared/Button";
 import { Heading } from "@/components/shared/Heading";
 import { RichText } from "@/components/shared/RichText";
@@ -86,6 +88,14 @@ export function About() {
             <Button variant="secondary" href={about.secondaryCta.href}>
               {about.secondaryCta.label}
             </Button>
+          </div>
+
+          {/* Matches the other sections: what is here is the whole of it in
+              short, and the page behind this link is the long version. */}
+          <div className="mt-4">
+            <Link href={about.moreLink.href} className="link-underline text-body">
+              {about.moreLink.label} →
+            </Link>
           </div>
         </div>
       </div>

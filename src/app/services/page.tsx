@@ -140,7 +140,7 @@ export default function ServicesPage() {
                 </li>
               ))}
             </ul>
-            <Button variant="primary" href="/contact" className="mt-4 self-start">
+            <Button variant="primary" href="/#contact" className="mt-4 self-start">
               Start a project
             </Button>
           </div>

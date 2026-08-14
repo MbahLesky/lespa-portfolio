@@ -1,6 +1,7 @@
 import { Container } from "@/components/layout/Container";
 import { BeforeAfterSlider } from "@/components/project/BeforeAfterSlider";
 import { KeyDecisionsBlock } from "@/components/project/KeyDecisions";
+import { LiveSystem } from "@/components/project/LiveSystem";
 import { MetaBar } from "@/components/project/MetaBar";
 import { NextProject } from "@/components/project/NextProject";
 import { ProjectHero } from "@/components/project/ProjectHero";
@@ -135,6 +136,15 @@ export function CaseStudy({
           <Block title="The system" id="system">
             <Text muted>{content.system}</Text>
           </Block>
+
+          {/* The system rendered from the live tokens, where the case study is
+              about the system drawing the page. Full width: swatches and a type
+              scale need the room, and this is the artefact, not an aside. */}
+          {content.liveSystem && (
+            <div className="case-wide">
+              <LiveSystem />
+            </div>
+          )}
 
           {/* 09 */}
           <section className="flex flex-col gap-6" aria-labelledby="after">

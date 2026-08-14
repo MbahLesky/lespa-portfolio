@@ -26,12 +26,29 @@ export const site = {
   ],
 } as const;
 
+/**
+ * The nav points at sections of the home page, not at separate pages: every
+ * one of these exists on the home page in full, and sending people away from a
+ * section they are about to scroll past is what made the site feel scattered.
+ *
+ * `section` is the id it scrolls to. `page` is the fuller version behind a
+ * "see all" link, and is what marks the nav item current when the visitor is
+ * on it — so the bar still says where they are away from home.
+ */
 export const nav = [
-  { label: "Work", href: "/projects" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Contact", href: "/contact" },
+  { label: "Work", href: "/#work", section: "work", page: "/projects" },
+  { label: "About", href: "/#about", section: "about", page: "/about" },
+  {
+    label: "Services",
+    href: "/#services",
+    section: "services",
+    page: "/services",
+  },
+  { label: "Contact", href: "/#contact", section: "contact", page: null },
 ] as const;
+
+/** The action, kept out of the link list: navigation and doing are different. */
+export const navCta = { label: "Start a project", href: "/#contact" } as const;
 
 /* ---------- 1 · Hero ---------- */
 
@@ -53,8 +70,8 @@ export const hero = {
     "I am Lespa, a graphic designer and a web and mobile developer.",
   subtext:
     "Brand systems, custom-coded websites and mobile apps — and I teach you how to run what I build.",
-  primaryCta: { label: "See the work", href: "/projects" },
-  secondaryCta: { label: "Start a project", href: "/contact" },
+  primaryCta: { label: "See the work", href: "/#work" },
+  secondaryCta: { label: "Start a project", href: "/#contact" },
   trust: "Bamenda, Cameroon · Remote worldwide · @iamlespa",
   /**
    * The hint that appears under the hero once it has been left alone. The
@@ -115,9 +132,22 @@ export const approach = {
 
 export const selectedWork = {
   label: "Selected Work",
-  heading: "Five projects. Real clients, real constraints.",
+  heading: "Real constraints, real outcomes.",
   subline: "Brand, interface, and code — usually all three.",
   bottomLink: { label: "See all work", href: "/projects" },
+  /**
+   * How many appear on the home page. The rest are behind the link — a
+   * "see all" that shows everything already is not an invitation, it is a
+   * label for a button that does nothing.
+   */
+  homeCount: 3,
+} as const;
+
+/** The full index, where the count is worth stating. */
+export const workPage = {
+  heading: "Six projects. Real constraints, real outcomes.",
+  intro:
+    "Five for clients and one for myself. Brand, interface, and code — usually all three.",
 } as const;
 
 /* ---------- 4 · Skills & Services ---------- */
@@ -316,8 +346,10 @@ export const about = {
    */
   beyondWork: null as string | null,
   close: "If any of that sounds like how you'd want to work, say hello.",
-  primaryCta: { label: "See the work", href: "/projects" },
-  secondaryCta: { label: "Start a project", href: "/contact" },
+  primaryCta: { label: "See the work", href: "/#work" },
+  secondaryCta: { label: "Start a project", href: "/#contact" },
+  /** The fuller version, for anyone this section did not exhaust. */
+  moreLink: { label: "Read the whole story", href: "/about" },
 } as const;
 
 /* ---------- 9 · Final CTA ---------- */
@@ -325,19 +357,18 @@ export const about = {
 export const finalCta = {
   heading: "Have something to build?",
   body: "Tell me what you're working on. If it's a fit, I'll reply within two days with next steps. If it isn't, I'll tell you that too — and point you somewhere better.",
-  cta: { label: "Start a project", href: "/contact" },
+  cta: { label: "Start a project", href: "/#contact" },
 } as const;
 
 /* ---------- Micro-CTAs ---------- */
 
 /** Maximum three on the page. Text links, not buttons. */
 export const microCtas = {
-  afterWork: { label: "Want something like this?", href: "/contact" },
+  afterWork: { label: "Want something like this?", href: "/#contact" },
   afterMethodology: {
     label: "Curious what yours would look like?",
-    href: "/contact",
+    href: "/#contact",
   },
-  afterAbout: { label: "Still reading? Let's talk.", href: "/contact" },
 } as const;
 
 /* ---------- Footer ---------- */

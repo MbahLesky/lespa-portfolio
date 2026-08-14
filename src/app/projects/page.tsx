@@ -4,7 +4,7 @@ import { Section } from "@/components/sections/Section";
 import { Heading } from "@/components/shared/Heading";
 import { ProjectCard } from "@/components/shared/ProjectCard";
 import { SectionLabel, Text } from "@/components/shared/Text";
-import { selectedWork } from "@/content/copy";
+import { selectedWork, workPage } from "@/content/copy";
 import { projects } from "@/content/projects";
 
 export const metadata: Metadata = {
@@ -22,9 +22,9 @@ export default function ProjectsPage() {
       <Section variant="gradient" spacing="major" className="below-nav">
         <div className="flex flex-col gap-4">
           <SectionLabel>{selectedWork.label}</SectionLabel>
-          <Heading as="h1">{selectedWork.heading}</Heading>
+          <Heading as="h1">{workPage.heading}</Heading>
           <Text muted className="max-w-reading">
-            {selectedWork.subline}
+            {workPage.intro}
           </Text>
         </div>
       </Section>

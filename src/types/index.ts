@@ -41,6 +41,12 @@ export interface Project {
   timeline: string;
   year: string;
   stack: string[];
+  /**
+   * Mine rather than a client's. Labelled in the grid: a self-initiated piece
+   * shown unmarked among client engagements invites the reader to work out the
+   * difference for themselves, and think less of the work for it.
+   */
+  selfInitiated?: boolean;
   images: ProjectImages;
 }
 

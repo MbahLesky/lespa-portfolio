@@ -524,6 +524,14 @@
     display: block;
   }
 
+  /* The nav's one action. Smaller than a page button so it reads as part of
+     the bar rather than as content that has floated up into it. */
+  .nav-cta {
+    min-height: 40px;
+    padding-inline: 1rem;
+    font-size: var(--text-body-sm);
+  }
+
   /* ---------- SCROLL CUE ---------- */
 
   /* Sits below the hero copy, centred on the column. It fades and rises in
@@ -1061,6 +1069,13 @@
   }
   /* Not clickable in v1 — the border brighten is the whole interaction. */
   .tag:hover { border-color: var(--control-border-hover); }
+
+  /* Marks a project as mine rather than a client's. Carries the accent so it
+     reads as a deliberate label and not as another discipline tag. */
+  .tag-self {
+    border-color: var(--accent-fg);
+    color: var(--accent-fg);
+  }
 
   /* Underline draws left-to-right. Never combined with .highlight.
      These are standalone links rather than links inside a sentence, so they

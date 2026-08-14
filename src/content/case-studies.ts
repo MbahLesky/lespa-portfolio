@@ -43,6 +43,12 @@ export interface CaseStudy {
   outcomes: string[];
   testimonial?: Testimonial;
   differently?: string;
+  /**
+   * Renders the design system live inside "The system", from the tokens this
+   * site is actually built on. Only true for the brand case study, where the
+   * system under discussion is the one drawing the page.
+   */
+  liveSystem?: boolean;
 }
 
 /** The short visual template. */
@@ -224,6 +230,65 @@ export const caseStudies: Record<string, CaseStudy> = {
     // [MOCK] ~40 words
     differently:
       "I built all nine blocks before anyone had assembled a page with them. Two turned out to be near-duplicates that should have been one, and I only learned that once the team started composing.",
+  },
+  "lespa-brand": {
+    // [MOCK] ~80 words
+    problem: [
+      "I had been building brands for other people for three years and had none of my own. My work went out under three different marks depending on which file I opened last, my proposals were typeset in whatever the template came with, and the site I sent people to was a template I had not touched since I bought it.",
+      "The gap that mattered was not vanity. I was asking clients to trust me with their identity while visibly not having solved my own.",
+    ],
+    before: {
+      description:
+        "Three logo variants in circulation, no palette written down anywhere, and a portfolio built on a theme whose spacing I could not change without fighting it. Every new proposal started by hunting for the file I used last time.", // [MOCK]
+      callouts: [
+        { marker: "01", text: "Three marks, no rule about which to use" },
+        { marker: "02", text: "No documented palette or type scale" },
+        { marker: "03", text: "Portfolio on a theme I could not extend" },
+      ],
+    },
+    // [MOCK] ~50 words
+    whatIDid:
+      "All of it, which is the point: the mark, the system it implies, and the site that proves the system works. No handoff, because there was nobody to hand off to — and no excuse for a seam anywhere.",
+    // [MOCK] ~80 words
+    research: [
+      "The audience is two groups who want opposite things. Founders want to see finished work and be reassured. Developers and students want to see the reasoning and the file underneath. A brand that speaks only to one loses the other.",
+      "Constraint I set myself: everything the site is built on has to be publishable. If a token could not be shown on the page without embarrassment, it was the wrong token.",
+    ],
+    decisions: [
+      {
+        chose: "One wordmark, drawn, with a single symbol",
+        rejected: "A family of marks for different contexts",
+        why: "A family is a rule you have to remember. One mark that works everywhere is a rule you cannot get wrong.",
+      },
+      {
+        chose: "A green that is not the safe green",
+        rejected: "The blue every developer portfolio uses",
+        why: "Blue would have made me indistinguishable from the field. The green carries the Cameroon connection without being a flag.",
+      },
+      {
+        chose: "Tokens as CSS custom properties, no hard-coded colour anywhere",
+        rejected: "A Tailwind config with values inline",
+        why: "Custom properties can be read at runtime, which is what lets this page render its own palette instead of a picture of one.",
+      },
+      {
+        chose: "Publishing the system on the site itself",
+        rejected: "A PDF brand guide",
+        why: "A PDF goes stale the day it is exported. The swatches below are read from the running stylesheet, so they cannot disagree with the site.",
+      },
+    ],
+    // [MOCK] ~40 words
+    system:
+      "Everything below is read from the stylesheet this page is using — not a screenshot, not a copy. If a value here is wrong, the site is wrong with it, which is the only way a system stays honest.",
+    liveSystem: true,
+    after:
+      "The mark in use across the site, the proposal template, and the social set.", // [MOCK]
+    // [MOCK] ~60 words
+    outcomes: [
+      "Proposals now start from a template instead of a search. The site is the portfolio and the brand guide at once, so there is one thing to keep current rather than two. And the system has already been lifted wholesale as the starting point for two client projects.",
+    ],
+    // [MOCK] ~40 words
+    differently:
+      "I drew the mark before writing a word about who it was for, and spent two weeks refining letterforms for a positioning I had not settled. The palette and the type scale came out of the writing, and they came out quickly. The mark should have waited.",
   },
 };
 

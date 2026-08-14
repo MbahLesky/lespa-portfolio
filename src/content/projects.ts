@@ -113,6 +113,30 @@ export const projects: Project[] = [
       gallery: ["/projects/monilog/01.webp"],
     },
   },
+  {
+    slug: "lespa-brand",
+    name: "Lespa",
+    tier: "case-study",
+    order: 6,
+    featured: false,
+    selfInitiated: true,
+    outcome: "A brand system that builds its own portfolio.", // [MOCK]
+    tags: ["Brand", "Design System", "Development"],
+    client: "Self-initiated",
+    role: ["Brand Identity", "Design System", "Frontend Development"],
+    timeline: "Ongoing", // [MOCK]
+    year: "2025", // [MOCK]
+    stack: ["Figma", "Next.js", "TypeScript", "Tailwind"],
+    images: {
+      final: "/projects/lespa-brand/final.webp",
+      sketch: "/projects/lespa-brand/wireframe.webp",
+      hero: "/projects/lespa-brand/hero.webp",
+      gallery: [
+        "/projects/lespa-brand/01.webp",
+        "/projects/lespa-brand/02.webp",
+      ],
+    },
+  },
 ];
 
 /** Cyclic next — nobody dead-ends. */

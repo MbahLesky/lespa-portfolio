@@ -5,22 +5,40 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
+import { Button } from "@/components/shared/Button";
 import { Container } from "@/components/layout/Container";
 import { SoundToggle } from "@/components/shared/SoundToggle";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { Wordmark } from "@/components/shared/Wordmark";
-import { nav } from "@/content/copy";
+import { nav, navCta } from "@/content/copy";
+import { useActiveSection } from "@/hooks/useActiveSection";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { cn } from "@/lib/utils";
 
-function isActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+/** The sections the nav points at, hoisted so the observer is set up once. */
+const NAV_SECTIONS = nav.map((item) => item.section);
+
+type NavItem = (typeof nav)[number];
+
+/**
+ * On the home page a link is current when its section is the one being read.
+ * Away from home it is current when the visitor is on the fuller version of
+ * that section, so the bar still says where they are.
+ */
+function currentState(pathname: string, active: string, item: NavItem) {
+  if (pathname === "/") {
+    return item.section === active ? ("location" as const) : undefined;
+  }
+  return item.page && pathname.startsWith(item.page)
+    ? ("page" as const)
+    : undefined;
 }
 
 export function Navbar() {
   const pathname = usePathname();
   const { isScrolled, isHidden } = useScrollDirection();
   const [menuOpen, setMenuOpen] = useState(false);
+  const activeSection = useActiveSection(NAV_SECTIONS, pathname === "/");
 
   // Close the overlay on navigation so the menu never survives a route change.
   useEffect(() => setMenuOpen(false), [pathname]);
@@ -80,13 +98,16 @@ export function Navbar() {
           <nav aria-label="Primary" className="hidden md:block">
             <ul className="flex items-center gap-8">
               {nav.map((item) => {
-                const active = isActive(pathname, item.href);
+                const current = currentState(pathname, activeSection, item);
                 return (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      aria-current={active ? "page" : undefined}
-                      className={cn("nav-link text-body-sm", active && "is-active")}
+                      aria-current={current}
+                      className={cn(
+                        "nav-link text-body-sm",
+                        current && "is-active",
+                      )}
                     >
                       {item.label}
                     </Link>
@@ -97,6 +118,12 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2">
+            {/* The action, not a destination. Desktop only: on a phone the
+                Contact link in the menu already goes to the same place, and a
+                second control would only crowd the bar. */}
+            <Button href={navCta.href} className="nav-cta mr-2 hidden lg:inline-flex">
+              {navCta.label}
+            </Button>
             <ThemeToggle />
             <SoundToggle />
             <button
@@ -130,26 +157,28 @@ export function Navbar() {
           <Container>
             <nav aria-label="Primary mobile">
               <ul className="flex flex-col gap-6">
-                {nav.map((item, index) => (
-                  <li
-                    key={item.href}
-                    className="mobile-menu-item"
-                    style={{ animationDelay: `${index * 40}ms` }}
-                  >
-                    <Link
-                      href={item.href}
-                      aria-current={
-                        isActive(pathname, item.href) ? "page" : undefined
-                      }
-                      className={cn(
-                        "nav-link font-heading text-h4-m",
-                        isActive(pathname, item.href) && "is-active",
-                      )}
+                {nav.map((item, index) => {
+                  const current = currentState(pathname, activeSection, item);
+                  return (
+                    <li
+                      key={item.href}
+                      className="mobile-menu-item"
+                      style={{ animationDelay: `${index * 40}ms` }}
                     >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
+                      <Link
+                        href={item.href}
+                        aria-current={current}
+                        onClick={() => setMenuOpen(false)}
+                        className={cn(
+                          "nav-link font-heading text-h4-m",
+                          current && "is-active",
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
           </Container>
