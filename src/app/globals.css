@@ -521,14 +521,26 @@
      will when finished and nothing below it moves while the text grows. */
   .type-rest { visibility: hidden; }
 
+  /* The caret occupies no width, and paints its bar outside its own box.
+     A caret that takes even a few pixels of the line is a caret that can push
+     the last word onto a new line — and since it moves with the typing, the
+     heading would gain and lose a line as the text ran past the wrap point.
+     The hidden remainder can only hold the final layout if nothing else in the
+     line changes width while it types. */
   .caret {
+    position: relative;
     display: inline-block;
-    width: 2px;
+    width: 0;
     height: 0.9em;
-    margin-left: 0.06em;
     vertical-align: -0.08em;
-    background-color: var(--accent-fg);
     animation: caret-blink 900ms steps(1, end) infinite;
+  }
+  .caret::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0.06em;
+    width: 2px;
+    background-color: var(--accent-fg);
   }
   @keyframes caret-blink {
     0%, 50%   { opacity: 1; }
@@ -878,23 +890,23 @@
   .role-swap-state {
     grid-area: line;
     opacity: 0;
-    /* In: fade and rise from 8px over 250ms. */
+    /* In: fade and rise from 8px. Durations mirror roleSwap in motion.ts. */
     transform: translateY(8px);
     transition:
-      opacity   250ms var(--ease-out),
-      transform 250ms var(--ease-out);
+      opacity   340ms var(--ease-out),
+      transform 340ms var(--ease-out);
   }
   .role-swap-state[data-current="true"] {
     opacity: 1;
     transform: none;
   }
-  /* Out: fade and lift 8px over 200ms, on the ease-in curve. */
+  /* Out: fade and lift 8px, on the ease-in curve. */
   .role-swap-state.is-leaving {
     opacity: 0;
     transform: translateY(-8px);
     transition:
-      opacity   200ms var(--ease-in-out),
-      transform 200ms var(--ease-in-out);
+      opacity   280ms var(--ease-in-out),
+      transform 280ms var(--ease-in-out);
   }
 
   /* ---------- ELEVATION ---------- */

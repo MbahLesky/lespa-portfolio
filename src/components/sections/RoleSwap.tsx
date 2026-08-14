@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import { INTRO_DONE_EVENT } from "@/components/shared/IntroSequence";
+import {
+  INTRO_DONE_EVENT,
+  type IntroDoneDetail,
+} from "@/components/shared/IntroSequence";
 import {
   Typewriter,
   segmentsLength,
@@ -85,7 +88,16 @@ export function RoleSwap() {
     };
 
     /** Type the first claim out, then hand over to the usual alternation. */
-    const typeThenCycle = () => {
+    const typeThenCycle = (event: Event) => {
+      // Skipping the opening sequence is a request for less of this, not more:
+      // the line is simply there, and the swap waits to be earned like it does
+      // on any later visit.
+      if ((event as CustomEvent<IntroDoneDetail>).detail?.skipped) {
+        setTypedCount(null);
+        armInteraction();
+        return;
+      }
+
       const total = segmentsLength(segmentsFor(0));
       setTypedCount(0);
       for (let i = 1; i <= total; i++) {

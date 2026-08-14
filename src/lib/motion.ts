@@ -39,18 +39,21 @@ export const pageVariants = {
  * more than the shape of the curve.
  */
 export const roleSwap = {
-  outMs: 200,
-  gapMs: 100,
-  inMs: 250,
-  holdMs: 3500,
+  /** Crossfade durations. Mirrored in globals.css — change both together. */
+  outMs: 280,
+  gapMs: 120,
+  inMs: 340,
+  /** How long each claim rests before giving way. Long enough to be read
+   *  twice: this is a sentence, not a ticker. */
+  holdMs: 4200,
   /** Beat between the visitor's first interaction and the first swap. */
   firstSwapMs: 1400,
   /**
-   * The first swap after the opening sequence. Short, because it is the closing
-   * beat of the intro — long enough to read State A first, not long enough to
-   * feel like a separate event.
+   * The first swap after the opening sequence — the closing beat of the intro.
+   * Long enough to read the whole of the first claim after it finishes typing,
+   * since the swap is what reveals that there is a second one.
    */
-  firstSwapAfterIntroMs: 700,
+  firstSwapAfterIntroMs: 1500,
   /** Stops after four cycles, resting on State A. Infinite loops irritate. */
   cycles: 4,
 } as const;

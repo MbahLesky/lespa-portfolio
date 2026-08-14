@@ -3,14 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 
 import {
+  ERASE_AT,
   GREETING,
+  GREETING_AT,
   INTRO,
   INTRO_TIMEOUT_PAD,
   NAME_AT,
+  SKIP_OUT_MS,
   TYPE,
+  WORD_FLY_AT,
   introEnd,
   nameDoneAt,
-  typeMs,
+  scrimOutAt,
 } from "@/lib/intro-timeline";
 import { hero } from "@/content/copy";
 
@@ -21,8 +25,16 @@ const TITLE_ZOOM = 1.35;
 
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 
-/** Fired once the headline is in place, so the role line can start typing. */
+/**
+ * Fired once the headline is in place, so the role line can start typing.
+ * `detail.skipped` says the visitor cut the sequence short, in which case they
+ * have asked for less animation rather than more.
+ */
 export const INTRO_DONE_EVENT = "lespa:intro-done";
+
+export interface IntroDoneDetail {
+  skipped: boolean;
+}
 
 /**
  * The opening sequence: a short run of title cards.
@@ -77,13 +89,17 @@ export function IntroSequence() {
 
     let finished = false;
     /** Drop the overlay and hand the page back, whatever happened. */
-    const finish = () => {
+    const finish = (skipped = false) => {
       if (finished) return;
       finished = true;
       cancelled = true;
       timers.forEach(clearTimeout);
       root.classList.remove("intro-active");
-      window.dispatchEvent(new Event(INTRO_DONE_EVENT));
+      window.dispatchEvent(
+        new CustomEvent<IntroDoneDetail>(INTRO_DONE_EVENT, {
+          detail: { skipped },
+        }),
+      );
     };
 
     // Nothing to fly to means nothing to show; skip rather than hold the page
@@ -153,13 +169,36 @@ export function IntroSequence() {
     //
     // The headline is released immediately: it is hidden behind the overlay
     // anyway, so its entrance plays unseen and the element is already opaque
-    // when the stand-in lands on it. Everything else waits for the role line to
-    // finish typing.
-    const roleLine = `${hero.roles[0].before} ${hero.roles[0].word} ${hero.roles[0].after}`;
+    // when the stand-in lands on it. The rest of the hero follows it in just
+    // after, rising while the role line types itself — holding it back until
+    // the typing finished left the hero standing empty under two lines of
+    // headline for the better part of two seconds.
     root.style.setProperty("--enter-delay", "0ms");
-    root.style.setProperty(
-      "--enter-rest",
-      `${endAt + typeMs(roleLine, TYPE.role) + 260}ms`,
+    root.style.setProperty("--enter-rest", `${endAt + 240}ms`);
+
+    // A sequence long enough to be read is long enough to be unwanted. Any
+    // deliberate input cuts it short: the overlay fades out over a couple of
+    // frames rather than jump-cutting, and the page is handed straight over.
+    const SKIPS = ["pointerdown", "keydown", "wheel", "touchstart"];
+    const onSkip = () => {
+      SKIPS.forEach((type) => window.removeEventListener(type, onSkip));
+      if (finished) return;
+      const overlay = scrim.parentElement;
+      // Reveal the real page first, then fade the stand-in off the top of it —
+      // fading the overlay while the page is still hidden shows a blank frame.
+      clearCues();
+      root.classList.remove("intro-active");
+      overlay
+        ?.animate([{ opacity: 1 }, { opacity: 0 }], {
+          duration: SKIP_OUT_MS,
+          easing: EASE,
+          fill: "forwards",
+        })
+        ?.finished.catch(() => {});
+      finish(true);
+    };
+    SKIPS.forEach((type) =>
+      window.addEventListener(type, onSkip, { once: true, passive: true }),
     );
 
     // 1 — the wordmark fades up at centre.
@@ -171,8 +210,8 @@ export function IntroSequence() {
       });
     });
 
-    // 2 — and travels to its place in the navbar.
-    at(INTRO.wordFly, () => {
+    // 2 — is held, then travels to its place in the navbar.
+    at(WORD_FLY_AT, () => {
       word.animate(
         [{ transform: wordStart }, { transform: "translate(0, 0) scale(1)" }],
         { duration: INTRO.wordFlyDur, easing: EASE, fill: "forwards" },
@@ -180,22 +219,20 @@ export function IntroSequence() {
     });
 
     // 3 — "Hi", typed and held.
-    at(INTRO.greetingAt, () => {
+    at(GREETING_AT, () => {
       setCaret(true);
       title.style.opacity = "1";
       run(GREETING, GREETING.length, 0, TYPE.greeting);
     });
 
     // 4 — cleared again.
-    const eraseAt =
-      INTRO.greetingAt + typeMs(GREETING, TYPE.greeting) + INTRO.greetingHold;
-    at(eraseAt, () => run(GREETING, 0, GREETING.length, TYPE.erase));
+    at(ERASE_AT, () => run(GREETING, 0, GREETING.length, TYPE.erase));
 
-    // 5 — "I am Lespa."
+    // 5 — "I am Lespa.", typed and held.
     at(NAME_AT, () => run(name, name.length, 0, TYPE.name));
 
     // 6 — the backdrop clears, so the page is already there behind the card.
-    at(INTRO.scrimOut, () => {
+    at(scrimOutAt(name), () => {
       scrim.animate([{ opacity: 1 }, { opacity: 0 }], {
         duration: INTRO.scrimOutDur,
         easing: EASE,
@@ -227,6 +264,7 @@ export function IntroSequence() {
 
     return () => {
       window.removeEventListener("resize", onResize);
+      SKIPS.forEach((type) => window.removeEventListener(type, onSkip));
       clearCues();
       finish();
     };

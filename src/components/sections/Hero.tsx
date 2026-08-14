@@ -59,7 +59,9 @@ export function Hero() {
               {hero.kicker}
             </Text>
 
-            <Heading as="h1" id="hero-heading">
+            {/* Unbalanced deliberately: line two types itself, and the line
+                balancer re-breaks the whole heading on every character. */}
+            <Heading as="h1" id="hero-heading" balance={false}>
               {/* One clean sentence for assistive technology, in place of the
                   two-state headline underneath it. */}
               <span className="sr-only">{hero.screenReaderLine}</span>
