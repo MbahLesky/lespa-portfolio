@@ -524,6 +524,61 @@
     display: block;
   }
 
+  /* ---------- SCROLL CUE ---------- */
+
+  /* Sits below the hero copy, centred on the column. It fades and rises in
+     once, and is removed outright rather than hidden when it retires. */
+  .scroll-cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* 44px of target around a 16px arrow. */
+    min-height: 44px;
+    padding: 0 1rem 0 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background-color: var(--surface);
+    color: var(--content-secondary);
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity   var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out),
+      color     var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .scroll-cue.is-shown {
+    opacity: 1;
+    transform: none;
+  }
+  .scroll-cue:hover,
+  .scroll-cue:focus-visible {
+    color: var(--content-primary);
+    border-color: var(--accent-fg);
+  }
+
+  .scroll-cue-label {
+    font-size: var(--text-body-sm);
+    letter-spacing: 0.01em;
+  }
+
+  /* The arrow drifts down and back, a short distance and slowly: the cue is
+     an offer, not an alarm. */
+  .scroll-cue-arrow {
+    display: inline-flex;
+    color: var(--accent-fg);
+    animation: scroll-cue-bob 2.4s var(--ease-in-out) infinite;
+  }
+  @keyframes scroll-cue-bob {
+    0%, 100% { transform: translateY(-2px); }
+    50%      { transform: translateY(3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue { transition: none; }
+    .scroll-cue-arrow { animation: none; }
+  }
+
   /* ---------- TYPEWRITER ---------- */
 
   /* The untyped remainder keeps its space, so the line wraps exactly as it
@@ -536,19 +591,26 @@
      heading would gain and lose a line as the text ran past the wrap point.
      The hidden remainder can only hold the final layout if nothing else in the
      line changes width while it types. */
+  /* display:inline, deliberately, and empty. An inline-block would be an
+     atomic inline, and an atomic inline is a line-break opportunity — with the
+     caret sitting mid-word the browser could break there, packing the line into
+     fewer rows while typing and springing back when the caret left. An empty
+     non-atomic inline adds neither width nor a place to break. */
   .caret {
     position: relative;
-    display: inline-block;
-    width: 0;
-    height: 0.9em;
-    vertical-align: -0.08em;
+    display: inline;
     animation: caret-blink 900ms steps(1, end) infinite;
   }
+  /* Centred on the em box rather than hung off an edge: the caret is used at
+     three different sizes, and a fixed offset that suits one misses the others. */
   .caret::after {
     content: "";
     position: absolute;
-    inset: 0 auto 0 0.06em;
+    left: 0.06em;
+    top: 50%;
     width: 2px;
+    height: 0.78em;
+    transform: translateY(-52%);
     background-color: var(--accent-fg);
   }
   @keyframes caret-blink {
@@ -905,26 +967,16 @@
     display: inline-grid;
     grid-template-areas: "line";
   }
+  /* The claim that is not being written is kept in the flow, unseen, so the
+     cell stays the size of the larger of the two and a swap cannot move the
+     page. There is no transition: one claim becomes the other at zero
+     characters, where the line is empty and the change cannot be seen. */
   .role-swap-state {
     grid-area: line;
     opacity: 0;
-    /* In: fade and rise from 8px. Durations mirror roleSwap in motion.ts. */
-    transform: translateY(8px);
-    transition:
-      opacity   340ms var(--ease-out),
-      transform 340ms var(--ease-out);
   }
   .role-swap-state[data-current="true"] {
     opacity: 1;
-    transform: none;
-  }
-  /* Out: fade and lift 8px, on the ease-in curve. */
-  .role-swap-state.is-leaving {
-    opacity: 0;
-    transform: translateY(-8px);
-    transition:
-      opacity   280ms var(--ease-in-out),
-      transform 280ms var(--ease-in-out);
   }
 
   /* ---------- ELEVATION ---------- */

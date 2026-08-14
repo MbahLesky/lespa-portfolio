@@ -57,6 +57,16 @@ export const hero = {
   secondaryCta: { label: "Start a project", href: "/contact" },
   trust: "Bamenda, Cameroon · Remote worldwide · @iamlespa",
   /**
+   * The hint that appears under the hero once it has been left alone. The
+   * description is the accessible name and contains the visible label, so
+   * "click Scroll" still works for anyone driving the page by voice.
+   */
+  scrollCue: {
+    label: "Scroll",
+    description: "Scroll to the selected work",
+    target: "work",
+  },
+  /**
    * [MOCK] The hero visual. Nothing exists at this path yet, so the slot renders
    * its reserved frame instead — the box is already the right size, so dropping
    * the real file in cannot shift the page.

@@ -5,20 +5,21 @@
  *   -> the wordmark arrives at centre, is held, and flies to the navbar
  *   -> "Hi" is typed, held, and cleared
  *   -> "I am Lespa." is typed at centre and held
- *   -> it settles up the screen and shrinks, making room beneath it
- *   -> the role line types itself, still centred
- *   -> the backdrop clears, the pair is held, then both lines push left into
- *      their places in the hero
+ *   -> the backdrop clears and the name moves into its place in the hero
+ *   -> the role line types itself underneath, where it belongs
  *   -> the rest of the page arrives
  *
- * Both lines are typed at the centre of the screen and only move into the
- * left-aligned hero once the second one is finished, so nothing travels while
- * there is still something to read.
+ * The name lands before the second line exists: nothing is still being read
+ * when something moves, and nothing moves once it has landed.
  *
  * Every card is given time to be read: a card that finishes typing and moves
  * on immediately is a card nobody read. The holds below are the point of the
  * sequence, not padding around it — each one is the stillness after something
  * lands and before the next thing happens.
+ *
+ * The role line is not scripted here. It is typed by RoleSwap, in the hero,
+ * once this hands over — that component owns line two from its first character
+ * through every later swap.
  *
  * Kept in a plain module rather than beside the component: the inline head
  * script is built on the server, and importing a value from a "use client"
@@ -53,25 +54,19 @@ export const INTRO = {
 
   /** Beat between the greeting clearing and the name starting. */
   nameGap: 200,
-  /** The finished name is held at full size before it settles. */
-  nameHold: 520,
-  /** The name shifts up and shrinks, opening the space beneath it. */
-  settleDur: 500,
-  /** Beat between the name settling and the role line starting to type. */
-  roleGap: 180,
-  /** The role line fades up as its first characters arrive. */
-  roleFadeDur: 260,
+  /** The finished name is held at centre before it moves. */
+  nameHold: 560,
+  /** The name travels to its place in the hero. */
+  pushDur: 620,
 
-  /** The finished pair is held, centred, before it moves. */
-  pushHold: 650,
-  /** Both lines travel left into their places in the hero. */
-  pushDur: 600,
-
-  /** The backdrop starts clearing this long before the pair moves, so the
-   *  page is already there for them to land into. */
-  scrimOutBefore: 900,
+  /** The backdrop starts clearing this long before the name moves, so the
+   *  page is already there for it to land into. */
+  scrimOutBefore: 700,
   scrimOutDur: 500,
 } as const;
+
+/** How much larger the name reads while it is alone at centre. */
+export const SOLO_ZOOM = 1.55;
 
 /** Length of a typed string in milliseconds. */
 export const typeMs = (text: string, speed: number) => text.length * speed;
@@ -90,25 +85,16 @@ export const ERASE_AT =
 /** When "I am Lespa." starts typing. */
 export const NAME_AT = ERASE_AT + typeMs(GREETING, TYPE.erase) + INTRO.nameGap;
 
-/** When the name shifts up and shrinks — after it has been read. */
-export const settleAt = (name: string) =>
+/** When the name starts moving into the hero — after it has been read. */
+export const pushAt = (name: string) =>
   NAME_AT + typeMs(name, TYPE.name) + INTRO.nameHold;
 
-/** When the role line starts typing, beneath the settled name. */
-export const roleAt = (name: string) =>
-  settleAt(name) + INTRO.settleDur + INTRO.roleGap;
-
-/** When both lines start moving into the hero. */
-export const pushAt = (name: string, role: string) =>
-  roleAt(name) + typeMs(role, TYPE.role) + INTRO.pushHold;
-
 /** When the backdrop starts clearing. */
-export const scrimOutAt = (name: string, role: string) =>
-  pushAt(name, role) - INTRO.scrimOutBefore;
+export const scrimOutAt = (name: string) =>
+  pushAt(name) - INTRO.scrimOutBefore;
 
-/** The overlay is gone and the headline is in place. */
-export const introEnd = (name: string, role: string) =>
-  pushAt(name, role) + INTRO.pushDur;
+/** The overlay is gone and the name is in place. */
+export const introEnd = (name: string) => pushAt(name) + INTRO.pushDur;
 
 /** How quickly the overlay gets out of the way when the visitor skips it. */
 export const SKIP_OUT_MS = 240;

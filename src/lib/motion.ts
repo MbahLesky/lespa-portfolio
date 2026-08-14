@@ -39,21 +39,39 @@ export const pageVariants = {
  * more than the shape of the curve.
  */
 export const roleSwap = {
-  /** Crossfade durations. Mirrored in globals.css — change both together. */
-  outMs: 280,
-  gapMs: 120,
-  inMs: 340,
-  /** How long each claim rests before giving way. Long enough to be read
-   *  twice: this is a sentence, not a ticker. */
-  holdMs: 4200,
+  /** Erasing runs faster than typing, as it does on a real keyboard. */
+  eraseMs: 26,
+  /** The beat at zero characters, where one claim becomes the other. */
+  gapMs: 260,
+  /**
+   * How long a finished claim rests before it is erased. A swap is now a
+   * visible rewrite rather than a crossfade, so it needs to be rare: long
+   * enough to read the sentence, look away, and look back.
+   */
+  holdMs: 6000,
+  /** Beat between the name landing and line two starting to type. */
+  afterIntroMs: 280,
   /** Beat between the visitor's first interaction and the first swap. */
-  firstSwapMs: 1400,
+  firstSwapMs: 2400,
   /**
    * The first swap after the opening sequence — the closing beat of the intro.
    * Long enough to read the whole of the first claim after it finishes typing,
    * since the swap is what reveals that there is a second one.
    */
-  firstSwapAfterIntroMs: 1500,
-  /** Stops after four cycles, resting on State A. Infinite loops irritate. */
-  cycles: 4,
+  firstSwapAfterIntroMs: 2600,
+  /**
+   * Stops after two cycles, resting on State A. Infinite loops irritate, and a
+   * rewrite draws far more attention than the crossfade it replaced — the
+   * point is made in two passes.
+   */
+  cycles: 2,
+} as const;
+
+/**
+ * The scroll hint below the hero. It waits out the opening sequence and the
+ * typing of line two, then a beat more, so it reads as an invitation rather
+ * than an interruption.
+ */
+export const scrollCue = {
+  appearAfterMs: 9000,
 } as const;

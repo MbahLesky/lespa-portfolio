@@ -11,34 +11,24 @@ import {
   INTRO_TIMEOUT_PAD,
   NAME_AT,
   SKIP_OUT_MS,
+  SOLO_ZOOM,
   TYPE,
   WORD_FLY_AT,
   introEnd,
   pushAt,
-  roleAt,
   scrimOutAt,
-  settleAt,
 } from "@/lib/intro-timeline";
-import {
-  Typewriter,
-  segmentsLength,
-  type TypeSegment,
-} from "@/components/shared/Typewriter";
 import { hero } from "@/content/copy";
 
 /** How much larger the wordmark sits at centre before flying to the navbar. */
 const WORDMARK_ZOOM = 2.6;
-/** How much larger the name reads while it is alone at centre. */
-const SOLO_ZOOM = 1.55;
-/** And once it has settled up to make room for the line beneath it. */
-const PAIR_ZOOM = 1.18;
 /** Breathing room kept between an enlarged card and the edge of the screen. */
 const EDGE = 24;
 
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 /**
- * Fired once the headline is in place, so the role line can be handed back.
+ * Fired once the name is in place, so the role line can start typing.
  * `detail.skipped` says the visitor cut the sequence short, in which case they
  * have asked for less animation rather than more.
  */
@@ -48,34 +38,19 @@ export interface IntroDoneDetail {
   skipped: boolean;
 }
 
-/** The role line as typed runs, with the role itself carrying the accent. */
-const roleSegments = (): TypeSegment[] => {
-  const role = hero.roles[0];
-  return [
-    { text: `${role.before} ` },
-    { text: role.word, className: "text-accent-fg" },
-    { text: ` ${role.after}` },
-  ];
-};
-
-const roleText = () =>
-  roleSegments()
-    .map((segment) => segment.text)
-    .join("");
-
 /**
  * The opening sequence: a short run of title cards.
  *
  * The wordmark arrives at centre and flies to the navbar; "Hi" is typed, held
- * and cleared; "I am Lespa." is typed at centre, held, then settles up the
- * screen and shrinks; the role line types itself beneath it; and only once
- * that line is finished do the two push left together into the hero.
+ * and cleared; "I am Lespa." is typed at centre, held, and moves into its place
+ * in the hero. Line two is not part of this — it types itself underneath once
+ * the name has landed, and RoleSwap owns it from there.
  *
- * Both stand-ins are measured against the real elements they become and
- * animated from centre *to* that exact box, so each landing is pixel-accurate
- * at any viewport rather than depending on coordinates that would drift. The
- * enlargements are clamped to the screen, so a card is never scaled up past
- * the edge on a narrow one.
+ * The stand-ins are measured against the real elements they become and animated
+ * from centre *to* that exact box, so each landing is pixel-accurate at any
+ * viewport rather than depending on coordinates that would drift. The
+ * enlargements are clamped to the screen, so a card is never scaled up past the
+ * edge on a narrow one.
  *
  * The markup is server-rendered and hidden by default; the inline head script
  * decides before first paint whether it runs. Mounting it on the client instead
@@ -88,12 +63,9 @@ export function IntroSequence() {
   const scrimRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
-  const roleRef = useRef<HTMLDivElement>(null);
 
   const [typed, setTyped] = useState("");
   const [caret, setCaret] = useState(false);
-  const [roleCount, setRoleCount] = useState(0);
-  const [roleCaret, setRoleCaret] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -102,7 +74,6 @@ export function IntroSequence() {
     const scrim = scrimRef.current;
     const word = wordRef.current;
     const name = nameRef.current;
-    const role = roleRef.current;
 
     const wordTarget = document.querySelector<HTMLElement>(
       '[data-intro-target="wordmark"]',
@@ -110,7 +81,6 @@ export function IntroSequence() {
     const nameTarget = document.querySelector<HTMLElement>(
       '[data-intro-target="title"]',
     );
-    const roleTarget = document.querySelector<HTMLElement>("[data-intro-hold]");
 
     let cancelled = false;
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -128,25 +98,24 @@ export function IntroSequence() {
       finished = true;
       cancelled = true;
       timers.forEach(clearTimeout);
-      root.classList.remove("intro-active");
-      window.dispatchEvent(
-        new CustomEvent<IntroDoneDetail>(INTRO_DONE_EVENT, {
-          detail: { skipped },
-        }),
-      );
+      // Announce before revealing. Line two blanks itself in response, and
+      // doing it in this same task means the finished sentence is never
+      // painted for a frame before its first character is typed. The reveal is
+      // in a finally: a listener that throws must not leave the page hidden.
+      try {
+        window.dispatchEvent(
+          new CustomEvent<IntroDoneDetail>(INTRO_DONE_EVENT, {
+            detail: { skipped },
+          }),
+        );
+      } finally {
+        root.classList.remove("intro-active");
+      }
     };
 
     // Nothing to fly to means nothing to show; skip rather than hold the page
     // behind an overlay that cannot resolve.
-    if (
-      !scrim ||
-      !word ||
-      !name ||
-      !role ||
-      !wordTarget ||
-      !nameTarget ||
-      !roleTarget
-    ) {
+    if (!scrim || !word || !name || !wordTarget || !nameTarget) {
       clearCues();
       finish();
       return;
@@ -161,18 +130,13 @@ export function IntroSequence() {
     };
 
     /** Types or erases toward a target length, one character per tick. */
-    const type = (
-      to: number,
-      from: number,
-      speed: number,
-      set: (count: number) => void,
-    ) => {
+    const type = (to: number, from: number, speed: number, text: string) => {
       const step = to > from ? 1 : -1;
       for (let i = 1; i <= Math.abs(to - from); i++) {
         const count = from + i * step;
         timers.push(
           setTimeout(() => {
-            if (!cancelled) set(count);
+            if (!cancelled) setTyped(text.slice(0, count));
           }, i * speed),
         );
       }
@@ -208,26 +172,10 @@ export function IntroSequence() {
         ),
       );
 
-    /**
-     * The transform that scales a box by `zoom` and puts it at the centre of
-     * the screen, pivoting on a given point.
-     *
-     * Each axis takes its own pivot. Passing the box's own centre centres the
-     * box on that axis; passing the pair's centre makes the box hold its place
-     * within the pair, so the two lines scale and travel as one group. The
-     * lines are centred individually across and grouped down the screen: they
-     * are two cards stacked, not a block of the hero moved wholesale.
-     */
-    const place = (
-      rect: DOMRect,
-      zoom: number,
-      pivotX: number,
-      pivotY: number,
-    ) => {
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = window.innerWidth / 2 + zoom * (cx - pivotX) - cx;
-      const dy = window.innerHeight / 2 + zoom * (cy - pivotY) - cy;
+    /** The transform that scales a box and puts it at the screen's centre. */
+    const centre = (rect: DOMRect, zoom: number) => {
+      const dx = window.innerWidth / 2 - (rect.left + rect.width / 2);
+      const dy = window.innerHeight / 2 - (rect.top + rect.height / 2);
       return `translate(${dx}px, ${dy}px) scale(${zoom})`;
     };
 
@@ -242,67 +190,39 @@ export function IntroSequence() {
       if (cancelled) return;
 
       borrowType(name, nameTarget);
-      borrowType(role, roleTarget);
 
       // Read every target where it will actually rest. See .intro-measuring.
       root.classList.add("intro-measuring");
       const wordRect = placeOver(word, wordTarget);
       const nameRect = placeOver(name, nameTarget);
-      const roleRect = placeOver(role, roleTarget);
       root.classList.remove("intro-measuring");
 
-      const mid = (rect: DOMRect) => ({
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2,
-      });
-      const wordMid = mid(wordRect);
-      const nameMid = mid(nameRect);
-      const roleMid = mid(roleRect);
-      /** Where the pair balances vertically, once both lines are on screen. */
-      const pairY = (nameRect.top + roleRect.bottom) / 2;
-
-      const soloZoom = fit(SOLO_ZOOM, nameRect.width, nameRect.height);
-      const pairZoom = fit(
-        PAIR_ZOOM,
-        Math.max(nameRect.width, roleRect.width),
-        roleRect.bottom - nameRect.top,
-      );
-
-      const wordStart = place(
+      const wordStart = centre(
         wordRect,
         fit(WORDMARK_ZOOM, wordRect.width, wordRect.height),
-        wordMid.x,
-        wordMid.y,
       );
-      /** Alone at centre, at full size. */
-      const nameSolo = place(nameRect, soloZoom, nameMid.x, nameMid.y);
-      /** Settled up and shrunk, sharing the screen with the line below. */
-      const namePaired = place(nameRect, pairZoom, nameMid.x, pairY);
-      const rolePaired = place(roleRect, pairZoom, roleMid.x, pairY);
+      const nameStart = centre(
+        nameRect,
+        fit(SOLO_ZOOM, nameRect.width, nameRect.height),
+      );
       const LANDED = "translate(0, 0) scale(1)";
 
       word.style.transform = wordStart;
-      name.style.transform = nameSolo;
-      // The role line waits in its paired position, so when it fades up it is
-      // already where it belongs and only its text moves.
-      role.style.transform = rolePaired;
+      name.style.transform = nameStart;
 
       const nameText = hero.headlineLead;
-      const line = roleText();
-      const settle = settleAt(nameText);
-      const roleStart = roleAt(nameText);
-      const push = pushAt(nameText, line);
-      const endAt = introEnd(nameText, line);
+      const push = pushAt(nameText);
+      const endAt = introEnd(nameText);
 
       // The head script parks both cues far in the future so nothing can enter
       // underneath the overlay before this knows the real timings.
       //
       // The headline is released immediately: it is hidden behind the overlay
       // anyway, so its entrance plays unseen and the element is already opaque
-      // when the stand-ins land on it. Everything else waits until they have —
-      // the rest of the page arrives once there is nothing left to read.
+      // when the stand-in lands on it. The rest of the page is left parked —
+      // RoleSwap releases it once line two has finished typing, since only it
+      // knows how long that takes.
       root.style.setProperty("--enter-delay", "0ms");
-      root.style.setProperty("--enter-rest", `${endAt + 240}ms`);
 
       // 1 — the wordmark fades up at centre.
       at(INTRO.wordIn, () => {
@@ -326,50 +246,17 @@ export function IntroSequence() {
       at(GREETING_AT, () => {
         setCaret(true);
         name.style.opacity = "1";
-        type(GREETING.length, 0, TYPE.greeting, (count) =>
-          setTyped(GREETING.slice(0, count)),
-        );
+        type(GREETING.length, 0, TYPE.greeting, GREETING);
       });
 
       // 4 — cleared again.
-      at(ERASE_AT, () =>
-        type(0, GREETING.length, TYPE.erase, (count) =>
-          setTyped(GREETING.slice(0, count)),
-        ),
-      );
+      at(ERASE_AT, () => type(0, GREETING.length, TYPE.erase, GREETING));
 
       // 5 — "I am Lespa.", typed and held.
-      at(NAME_AT, () =>
-        type(nameText.length, 0, TYPE.name, (count) =>
-          setTyped(nameText.slice(0, count)),
-        ),
-      );
+      at(NAME_AT, () => type(nameText.length, 0, TYPE.name, nameText));
 
-      // 6 — it settles up the screen and shrinks, opening the space beneath it.
-      //     The caret goes with it: the line is finished, and a caret left
-      //     blinking on it would promise more of the same sentence.
-      at(settle, () => {
-        setCaret(false);
-        name.animate([{ transform: nameSolo }, { transform: namePaired }], {
-          duration: INTRO.settleDur,
-          easing: EASE,
-          fill: "forwards",
-        });
-      });
-
-      // 7 — the role line types itself into the space that opened up.
-      at(roleStart, () => {
-        setRoleCaret(true);
-        role.animate([{ opacity: 0 }, { opacity: 1 }], {
-          duration: INTRO.roleFadeDur,
-          easing: EASE,
-          fill: "forwards",
-        });
-        type(segmentsLength(roleSegments()), 0, TYPE.role, setRoleCount);
-      });
-
-      // 8 — the backdrop clears, so the page is there for the pair to land into.
-      at(scrimOutAt(nameText, line), () => {
+      // 6 — the backdrop clears, so the page is there for it to land into.
+      at(scrimOutAt(nameText), () => {
         scrim.animate([{ opacity: 1 }, { opacity: 0 }], {
           duration: INTRO.scrimOutDur,
           easing: EASE,
@@ -377,22 +264,17 @@ export function IntroSequence() {
         });
       });
 
-      // 9 — held, then both lines push left into the hero together.
+      // 7 — the caret goes and the name moves into the hero.
       at(push, () => {
-        setRoleCaret(false);
-        name.animate([{ transform: namePaired }, { transform: LANDED }], {
-          duration: INTRO.pushDur,
-          easing: EASE,
-          fill: "forwards",
-        });
-        role.animate([{ transform: rolePaired }, { transform: LANDED }], {
+        setCaret(false);
+        name.animate([{ transform: nameStart }, { transform: LANDED }], {
           duration: INTRO.pushDur,
           easing: EASE,
           fill: "forwards",
         });
       });
 
-      // 10 — hand over. The rest of the page follows.
+      // 8 — hand over. Line two types itself from here.
       at(endAt, finish);
 
       // Safety net, in case an animation never resolves.
@@ -463,13 +345,6 @@ export function IntroSequence() {
       <div className="intro-name" ref={nameRef}>
         <span>{typed}</span>
         {caret && <span className="caret" />}
-      </div>
-      <div className="intro-role" ref={roleRef}>
-        <Typewriter
-          segments={roleSegments()}
-          count={roleCount}
-          caret={roleCaret}
-        />
       </div>
     </div>
   );

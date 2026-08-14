@@ -3,6 +3,7 @@ import { Heading } from "@/components/shared/Heading";
 import { MediaFallback, ProjectImage } from "@/components/shared/ProjectImage";
 import { Text } from "@/components/shared/Text";
 import { RoleSwap } from "@/components/sections/RoleSwap";
+import { ScrollCue } from "@/components/shared/ScrollCue";
 import { Section } from "@/components/sections/Section";
 import { hero } from "@/content/copy";
 
@@ -132,6 +133,18 @@ export function Hero() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Offered late and only once, well after the opening has finished having
+          its say. It sits under the whole hero rather than in the copy column,
+          and outside the entrance choreography: it has its own timing and must
+          not be held back by the shared cue. */}
+      <div className="mt-16 flex justify-center">
+        <ScrollCue
+          target={hero.scrollCue.target}
+          label={hero.scrollCue.label}
+          description={hero.scrollCue.description}
+        />
       </div>
     </Section>
   );
