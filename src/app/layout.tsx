@@ -4,8 +4,8 @@ import localFont from "next/font/local";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { AppChrome } from "@/components/shared/AppChrome";
-import { BootScreen } from "@/components/shared/BootScreen";
-import { bootScript } from "@/lib/boot-script";
+import { IntroSequence } from "@/components/shared/IntroSequence";
+import { introScript } from "@/lib/intro-script";
 import { SoundProvider } from "@/components/shared/SoundProvider";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import "./globals.css";
@@ -72,13 +72,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        <script dangerouslySetInnerHTML={{ __html: introScript }} />
         {/* Scroll reveals start at opacity 0 and are only ever un-hidden by
             script. Without JS the content must still be readable. */}
         <noscript>
           <style>
             {
-              ".reveal,.enter,.enter-line>*,.enter-rule{opacity:1!important;transform:none!important;animation:none!important}"
+              ".reveal,.enter,.enter-line>*,.enter-rule,[data-intro-target]{opacity:1!important;transform:none!important;animation:none!important}.intro{display:none!important}"
             }
           </style>
         </noscript>
@@ -90,7 +90,7 @@ export default function RootLayout({
           <a href="#main" className="skip-link">
             Skip to content
           </a>
-          <BootScreen />
+          <IntroSequence />
           <AppChrome />
           <Navbar />
           {children}

@@ -46,10 +46,11 @@ export const hero = {
    */
   roles: [
     { before: "A", word: "Graphic Designer", after: "who builds the products too." },
-    { before: "A", word: "Web Developer", after: "who designs them first." },
+    { before: "A", word: "Web & Mobile Developer", after: "who designs them first." },
   ],
   /** Read by screen readers in place of the swapping word. */
-  screenReaderLine: "I am Lespa, a graphic designer and web developer.",
+  screenReaderLine:
+    "I am Lespa, a graphic designer and a web and mobile developer.",
   subtext:
     "Brand systems, custom-coded websites and mobile apps — and I teach you how to run what I build.",
   primaryCta: { label: "See the work", href: "/projects" },

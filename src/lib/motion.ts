@@ -46,6 +46,12 @@ export const roleSwap = {
   firstSwapMs: 1400,
   /** Quiet period after load before the sequence starts. See RoleSwap. */
   settleAfterLoadMs: 2000,
+  /**
+   * The first swap after the opening sequence. Short, because it is the closing
+   * beat of the intro — long enough to read State A first, not long enough to
+   * feel like a separate event.
+   */
+  firstSwapAfterIntroMs: 700,
   /** Stops after four cycles, resting on State A. Infinite loops irritate. */
   cycles: 4,
 } as const;

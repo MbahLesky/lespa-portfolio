@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { INTRO_DONE_EVENT } from "@/components/shared/IntroSequence";
 import { hero } from "@/content/copy";
 import { roleSwap } from "@/lib/motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -50,22 +51,42 @@ export function RoleSwap() {
       }, delay);
     };
 
-    // Held until the page has finished loading. Animating a large
-    // above-the-fold element re-triggers the browser's largest-contentful-paint
-    // candidate on every swap, which charges the page for motion the reader has
-    // already seen settle. Waiting also means the headline is never moving
-    // while the rest of the page is still arriving.
-    let startTimer: ReturnType<typeof setTimeout>;
-    const begin = () => {
-      startTimer = setTimeout(() => scheduleNext(roleSwap.firstSwapMs), roleSwap.settleAfterLoadMs);
+    // Held until the page has settled. Animating a large above-the-fold element
+    // re-triggers the browser's largest-contentful-paint candidate on every
+    // swap, which charges the page for motion the reader has already watched
+    // settle. It also keeps the headline still while the rest is arriving.
+    let started = false;
+    /** delay: how long to wait before the first swap. */
+    const begin = (delay: number) => {
+      if (started) return;
+      started = true;
+      scheduleNext(delay);
     };
 
-    if (document.readyState === "complete") begin();
-    else window.addEventListener("load", begin, { once: true });
+    // On a first visit the opening sequence owns the headline until it lands,
+    // and says so; otherwise the load event is the cue.
+    const introRunning =
+      document.documentElement.classList.contains("intro-active");
+
+    // After the intro the page has already settled, so the swap follows close
+    // behind — it is the last beat of the opening rather than a separate event.
+    // Without the intro it waits out the load, which keeps the headline still
+    // while the rest of the page is still arriving.
+    const onIntroDone = () => begin(roleSwap.firstSwapAfterIntroMs);
+    const onLoad = () =>
+      begin(roleSwap.settleAfterLoadMs + roleSwap.firstSwapMs);
+
+    if (introRunning) {
+      window.addEventListener(INTRO_DONE_EVENT, onIntroDone, { once: true });
+    } else if (document.readyState === "complete") {
+      onLoad();
+    } else {
+      window.addEventListener("load", onLoad, { once: true });
+    }
 
     return () => {
-      window.removeEventListener("load", begin);
-      clearTimeout(startTimer);
+      window.removeEventListener("load", onLoad);
+      window.removeEventListener(INTRO_DONE_EVENT, onIntroDone);
       clearTimeout(swapTimer);
       clearTimeout(settleTimer);
     };

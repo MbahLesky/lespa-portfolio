@@ -65,7 +65,11 @@ export function Hero() {
               <span className="sr-only">{hero.screenReaderLine}</span>
               <span aria-hidden="true">
                 <span className="enter-line">
-                  <span style={step(STEP.lineOne)}>{hero.headlineLead}</span>
+                  {/* The intro flies a stand-in onto this exact box, so it is
+                      revealed by the handover rather than by its own entrance. */}
+                  <span data-intro-target="title" style={step(STEP.lineOne)}>
+                    {hero.headlineLead}
+                  </span>
                 </span>
                 <span className="enter-line">
                   <span style={step(STEP.lineTwo)}>

@@ -72,7 +72,9 @@ export function Navbar() {
             className="flex min-h-11 items-center rounded-sm"
             aria-label="Lespa — home"
           >
-            <Wordmark height={26} forceDark={overHero} />
+            <span data-intro-target="wordmark" className="flex">
+              <Wordmark height={26} forceDark={overHero} />
+            </span>
           </Link>
 
           <nav aria-label="Primary" className="hidden md:block">

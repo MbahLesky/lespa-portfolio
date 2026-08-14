@@ -40,6 +40,10 @@
     --gradient-surface:    linear-gradient(135deg, #FAFBF9 0%, #FFFFFF 100%);
     --gradient-warm:       linear-gradient(135deg, #FAFBF9 0%, #EDE7DB 100%);
 
+    /* ---------- BRAND MARK ---------- */
+    /* Read by the intro overlay, so its stand-in matches the navbar mark. */
+    --wordmark-url:       url('/assets/logos/light-theme/Wordmark.svg');
+
     /* ---------- PATTERN ---------- *
        Texture, not decoration. The brand collateral sits the maze barely a
        shade off its background — you notice it only once you look for it. 0.5
@@ -103,6 +107,7 @@
     --gradient-surface:   linear-gradient(135deg, #0E1110 0%, #141A17 100%);
     --gradient-warm:      linear-gradient(135deg, #0E1110 0%, #141A17 100%);
 
+    --wordmark-url:       url('/assets/logos/dark-theme/Lespa/Wordmark.svg');
     --pattern-url:        url('/assets/pattern-dark.svg');
 
     --elevation-1:        inset 0 0 0 1px rgba(255, 255, 255, 0.10);
@@ -467,120 +472,72 @@
   /* Sections clear the fixed nav when snapped to. */
   .snap-section { scroll-margin-top: var(--nav-height); }
 
-  /* ---------- LOADING TRANSITION ---------- */
-  /* The mark assembles: icon settles, wordmark wipes in behind it, a green rule
-     draws underneath, then the whole lockup lifts away. Once per session. */
+  /* ---------- INTRO SEQUENCE ---------- */
+  /* A blank screen in the current theme, the wordmark arriving at centre, then
+     both it and the headline flying to the exact boxes they occupy on the page.
+     Positions come from live measurement, so only presentation lives here. */
 
-  /* Hidden unless the head script opted this visit in, so the markup can ship
-     in the server HTML without ever flashing for a returning visitor. */
-  .boot { display: none; }
-  .boot-active .boot {
+  .intro { display: none; }
+  .intro-active .intro {
+    display: block;
     position: fixed;
     inset: 0;
     z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #0E1110;
-  }
-  [data-boot-leaving="true"] .boot {
-    animation: boot-out var(--duration-slow) var(--ease-in-out) both;
-  }
-  @keyframes boot-out {
-    to { opacity: 0; visibility: hidden; }
+    /* Never intercepts a click; the page underneath stays usable throughout. */
+    pointer-events: none;
   }
 
-  .boot-lockup {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding-bottom: 1rem;
-  }
-  [data-boot-leaving="true"] .boot-lockup {
-    animation: boot-lift var(--duration-slow) var(--ease-in-out) both;
-  }
-  @keyframes boot-lift {
-    to { opacity: 0; transform: translateY(-10px); }
-  }
-
-  .boot-icon {
-    animation: boot-icon 420ms var(--ease-out) both;
-  }
-  @keyframes boot-icon {
-    from { opacity: 0; transform: scale(0.82) translateY(6px); }
-    to   { opacity: 1; transform: none; }
-  }
-
-  /* Wipes open from the left rather than fading, so the letterforms arrive in
-     reading order. */
-  .boot-word {
-    animation: boot-word 460ms var(--ease-out) 200ms both;
-  }
-  @keyframes boot-word {
-    from { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-6px); }
-    to   { opacity: 1; clip-path: inset(0 0 0 0);    transform: none; }
-  }
-
-  /* The brand's green underline motif, drawn as the last beat. */
-  .boot-rule {
+  .intro-scrim {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 2px;
-    transform-origin: left;
-    background-image: var(--gradient-brand-lift);
-    animation: boot-rule 420ms var(--ease-out) 560ms both;
-  }
-  @keyframes boot-rule {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
+    inset: 0;
+    background-color: var(--background);
   }
 
-  /* Section labels carry a short green rule, echoing the brand collateral's
-     use of a thin accent rule against a heading. */
-  .section-label {
+  .intro-word,
+  .intro-title {
+    position: fixed;
+    opacity: 0;
+    transform-origin: center center;
+    will-change: transform, opacity;
+  }
+
+  .intro-word-mark {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--wordmark-url) left center / contain no-repeat;
+  }
+
+  .intro-title {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-  }
-  .section-label-rule {
-    display: block;
-    width: 24px;
-    height: 2px;
-    flex-shrink: 0;
-    border-radius: 2px;
-    background-image: var(--gradient-brand-lift);
+    white-space: nowrap;
   }
 
-  /* Vertical accent rule beside the hero block, from the brand collateral.
-     Sits outside the text on wide viewports and is dropped on small ones,
-     where the gutter it needs does not exist. */
-  .hero-rule { display: none; }
-  @media (min-width: 1024px) {
-    .hero-block { padding-left: 2rem; }
-    .hero-rule {
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 0.5rem;
-      bottom: 0.5rem;
-      width: 2px;
-      border-radius: 2px;
-    }
-  }
+  /* The real elements wait, invisible, under their stand-ins, and are revealed
+     in one step when .intro-active is dropped.
+
+     visibility rather than opacity, deliberately. The headline also carries the
+     shared entrance animation: hiding it with opacity loses to that animation,
+     and suppressing the animation instead made it restart when the overlay
+     lifted, so the headline disappeared for two seconds. visibility is not
+     touched by the animation, so the entrance runs to completion underneath and
+     the element is simply revealed in place. .intro-active is removed on every
+     exit path, so nothing can be left hidden by this. */
+  .intro-active [data-intro-target] { visibility: hidden !important; }
 
   /* ---------- ENTRANCE ---------- */
   /* Shared choreography for above-the-fold content. --enter-delay is set once
      by the boot logic: the loader's exit time on a first visit, 0 otherwise, so
      nothing plays underneath the loading screen. */
 
-  :root { --enter-delay: 0ms; }
+  /* Two cues, so the opening can land the headline and its role line first and
+     bring the rest of the page in behind them. Both are 0 without the intro. */
+  :root { --enter-delay: 0ms; --enter-rest: 0ms; }
 
   .enter {
     animation: enter-rise var(--duration-slow) var(--ease-out) both;
-    animation-delay: calc(var(--enter-delay) + var(--enter-step, 0ms));
+    animation-delay: calc(var(--enter-rest) + var(--enter-step, 0ms));
   }
   @keyframes enter-rise {
     from { opacity: 0; transform: translateY(16px); }
@@ -606,7 +563,7 @@
   .enter-rule {
     transform-origin: top;
     animation: enter-rule var(--duration-slow) var(--ease-out) both;
-    animation-delay: calc(var(--enter-delay) + var(--enter-step, 0ms));
+    animation-delay: calc(var(--enter-rest) + var(--enter-step, 0ms));
   }
   @keyframes enter-rule {
     from { transform: scaleY(0); opacity: 0; }
