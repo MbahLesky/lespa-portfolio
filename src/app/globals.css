@@ -512,6 +512,27 @@
     display: flex;
     align-items: center;
     white-space: nowrap;
+    opacity: 0;
+  }
+
+  /* ---------- TYPEWRITER ---------- */
+
+  /* The untyped remainder keeps its space, so the line wraps exactly as it
+     will when finished and nothing below it moves while the text grows. */
+  .type-rest { visibility: hidden; }
+
+  .caret {
+    display: inline-block;
+    width: 2px;
+    height: 0.9em;
+    margin-left: 0.06em;
+    vertical-align: -0.08em;
+    background-color: var(--accent-fg);
+    animation: caret-blink 900ms steps(1, end) infinite;
+  }
+  @keyframes caret-blink {
+    0%, 50%   { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
   }
 
   /* The real elements wait, invisible, under their stand-ins, and are revealed
@@ -524,7 +545,8 @@
      touched by the animation, so the entrance runs to completion underneath and
      the element is simply revealed in place. .intro-active is removed on every
      exit path, so nothing can be left hidden by this. */
-  .intro-active [data-intro-target] { visibility: hidden !important; }
+  .intro-active [data-intro-target],
+  .intro-active [data-intro-hold] { visibility: hidden !important; }
 
   /* ---------- ENTRANCE ---------- */
   /* Shared choreography for above-the-fold content. --enter-delay is set once

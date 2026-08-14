@@ -1,56 +1,79 @@
 /**
- * The opening sequence, in milliseconds from the moment it starts.
+ * The opening sequence, as a script of title cards.
+ *
+ *   blank
+ *   -> the wordmark arrives at centre and flies to its place in the navbar
+ *   -> "Hi" is typed, held, and cleared
+ *   -> "I am Lespa." is typed
+ *   -> the backdrop clears and that line moves into its place in the hero
+ *   -> the role line types itself
+ *   -> the rest of the page arrives
  *
  * Kept in a plain module rather than beside the component: the inline head
  * script is built on the server, and importing a value from a "use client"
  * module there yields a client reference instead of the number.
- *
- * The shape of it:
- *   blank screen
- *   -> wordmark fades in at centre
- *   -> wordmark flies to its place in the navbar, while "I am Lespa." fades
- *      in at centre and the backdrop clears to reveal the page
- *   -> the headline rises and shrinks into its place in the hero
- *   -> the role line swaps, then the rest of the page arrives
  */
-export const INTRO = {
-  /** Beat of blank screen before anything appears. */
-  wordIn: 120,
-  wordInDur: 280,
 
-  /** Wordmark leaves the centre for the navbar. */
-  wordFly: 700,
-  wordFlyDur: 560,
-
-  /** The headline appears at centre while the wordmark is still travelling. */
-  titleIn: 700,
-  titleInDur: 300,
-
-  /** Backdrop clears, so the page is already behind the moving headline. */
-  scrimOut: 1000,
-  scrimOutDur: 350,
-
-  /** Headline rises and shrinks into the hero. */
-  titleFly: 1350,
-  titleFlyDur: 520,
+/** Per-character typing speeds, in milliseconds. */
+export const TYPE = {
+  greeting: 80,
+  name: 55,
+  role: 20,
+  /** Erasing runs faster than typing, as it does on a real keyboard. */
+  erase: 45,
 } as const;
 
-/** The headline has landed. The role line arrives with it. */
-export const INTRO_END = INTRO.titleFly + INTRO.titleFlyDur;
+export const GREETING = "Hi";
 
-/**
- * Long enough for the role line to be read once and swap: the first swap plus
- * its out-and-in. The rest of the page waits for this, so the sequence reads
- * headline -> role -> swap -> everything else, rather than dropping the whole
- * page in and swapping a word afterwards.
- */
-export const INTRO_SWAP_WINDOW = 1400;
+export const INTRO = {
+  /** Wordmark fades up at centre. */
+  wordIn: 150,
+  wordInDur: 280,
 
-/** When everything other than the headline and role line enters. */
-export const INTRO_REST = INTRO_END + INTRO_SWAP_WINDOW;
+  /** Wordmark leaves for the navbar. */
+  wordFly: 650,
+  wordFlyDur: 520,
+
+  /** "Hi" — typed, held, cleared. */
+  greetingAt: 850,
+  greetingHold: 420,
+
+  /** "I am Lespa." begins once the greeting is gone. */
+  nameGap: 60,
+
+  /** Backdrop clears while the name is still being typed. */
+  scrimOut: 1900,
+  scrimOutDur: 400,
+
+  /** The typed line moves into its place in the hero. */
+  titleFlyDur: 480,
+  /** Beat between finishing the name and moving it. */
+  titleFlyGap: 140,
+} as const;
+
+/** Length of a typed string in milliseconds. */
+export const typeMs = (text: string, speed: number) => text.length * speed;
+
+const greetingDone =
+  INTRO.greetingAt +
+  typeMs(GREETING, TYPE.greeting) +
+  INTRO.greetingHold +
+  typeMs(GREETING, TYPE.erase);
+
+/** When "I am Lespa." starts typing. */
+export const NAME_AT = greetingDone + INTRO.nameGap;
+
+/** When the typed line starts moving to the hero. Set by the component from
+ *  the real headline text, but this is the floor the scrim is timed against. */
+export const nameDoneAt = (name: string) =>
+  NAME_AT + typeMs(name, TYPE.name) + INTRO.titleFlyGap;
+
+/** The overlay is gone and the headline is in place. */
+export const introEnd = (name: string) =>
+  nameDoneAt(name) + INTRO.titleFlyDur;
 
 /**
  * Safety net. If a measurement fails or an animation never resolves, the
  * sequence is torn down anyway — the page must never stay hidden behind it.
  */
-export const INTRO_TIMEOUT = INTRO_END + 1200;
+export const INTRO_TIMEOUT_PAD = 1500;

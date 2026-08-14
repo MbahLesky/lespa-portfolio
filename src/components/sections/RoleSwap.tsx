@@ -3,117 +3,174 @@
 import { useEffect, useState } from "react";
 
 import { INTRO_DONE_EVENT } from "@/components/shared/IntroSequence";
+import {
+  Typewriter,
+  segmentsLength,
+  type TypeSegment,
+} from "@/components/shared/Typewriter";
 import { hero } from "@/content/copy";
 import { roleSwap } from "@/lib/motion";
+import { TYPE } from "@/lib/intro-timeline";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/utils";
 
 /**
- * Line two of the hero headline, alternating between two complete claims.
+ * A role as typed runs. The role itself carries the accent, so the green is
+ * there while the word appears rather than being applied once it lands.
+ */
+const segmentsFor = (index: number): TypeSegment[] => {
+  const role = hero.roles[index];
+  return [
+    { text: `${role.before} ` },
+    { text: role.word, className: "text-accent-fg" },
+    { text: ` ${role.after}` },
+  ];
+};
+
+/**
+ * Line two of the hero headline.
  *
- * Both states are always rendered, stacked into a single CSS grid cell, so the
- * box is permanently sized to the wider of the two and the swap cannot shift
- * the layout by a pixel.
+ * On a first visit it is typed out as the closing card of the opening sequence.
+ * After that — and on every later visit — it alternates between the two claims
+ * by crossfade, resting on the first.
  *
- * Both are hidden from assistive technology and the hero supplies one clean
- * sentence instead — a screen reader should not hear a stuttering headline.
+ * Both states are always in the DOM, stacked into one grid cell, so the box is
+ * permanently sized to the wider of the two and neither the typing nor the
+ * swapping can shift the layout by a pixel.
  *
- * Timing: first swap at 1400ms, then hold 3500ms. Out is 200ms, a 100ms gap,
- * in is 250ms. Stops after four cycles resting on State A; an infinite loop
- * becomes irritating on a page people spend two minutes with.
+ * Both are hidden from assistive technology; the hero supplies one clean
+ * sentence instead, so a screen reader never hears a stuttering headline.
  */
 export function RoleSwap() {
   const prefersReducedMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
+  /** null once typing is done — from then on the full line is shown. */
+  const [typedCount, setTypedCount] = useState<number | null>(null);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
 
+    // Blank the line for the whole of the opening sequence. Waiting until the
+    // handover to do this left the finished sentence painted for a frame
+    // before the first character was typed.
+    const introRunning =
+      document.documentElement.classList.contains("intro-active");
+    if (introRunning) setTypedCount(0);
+
+    let cancelled = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const hold = (delay: number, run: () => void) => {
+      timers.push(
+        setTimeout(() => {
+          if (!cancelled) run();
+        }, delay),
+      );
+    };
+
     let cycles = 0;
-    let swapTimer: ReturnType<typeof setTimeout>;
-    let settleTimer: ReturnType<typeof setTimeout>;
-
     const scheduleNext = (delay: number) => {
-      swapTimer = setTimeout(() => {
+      hold(delay, () => {
         setLeaving(true);
-
-        settleTimer = setTimeout(() => {
+        hold(roleSwap.outMs + roleSwap.gapMs, () => {
           setIndex((current) => (current + 1) % hero.roles.length);
           setLeaving(false);
           cycles += 1;
-
-          // A cycle is a full there-and-back. Stop only on State A, so the
-          // resting state is always the primary claim.
+          // A cycle is a full there-and-back. Stop only on the first claim, so
+          // the resting state is always the primary one.
           if (cycles >= roleSwap.cycles * hero.roles.length) return;
           scheduleNext(roleSwap.holdMs);
-        }, roleSwap.outMs + roleSwap.gapMs);
-      }, delay);
+        });
+      });
     };
 
-    // Held until the page has settled. Animating a large above-the-fold element
-    // re-triggers the browser's largest-contentful-paint candidate on every
-    // swap, which charges the page for motion the reader has already watched
-    // settle. It also keeps the headline still while the rest is arriving.
-    let started = false;
-    /** delay: how long to wait before the first swap. */
-    const begin = (delay: number) => {
-      if (started) return;
-      started = true;
-      scheduleNext(delay);
+    /** Type the first claim out, then hand over to the usual alternation. */
+    const typeThenCycle = () => {
+      const total = segmentsLength(segmentsFor(0));
+      setTypedCount(0);
+      for (let i = 1; i <= total; i++) {
+        hold(i * TYPE.role, () => setTypedCount(i));
+      }
+      hold(total * TYPE.role, () => setTypedCount(null));
+      scheduleNext(total * TYPE.role + roleSwap.firstSwapAfterIntroMs);
+    };
+
+    // The second claim rests at opacity 0, so the browser does not see it until
+    // the first swap paints it — and a large piece of text appearing for the
+    // first time several seconds in is recorded as a late largest-contentful
+    // paint. Waiting for the visitor to do something avoids that entirely:
+    // the first interaction, scrolling included, closes the measurement window,
+    // and a visitor who never interacts simply reads the resting claim.
+    const INTERACTIONS = ["pointerdown", "keydown", "scroll", "touchstart"];
+    const onInteract = () => {
+      INTERACTIONS.forEach((type) =>
+        window.removeEventListener(type, onInteract),
+      );
+      scheduleNext(roleSwap.firstSwapMs);
+    };
+    const armInteraction = () => {
+      INTERACTIONS.forEach((type) =>
+        window.addEventListener(type, onInteract, {
+          once: true,
+          passive: true,
+        }),
+      );
     };
 
     // On a first visit the opening sequence owns the headline until it lands,
-    // and says so; otherwise the load event is the cue.
-    const introRunning =
-      document.documentElement.classList.contains("intro-active");
-
-    // After the intro the page has already settled, so the swap follows close
-    // behind — it is the last beat of the opening rather than a separate event.
-    // Without the intro it waits out the load, which keeps the headline still
-    // while the rest of the page is still arriving.
-    const onIntroDone = () => begin(roleSwap.firstSwapAfterIntroMs);
-    const onLoad = () =>
-      begin(roleSwap.settleAfterLoadMs + roleSwap.firstSwapMs);
-
+    // and says so: the swap there is the closing beat of the sequence, not
+    // ambient motion, so it plays on its own. Afterwards it is decoration and
+    // waits to be earned.
     if (introRunning) {
-      window.addEventListener(INTRO_DONE_EVENT, onIntroDone, { once: true });
-    } else if (document.readyState === "complete") {
-      onLoad();
+      window.addEventListener(INTRO_DONE_EVENT, typeThenCycle, { once: true });
     } else {
-      window.addEventListener("load", onLoad, { once: true });
+      armInteraction();
     }
 
     return () => {
-      window.removeEventListener("load", onLoad);
-      window.removeEventListener(INTRO_DONE_EVENT, onIntroDone);
-      clearTimeout(swapTimer);
-      clearTimeout(settleTimer);
+      cancelled = true;
+      timers.forEach(clearTimeout);
+      INTERACTIONS.forEach((type) =>
+        window.removeEventListener(type, onInteract),
+      );
+      window.removeEventListener(INTRO_DONE_EVENT, typeThenCycle);
     };
   }, [prefersReducedMotion]);
 
-  // Reduced motion rests on State A and never animates.
+  // Reduced motion rests on the first claim and never animates.
   const current = prefersReducedMotion ? 0 : index;
 
   return (
     <span className="role-swap" aria-hidden="true">
-      {hero.roles.map((role, i) => (
-        // The role carries the accent and the copy around it drops to the
-        // secondary tone, so the swapping words are the brightest thing on the
-        // line. On Brand Deep that reads as white against 72% white — green on
-        // green would fail contrast outright.
-        <span
-          key={role.word}
-          className={cn(
-            "role-swap-state text-content-secondary",
-            i === current && leaving && "is-leaving",
-          )}
-          data-current={i === current ? "true" : undefined}
-        >
-          {role.before}{" "}
-          <span className="text-accent-fg">{role.word}</span> {role.after}
-        </span>
-      ))}
+      {hero.roles.map((role, i) => {
+        const isCurrent = i === current;
+        // Only the first claim is ever typed, and only while the count is set.
+        const typing = isCurrent && i === 0 && typedCount !== null;
+
+        return (
+          // The role carries the accent and the copy around it drops to the
+          // secondary tone, so the swapping words are the brightest thing on
+          // the line.
+          <span
+            key={role.word}
+            className={cn(
+              "role-swap-state text-content-secondary",
+              isCurrent && leaving && "is-leaving",
+            )}
+            data-current={isCurrent ? "true" : undefined}
+          >
+            {typing ? (
+              <Typewriter segments={segmentsFor(i)} count={typedCount} caret />
+            ) : (
+              <>
+                {role.before}{" "}
+                <span className="text-accent-fg">{role.word}</span>{" "}
+                {role.after}
+              </>
+            )}
+          </span>
+        );
+      })}
     </span>
   );
 }

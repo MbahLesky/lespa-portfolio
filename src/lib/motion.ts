@@ -43,9 +43,8 @@ export const roleSwap = {
   gapMs: 100,
   inMs: 250,
   holdMs: 3500,
+  /** Beat between the visitor's first interaction and the first swap. */
   firstSwapMs: 1400,
-  /** Quiet period after load before the sequence starts. See RoleSwap. */
-  settleAfterLoadMs: 2000,
   /**
    * The first swap after the opening sequence. Short, because it is the closing
    * beat of the intro — long enough to read State A first, not long enough to

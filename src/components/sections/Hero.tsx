@@ -72,7 +72,8 @@ export function Hero() {
                   </span>
                 </span>
                 <span className="enter-line">
-                  <span style={step(STEP.lineTwo)}>
+                  {/* Held behind the overlay, then typed. */}
+                  <span data-intro-hold style={step(STEP.lineTwo)}>
                     <RoleSwap />
                   </span>
                 </span>
