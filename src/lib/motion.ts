@@ -75,3 +75,29 @@ export const roleSwap = {
 export const scrollCue = {
   appearAfterMs: 9000,
 } as const;
+
+/**
+ * The settle that tidies a scroll which stops just short of a section.
+ *
+ * Deliberately small. This is not scroll snapping — it corrects a near-miss
+ * and is invisible the rest of the time, so a long section reads normally all
+ * the way down and only its edges are ever nudged.
+ */
+/**
+ * Marks <html> while the scroll is being corrected. The auto-hiding nav reads
+ * it and holds its state: a scroll the page performed on the visitor's behalf
+ * is not the visitor scrolling, and letting a downward correction re-hide the
+ * bar meant an upward flick could reveal it and lose it again in one gesture.
+ */
+export const SETTLING_ATTR = "data-settling";
+
+export const softSnap = {
+  /** How close to a boundary a resting position must be to be corrected. */
+  rangePx: 96,
+  /** Inside this it is already aligned, and moving would be noise. */
+  deadPx: 4,
+  /** Quiet time after the last scroll event before deciding it has stopped. */
+  idleMs: 140,
+  /** Long enough for the correction to land before listening again. */
+  cooldownMs: 700,
+} as const;

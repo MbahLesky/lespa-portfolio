@@ -126,6 +126,13 @@
 
   html {
     scroll-behavior: smooth;
+    /* Inset the top of the scrollport by the fixed nav. One declaration covers
+       every way of arriving at a section — an anchor link, scrollIntoView, and
+       a snap — so none of them can land content underneath the bar. Doing this
+       with scroll-margin on the sections instead was honoured for links but
+       only sometimes for snap positions, which left half the boundaries
+       settling with their heading behind the nav. */
+    scroll-padding-top: var(--nav-height);
     -webkit-text-size-adjust: 100%;
   }
 
@@ -468,9 +475,8 @@
     transform: scale(1.4);
   }
 
-  /* ---------- SOFT SNAP ---------- */
-  /* Sections clear the fixed nav when snapped to. */
-  .snap-section { scroll-margin-top: var(--nav-height); }
+  /* Sections clear the fixed nav via scroll-padding-top on the scrollport
+     above, not scroll-margin here: setting both offsets each section twice. */
 
   /* ---------- INTRO SEQUENCE ---------- */
   /* A blank screen in the current theme, the wordmark arriving at centre, then
@@ -644,13 +650,9 @@
      by the boot logic: the loader's exit time on a first visit, 0 otherwise, so
      nothing plays underneath the loading screen. */
 
-  /* Two cues, so the opening can land the headline and its role line first and
-     bring the rest of the page in behind them. Both are 0 without the intro. */
-  :root { --enter-delay: 0ms; --enter-rest: 0ms; }
-
   .enter {
     animation: enter-rise var(--duration-slow) var(--ease-out) both;
-    animation-delay: calc(var(--enter-rest) + var(--enter-step, 0ms));
+    animation-delay: var(--enter-step, 0ms);
   }
   @keyframes enter-rise {
     from { opacity: 0; transform: translateY(16px); }
@@ -663,10 +665,13 @@
     display: block;
     clip-path: inset(-0.25em 0 -0.15em 0);
   }
+  /* Not held: the headline is behind the overlay on a first visit, so its
+     entrance plays unseen and the element is already opaque when the stand-in
+     lands on it. On a repeat visit it simply enters with the page. */
   .enter-line > * {
     display: inline-block;
     animation: enter-line 700ms var(--ease-out) both;
-    animation-delay: calc(var(--enter-delay) + var(--enter-step, 0ms));
+    animation-delay: var(--enter-step, 0ms);
   }
   @keyframes enter-line {
     from { opacity: 0; transform: translateY(100%); }
@@ -676,8 +681,14 @@
   .enter-rule {
     transform-origin: top;
     animation: enter-rule var(--duration-slow) var(--ease-out) both;
-    animation-delay: calc(var(--enter-rest) + var(--enter-step, 0ms));
+    animation-delay: var(--enter-step, 0ms);
   }
+
+  /* Held at the first frame while the hero has the floor. Paused rather than
+     delayed: a delay applied at load and removed later plays the animation in
+     the past, and the element just appears. See HOLD_REST_CLASS. */
+  .hold-rest .enter,
+  .hold-rest .enter-rule { animation-play-state: paused; }
   @keyframes enter-rule {
     from { transform: scaleY(0); opacity: 0; }
     to   { transform: none; opacity: 1; }
@@ -1166,10 +1177,12 @@
   .reveal-stagger > *:nth-child(4) { transition-delay: 180ms; }
 
   /* ---------- SOFT SNAP ---------- */
-  /* proximity, never mandatory — mandatory hijacks the scroll wheel. */
-
-  .snap-container { scroll-snap-type: y proximity; }
-  .snap-section   { scroll-snap-align: start; scroll-snap-stop: normal; }
+  /* Deliberately no scroll-snap-type here. CSS proximity snapping turned every
+     section boundary into a magnet roughly a fifth of the viewport wide: a
+     scroll of up to 200px in either direction was swallowed whole, the page did
+     not move at all, and the auto-hiding nav read the snap-back as scrolling
+     down and stayed hidden. "Snap a little" is a smaller idea than the property
+     can express, so SoftSnap does it in script instead — see that component. */
 
   /* ---------- SKIP LINK ---------- */
 

@@ -7,6 +7,7 @@ import {
   FONT_WAIT_MS,
   GREETING,
   GREETING_AT,
+  HOLD_REST_CLASS,
   INTRO,
   INTRO_TIMEOUT_PAD,
   NAME_AT,
@@ -85,11 +86,8 @@ export function IntroSequence() {
     let cancelled = false;
     const timers: ReturnType<typeof setTimeout>[] = [];
 
-    /** Clear the entrance cues so later renders are not held back by them. */
-    const clearCues = () => {
-      root.style.setProperty("--enter-delay", "0ms");
-      root.style.setProperty("--enter-rest", "0ms");
-    };
+    /** Let the page below enter, whether or not the hero got to finish. */
+    const releaseRest = () => root.classList.remove(HOLD_REST_CLASS);
 
     let finished = false;
     /** Drop the overlay and hand the page back, whatever happened. */
@@ -116,7 +114,7 @@ export function IntroSequence() {
     // Nothing to fly to means nothing to show; skip rather than hold the page
     // behind an overlay that cannot resolve.
     if (!scrim || !word || !name || !wordTarget || !nameTarget) {
-      clearCues();
+      releaseRest();
       finish();
       return;
     }
@@ -214,16 +212,6 @@ export function IntroSequence() {
       const push = pushAt(nameText);
       const endAt = introEnd(nameText);
 
-      // The head script parks both cues far in the future so nothing can enter
-      // underneath the overlay before this knows the real timings.
-      //
-      // The headline is released immediately: it is hidden behind the overlay
-      // anyway, so its entrance plays unseen and the element is already opaque
-      // when the stand-in lands on it. The rest of the page is left parked —
-      // RoleSwap releases it once line two has finished typing, since only it
-      // knows how long that takes.
-      root.style.setProperty("--enter-delay", "0ms");
-
       // 1 — the wordmark fades up at centre.
       at(INTRO.wordIn, () => {
         word.animate([{ opacity: 0 }, { opacity: 1 }], {
@@ -292,7 +280,7 @@ export function IntroSequence() {
       const overlay = scrim.parentElement;
       // Reveal the real page first, then fade the stand-ins off the top of it —
       // fading the overlay while the page is still hidden shows a blank frame.
-      clearCues();
+      releaseRest();
       root.classList.remove("intro-active");
       overlay?.animate([{ opacity: 1 }, { opacity: 0 }], {
         duration: SKIP_OUT_MS,
@@ -323,7 +311,7 @@ export function IntroSequence() {
 
     // A resize mid-sequence invalidates every measurement taken above.
     const onResize = () => {
-      clearCues();
+      releaseRest();
       finish();
     };
     window.addEventListener("resize", onResize, { once: true });
@@ -331,7 +319,7 @@ export function IntroSequence() {
     return () => {
       window.removeEventListener("resize", onResize);
       SKIPS.forEach((kind) => window.removeEventListener(kind, onSkip));
-      clearCues();
+      releaseRest();
       finish();
     };
   }, []);

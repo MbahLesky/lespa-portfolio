@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { SETTLING_ATTR } from "@/lib/motion";
+
 /** Scroll distance before the nav swaps to its solid, blurred treatment. */
 const SOLID_AFTER = 80;
 
@@ -45,15 +47,22 @@ export function useScrollDirection(): ScrollState {
         return;
       }
 
-      // Never hide while near the top — there is nothing to reclaim there.
-      const isHidden = delta > 0 && y > SOLID_AFTER;
+      // Never hide while near the top — there is nothing to reclaim there, and
+      // never on a scroll the page made for the visitor: a correction that
+      // moves down a few dozen pixels is not them scrolling away, and treating
+      // it as such let an upward flick reveal the bar and lose it again in the
+      // same gesture. See SETTLING_ATTR.
+      const settling = document.documentElement.hasAttribute(SETTLING_ATTR);
+      const scrolled = y > SOLID_AFTER;
+      const goingDown = delta > 0 && scrolled;
       lastY = y;
 
-      setState((prev) =>
-        prev.isScrolled === y > SOLID_AFTER && prev.isHidden === isHidden
+      setState((prev) => {
+        const isHidden = settling ? prev.isHidden : goingDown;
+        return prev.isScrolled === scrolled && prev.isHidden === isHidden
           ? prev
-          : { isScrolled: y > SOLID_AFTER, isHidden },
-      );
+          : { isScrolled: scrolled, isHidden };
+      });
     };
 
     const onScroll = () => {

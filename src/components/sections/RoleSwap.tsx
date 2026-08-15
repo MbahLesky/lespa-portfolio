@@ -13,7 +13,7 @@ import {
 } from "@/components/shared/Typewriter";
 import { hero } from "@/content/copy";
 import { roleSwap } from "@/lib/motion";
-import { TYPE } from "@/lib/intro-timeline";
+import { HOLD_REST_CLASS, TYPE } from "@/lib/intro-timeline";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
@@ -90,7 +90,7 @@ export function RoleSwap() {
      * before anything else arrives — the opening parks this cue and leaves it
      * to here, since only this knows when the typing ends.
      */
-    const releaseRest = () => root.style.setProperty("--enter-rest", "0ms");
+    const releaseRest = () => root.classList.remove(HOLD_REST_CLASS);
 
     /** The line is finished: show it whole and let the page in behind it. */
     const settle = () => {

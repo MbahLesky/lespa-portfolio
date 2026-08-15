@@ -96,6 +96,25 @@ export const scrimOutAt = (name: string) =>
 /** The overlay is gone and the name is in place. */
 export const introEnd = (name: string) => pushAt(name) + INTRO.pushDur;
 
+/**
+ * Set on <html> before first paint, and removed once the hero has finished
+ * saying its piece. While it is there the page below the headline is held at
+ * the first frame of its entrance.
+ *
+ * A class rather than a long animation-delay. Delaying an animation by a huge
+ * amount at load and then removing the delay does not play it late — it plays
+ * it in the past, and the element simply appears, finished, with no motion at
+ * all. Pausing holds it at its first frame; resuming plays it properly.
+ */
+export const HOLD_REST_CLASS = "hold-rest";
+
+/**
+ * Last resort. If the sequence dies before it can release the page, this drops
+ * the hold anyway — an unreadable page is a far worse failure than a missing
+ * animation.
+ */
+export const HOLD_REST_MAX_MS = 14000;
+
 /** How quickly the overlay gets out of the way when the visitor skips it. */
 export const SKIP_OUT_MS = 240;
 
