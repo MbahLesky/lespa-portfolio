@@ -15,7 +15,11 @@ import { selectedWork } from "@/content/copy";
  * Flat surface, so the work images carry the section rather than a gradient.
  */
 export function SelectedWork() {
-  const [lead, ...rest] = [...projects].sort((a, b) => a.order - b.order);
+  // Only the first few. The rest are one click away, which is what makes that
+  // click worth offering.
+  const [lead, ...rest] = [...projects]
+    .sort((a, b) => a.order - b.order)
+    .slice(0, selectedWork.homeCount);
 
   return (
     <Section

@@ -61,7 +61,7 @@ export function Section({
   return (
     <section
       className={cn(
-        "snap-section relative",
+        "relative",
         SURFACE_CLASS[variant],
         SPACING_CLASS[spacing],
         withPattern && "has-pattern",

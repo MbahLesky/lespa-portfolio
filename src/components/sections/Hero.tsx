@@ -3,6 +3,7 @@ import { Heading } from "@/components/shared/Heading";
 import { MediaFallback, ProjectImage } from "@/components/shared/ProjectImage";
 import { Text } from "@/components/shared/Text";
 import { RoleSwap } from "@/components/sections/RoleSwap";
+import { ScrollCue } from "@/components/shared/ScrollCue";
 import { Section } from "@/components/sections/Section";
 import { hero } from "@/content/copy";
 
@@ -59,16 +60,23 @@ export function Hero() {
               {hero.kicker}
             </Text>
 
-            <Heading as="h1" id="hero-heading">
+            {/* Unbalanced deliberately: line two types itself, and the line
+                balancer re-breaks the whole heading on every character. */}
+            <Heading as="h1" id="hero-heading" balance={false}>
               {/* One clean sentence for assistive technology, in place of the
                   two-state headline underneath it. */}
               <span className="sr-only">{hero.screenReaderLine}</span>
               <span aria-hidden="true">
                 <span className="enter-line">
-                  <span style={step(STEP.lineOne)}>{hero.headlineLead}</span>
+                  {/* The intro flies a stand-in onto this exact box, so it is
+                      revealed by the handover rather than by its own entrance. */}
+                  <span data-intro-target="title" style={step(STEP.lineOne)}>
+                    {hero.headlineLead}
+                  </span>
                 </span>
                 <span className="enter-line">
-                  <span style={step(STEP.lineTwo)}>
+                  {/* Held behind the overlay, then typed. */}
+                  <span data-intro-hold style={step(STEP.lineTwo)}>
                     <RoleSwap />
                   </span>
                 </span>
@@ -125,6 +133,18 @@ export function Hero() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Offered late and only once, well after the opening has finished having
+          its say. It sits under the whole hero rather than in the copy column,
+          and outside the entrance choreography: it has its own timing and must
+          not be held back by the shared cue. */}
+      <div className="mt-16 flex justify-center">
+        <ScrollCue
+          target={hero.scrollCue.target}
+          label={hero.scrollCue.label}
+          description={hero.scrollCue.description}
+        />
       </div>
     </Section>
   );

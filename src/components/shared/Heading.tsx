@@ -20,11 +20,19 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   as?: HeadingLevel;
   /** Visual size override, when the outline needs one level and the design another. */
   size?: HeadingLevel;
+  /**
+   * Balanced line lengths, on by default because it is what makes a short
+   * heading sit well. Turn it off for a heading whose text changes after it is
+   * painted: the balancer re-breaks the lines every time the content does, so
+   * a heading that types itself would jump a line mid-word.
+   */
+  balance?: boolean;
 }
 
 export function Heading({
   as = "h2",
   size,
+  balance = true,
   className,
   children,
   ...props
@@ -34,7 +42,8 @@ export function Heading({
   return (
     <Tag
       className={cn(
-        "font-heading text-balance",
+        "font-heading",
+        balance && "text-balance",
         SIZE_CLASS[size ?? as],
         className,
       )}

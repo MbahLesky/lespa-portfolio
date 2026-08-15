@@ -40,6 +40,10 @@
     --gradient-surface:    linear-gradient(135deg, #FAFBF9 0%, #FFFFFF 100%);
     --gradient-warm:       linear-gradient(135deg, #FAFBF9 0%, #EDE7DB 100%);
 
+    /* ---------- BRAND MARK ---------- */
+    /* Read by the intro overlay, so its stand-in matches the navbar mark. */
+    --wordmark-url:       url('/assets/logos/light-theme/Wordmark.svg');
+
     /* ---------- PATTERN ---------- *
        Texture, not decoration. The brand collateral sits the maze barely a
        shade off its background — you notice it only once you look for it. 0.5
@@ -103,6 +107,7 @@
     --gradient-surface:   linear-gradient(135deg, #0E1110 0%, #141A17 100%);
     --gradient-warm:      linear-gradient(135deg, #0E1110 0%, #141A17 100%);
 
+    --wordmark-url:       url('/assets/logos/dark-theme/Lespa/Wordmark.svg');
     --pattern-url:        url('/assets/pattern-dark.svg');
 
     --elevation-1:        inset 0 0 0 1px rgba(255, 255, 255, 0.10);
@@ -121,6 +126,13 @@
 
   html {
     scroll-behavior: smooth;
+    /* Inset the top of the scrollport by the fixed nav. One declaration covers
+       every way of arriving at a section — an anchor link, scrollIntoView, and
+       a snap — so none of them can land content underneath the bar. Doing this
+       with scroll-margin on the sections instead was honoured for links but
+       only sometimes for snap positions, which left half the boundaries
+       settling with their heading behind the nav. */
+    scroll-padding-top: var(--nav-height);
     -webkit-text-size-adjust: 100%;
   }
 
@@ -463,124 +475,184 @@
     transform: scale(1.4);
   }
 
-  /* ---------- SOFT SNAP ---------- */
-  /* Sections clear the fixed nav when snapped to. */
-  .snap-section { scroll-margin-top: var(--nav-height); }
+  /* Sections clear the fixed nav via scroll-padding-top on the scrollport
+     above, not scroll-margin here: setting both offsets each section twice. */
 
-  /* ---------- LOADING TRANSITION ---------- */
-  /* The mark assembles: icon settles, wordmark wipes in behind it, a green rule
-     draws underneath, then the whole lockup lifts away. Once per session. */
+  /* ---------- INTRO SEQUENCE ---------- */
+  /* A blank screen in the current theme, the wordmark arriving at centre, then
+     both it and the headline flying to the exact boxes they occupy on the page.
+     Positions come from live measurement, so only presentation lives here. */
 
-  /* Hidden unless the head script opted this visit in, so the markup can ship
-     in the server HTML without ever flashing for a returning visitor. */
-  .boot { display: none; }
-  .boot-active .boot {
+  .intro { display: none; }
+  .intro-active .intro {
+    display: block;
     position: fixed;
     inset: 0;
     z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #0E1110;
-  }
-  [data-boot-leaving="true"] .boot {
-    animation: boot-out var(--duration-slow) var(--ease-in-out) both;
-  }
-  @keyframes boot-out {
-    to { opacity: 0; visibility: hidden; }
+    /* Never intercepts a click; the page underneath stays usable throughout. */
+    pointer-events: none;
   }
 
-  .boot-lockup {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding-bottom: 1rem;
-  }
-  [data-boot-leaving="true"] .boot-lockup {
-    animation: boot-lift var(--duration-slow) var(--ease-in-out) both;
-  }
-  @keyframes boot-lift {
-    to { opacity: 0; transform: translateY(-10px); }
-  }
-
-  .boot-icon {
-    animation: boot-icon 420ms var(--ease-out) both;
-  }
-  @keyframes boot-icon {
-    from { opacity: 0; transform: scale(0.82) translateY(6px); }
-    to   { opacity: 1; transform: none; }
-  }
-
-  /* Wipes open from the left rather than fading, so the letterforms arrive in
-     reading order. */
-  .boot-word {
-    animation: boot-word 460ms var(--ease-out) 200ms both;
-  }
-  @keyframes boot-word {
-    from { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-6px); }
-    to   { opacity: 1; clip-path: inset(0 0 0 0);    transform: none; }
-  }
-
-  /* The brand's green underline motif, drawn as the last beat. */
-  .boot-rule {
+  .intro-scrim {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 2px;
-    transform-origin: left;
-    background-image: var(--gradient-brand-lift);
-    animation: boot-rule 420ms var(--ease-out) 560ms both;
-  }
-  @keyframes boot-rule {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
+    inset: 0;
+    background-color: var(--background);
   }
 
-  /* Section labels carry a short green rule, echoing the brand collateral's
-     use of a thin accent rule against a heading. */
-  .section-label {
+  .intro-word,
+  .intro-name,
+  .intro-role {
+    position: fixed;
+    opacity: 0;
+    transform-origin: center center;
+    will-change: transform, opacity;
+  }
+
+  .intro-word-mark {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--wordmark-url) left center / contain no-repeat;
+  }
+
+  /* The name is one line by definition, and held to one: a wrap mid-word while
+     it types would move the card it is centred as. */
+  .intro-name {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-  }
-  .section-label-rule {
-    display: block;
-    width: 24px;
-    height: 2px;
-    flex-shrink: 0;
-    border-radius: 2px;
-    background-image: var(--gradient-brand-lift);
+    white-space: nowrap;
   }
 
-  /* Vertical accent rule beside the hero block, from the brand collateral.
-     Sits outside the text on wide viewports and is dropped on small ones,
-     where the gutter it needs does not exist. */
-  .hero-rule { display: none; }
-  @media (min-width: 1024px) {
-    .hero-block { padding-left: 2rem; }
-    .hero-rule {
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 0.5rem;
-      bottom: 0.5rem;
-      width: 2px;
-      border-radius: 2px;
-    }
+  /* The role line is laid over the box it will occupy in the hero and wraps
+     exactly as it will there, with the untyped remainder holding the rest of
+     its space. */
+  .intro-role {
+    display: block;
   }
+
+  /* The nav's one action. Smaller than a page button so it reads as part of
+     the bar rather than as content that has floated up into it. */
+  .nav-cta {
+    min-height: 40px;
+    padding-inline: 1rem;
+    font-size: var(--text-body-sm);
+  }
+
+  /* ---------- SCROLL CUE ---------- */
+
+  /* Sits below the hero copy, centred on the column. It fades and rises in
+     once, and is removed outright rather than hidden when it retires. */
+  .scroll-cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* 44px of target around a 16px arrow. */
+    min-height: 44px;
+    padding: 0 1rem 0 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background-color: var(--surface);
+    color: var(--content-secondary);
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity   var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out),
+      color     var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .scroll-cue.is-shown {
+    opacity: 1;
+    transform: none;
+  }
+  .scroll-cue:hover,
+  .scroll-cue:focus-visible {
+    color: var(--content-primary);
+    border-color: var(--accent-fg);
+  }
+
+  .scroll-cue-label {
+    font-size: var(--text-body-sm);
+    letter-spacing: 0.01em;
+  }
+
+  /* The arrow drifts down and back, a short distance and slowly: the cue is
+     an offer, not an alarm. */
+  .scroll-cue-arrow {
+    display: inline-flex;
+    color: var(--accent-fg);
+    animation: scroll-cue-bob 2.4s var(--ease-in-out) infinite;
+  }
+  @keyframes scroll-cue-bob {
+    0%, 100% { transform: translateY(-2px); }
+    50%      { transform: translateY(3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue { transition: none; }
+    .scroll-cue-arrow { animation: none; }
+  }
+
+  /* ---------- TYPEWRITER ---------- */
+
+  /* The untyped remainder keeps its space, so the line wraps exactly as it
+     will when finished and nothing below it moves while the text grows. */
+  .type-rest { visibility: hidden; }
+
+  /* The caret occupies no width, and paints its bar outside its own box.
+     A caret that takes even a few pixels of the line is a caret that can push
+     the last word onto a new line — and since it moves with the typing, the
+     heading would gain and lose a line as the text ran past the wrap point.
+     The hidden remainder can only hold the final layout if nothing else in the
+     line changes width while it types. */
+  /* display:inline, deliberately, and empty. An inline-block would be an
+     atomic inline, and an atomic inline is a line-break opportunity — with the
+     caret sitting mid-word the browser could break there, packing the line into
+     fewer rows while typing and springing back when the caret left. An empty
+     non-atomic inline adds neither width nor a place to break. */
+  .caret {
+    position: relative;
+    display: inline;
+    animation: caret-blink 900ms steps(1, end) infinite;
+  }
+  /* Centred on the em box rather than hung off an edge: the caret is used at
+     three different sizes, and a fixed offset that suits one misses the others. */
+  .caret::after {
+    content: "";
+    position: absolute;
+    left: 0.06em;
+    top: 50%;
+    width: 2px;
+    height: 0.78em;
+    transform: translateY(-52%);
+    background-color: var(--accent-fg);
+  }
+  @keyframes caret-blink {
+    0%, 50%   { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+  }
+
+  /* The real elements wait, invisible, under their stand-ins, and are revealed
+     in one step when .intro-active is dropped.
+
+     visibility rather than opacity, deliberately. The headline also carries the
+     shared entrance animation: hiding it with opacity loses to that animation,
+     and suppressing the animation instead made it restart when the overlay
+     lifted, so the headline disappeared for two seconds. visibility is not
+     touched by the animation, so the entrance runs to completion underneath and
+     the element is simply revealed in place. .intro-active is removed on every
+     exit path, so nothing can be left hidden by this. */
+  .intro-active [data-intro-target],
+  .intro-active [data-intro-hold] { visibility: hidden !important; }
 
   /* ---------- ENTRANCE ---------- */
   /* Shared choreography for above-the-fold content. --enter-delay is set once
      by the boot logic: the loader's exit time on a first visit, 0 otherwise, so
      nothing plays underneath the loading screen. */
 
-  :root { --enter-delay: 0ms; }
-
   .enter {
     animation: enter-rise var(--duration-slow) var(--ease-out) both;
-    animation-delay: calc(var(--enter-delay) + var(--enter-step, 0ms));
+    animation-delay: var(--enter-step, 0ms);
   }
   @keyframes enter-rise {
     from { opacity: 0; transform: translateY(16px); }
@@ -593,10 +665,13 @@
     display: block;
     clip-path: inset(-0.25em 0 -0.15em 0);
   }
+  /* Not held: the headline is behind the overlay on a first visit, so its
+     entrance plays unseen and the element is already opaque when the stand-in
+     lands on it. On a repeat visit it simply enters with the page. */
   .enter-line > * {
     display: inline-block;
     animation: enter-line 700ms var(--ease-out) both;
-    animation-delay: calc(var(--enter-delay) + var(--enter-step, 0ms));
+    animation-delay: var(--enter-step, 0ms);
   }
   @keyframes enter-line {
     from { opacity: 0; transform: translateY(100%); }
@@ -606,8 +681,14 @@
   .enter-rule {
     transform-origin: top;
     animation: enter-rule var(--duration-slow) var(--ease-out) both;
-    animation-delay: calc(var(--enter-delay) + var(--enter-step, 0ms));
+    animation-delay: var(--enter-step, 0ms);
   }
+
+  /* Held at the first frame while the hero has the floor. Paused rather than
+     delayed: a delay applied at load and removed later plays the animation in
+     the past, and the element just appears. See HOLD_REST_CLASS. */
+  .hold-rest .enter,
+  .hold-rest .enter-rule { animation-play-state: paused; }
   @keyframes enter-rule {
     from { transform: scaleY(0); opacity: 0; }
     to   { transform: none; opacity: 1; }
@@ -617,6 +698,15 @@
   @media (scripting: none) {
     .enter, .enter-line > *, .enter-rule { animation: none; opacity: 1; transform: none; }
   }
+
+  /* The entrance parks these elements below their resting place until it runs,
+     so measuring one while it waits reports a box that is displaced by its own
+     animation — and a stand-in laid over that box lands in the wrong spot. The
+     opening sequence adds this for the one frame in which it measures, then
+     removes it again, so the elements are read where they will actually sit. */
+  .intro-measuring .enter,
+  .intro-measuring .enter-line > *,
+  .intro-measuring .enter-rule { animation: none !important; }
 
   /* ---------- FORM ---------- */
 
@@ -896,26 +986,16 @@
     display: inline-grid;
     grid-template-areas: "line";
   }
+  /* The claim that is not being written is kept in the flow, unseen, so the
+     cell stays the size of the larger of the two and a swap cannot move the
+     page. There is no transition: one claim becomes the other at zero
+     characters, where the line is empty and the change cannot be seen. */
   .role-swap-state {
     grid-area: line;
     opacity: 0;
-    /* In: fade and rise from 8px over 250ms. */
-    transform: translateY(8px);
-    transition:
-      opacity   250ms var(--ease-out),
-      transform 250ms var(--ease-out);
   }
   .role-swap-state[data-current="true"] {
     opacity: 1;
-    transform: none;
-  }
-  /* Out: fade and lift 8px over 200ms, on the ease-in curve. */
-  .role-swap-state.is-leaving {
-    opacity: 0;
-    transform: translateY(-8px);
-    transition:
-      opacity   200ms var(--ease-in-out),
-      transform 200ms var(--ease-in-out);
   }
 
   /* ---------- ELEVATION ---------- */
@@ -1000,6 +1080,13 @@
   }
   /* Not clickable in v1 — the border brighten is the whole interaction. */
   .tag:hover { border-color: var(--control-border-hover); }
+
+  /* Marks a project as mine rather than a client's. Carries the accent so it
+     reads as a deliberate label and not as another discipline tag. */
+  .tag-self {
+    border-color: var(--accent-fg);
+    color: var(--accent-fg);
+  }
 
   /* Underline draws left-to-right. Never combined with .highlight.
      These are standalone links rather than links inside a sentence, so they
@@ -1090,10 +1177,12 @@
   .reveal-stagger > *:nth-child(4) { transition-delay: 180ms; }
 
   /* ---------- SOFT SNAP ---------- */
-  /* proximity, never mandatory — mandatory hijacks the scroll wheel. */
-
-  .snap-container { scroll-snap-type: y proximity; }
-  .snap-section   { scroll-snap-align: start; scroll-snap-stop: normal; }
+  /* Deliberately no scroll-snap-type here. CSS proximity snapping turned every
+     section boundary into a magnet roughly a fifth of the viewport wide: a
+     scroll of up to 200px in either direction was swallowed whole, the page did
+     not move at all, and the auto-hiding nav read the snap-back as scrolling
+     down and stayed hidden. "Snap a little" is a smaller idea than the property
+     can express, so SoftSnap does it in script instead — see that component. */
 
   /* ---------- SKIP LINK ---------- */
 

@@ -55,6 +55,9 @@ export function ProjectCard({
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-2">
+          {/* Said plainly and first, rather than left for the reader to work
+              out from the client name further down the page. */}
+          {project.selfInitiated && <Tag className="tag-self">Self-initiated</Tag>}
           {project.tags.map((tag) => (
             <Tag key={tag}>{tag}</Tag>
           ))}
