@@ -983,15 +983,27 @@
      of the two and the alternation cannot shift the layout. */
 
   .role-swap {
-    display: inline-grid;
-    grid-template-areas: "line";
+    position: relative;
+    display: inline-block;
   }
+  /* In the flow, and hidden: both claims stacked, so the box is the size of
+     the larger of the two. */
+  .role-swap-sizer {
+    display: grid;
+    grid-template-areas: "line";
+    visibility: hidden;
+  }
+  .role-swap-measure { grid-area: line; }
   /* The claim that is not being written is kept in the flow, unseen, so the
      cell stays the size of the larger of the two and a swap cannot move the
      page. There is no transition: one claim becomes the other at zero
      characters, where the line is empty and the change cannot be seen. */
+  /* Out of flow entirely. Nothing the typewriter does to this line — fusing
+     two words at the seam, wrapping onto an extra row mid-rewrite — can change
+     the size of anything else. */
   .role-swap-state {
-    grid-area: line;
+    position: absolute;
+    inset: 0;
     opacity: 0;
   }
   .role-swap-state[data-current="true"] {

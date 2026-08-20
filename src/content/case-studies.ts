@@ -1,12 +1,24 @@
 /**
- * Case study and showcase prose.
+ * Case study and showcase prose, from the per-project documents in /docs.
  *
- * Pikamgo is transcribed from /docs/mock-content.md Part 2. Diwa and Qiroke are
- * written to the same block structure and target lengths so the template can be
- * built and reviewed at realistic size.
+ * Sources: monilog-case-study-final.md, diwa-case-study-final.md,
+ * pikamgo-case-study.md, ronixe-case-study.md, qiroke-showcase-final.md,
+ * yisi-showcase.md.
  *
- * EVERY CLAIM IN THIS FILE IS INVENTED. The [MOCK] markers are deliberately
- * left in source so they stay greppable — replace all of it before launch.
+ * Two things to know before editing:
+ *
+ * DIWA CARRIES A CONFIDENTIALITY RULE. Its final document removes the audit
+ * block and the before/after outright, and forbids showing the earlier marks,
+ * itemising their flaws, or describing what was wrong with them in specifics —
+ * all of that would reveal the contents of a confidential brief. A second
+ * document, diwa-audit-block.md, restores exactly that material. The final
+ * document wins here. Do not merge the audit block in without the client's
+ * written agreement.
+ *
+ * LESPA IS THE ONE INVENTED ENTRY. Every other project below is transcribed
+ * from its document. The Lespa brand case study has not been written yet, so
+ * its prose is placeholder and marked [MOCK]. [CONFIRM] marks a real detail
+ * that its source document flagged as unverified.
  */
 
 export interface Callout {
@@ -26,20 +38,39 @@ export interface Testimonial {
   role: string;
 }
 
-/** The 13-block narrative template. */
+/** A titled run of prose. The narrative blocks genuinely differ per project —
+ *  one opens on a client, another on a set of constraints — so the ones that
+ *  are not shared are carried as these rather than forced into fixed fields. */
+export interface Block {
+  title: string;
+  body: string[];
+}
+
 export interface CaseStudy {
-  /** One-line outcome shown under the project name in the hero. */
+  /** Opens the page: the problem, or the client it belongs to. */
   problem: string[];
-  before: {
-    /** Used when images.before is absent — the slider is skipped entirely. */
-    description: string;
-    callouts: Callout[];
-  };
+  /** Defaults to "The problem" where a project opens on something else. */
+  problemTitle?: string;
+  /**
+   * The starting point, where one exists AND may be shown. Absent for a
+   * greenfield project, and absent for anything under a confidentiality rule.
+   */
+  before?: { description: string; callouts: Callout[] };
+  /** Stands in for `before`: the brief, the constraints, or a plain statement
+   *  that there was nothing there before. */
+  brief?: Block;
   whatIDid: string;
-  research: string[];
+  /** Research, or exploration. */
+  research?: string[];
+  researchTitle?: string;
   decisions: Decision[];
+  /** Between the decisions and the system. */
+  beforeSystem?: Block[];
   system: string;
+  /** Between the system and what shipped. */
+  afterSystem?: Block[];
   after: string;
+  afterTitle?: string;
   outcomes: string[];
   testimonial?: Testimonial;
   differently?: string;
@@ -57,199 +88,287 @@ export interface Showcase {
 }
 
 export const caseStudies: Record<string, CaseStudy> = {
-  pikamgo: {
-    // [MOCK] ~80 words
+  monilog: {
     problem: [
-      "Pikamgo had customers, but they were losing most of them at checkout. The booking flow ran seven screens deep, asked for information twice, and gave no indication of progress. Support was fielding the same three questions every day — all of them answerable by the interface, if the interface had bothered to answer them.",
-      "The brand had the same problem in a different form: three different logos in circulation and no rule about which to use.",
+      "Most personal finance apps assume two things: a stable internet connection and a bank account. In Cameroon, neither is safe to assume.",
+      "Money moves through MTN MoMo and Orange Money as much as through banks — but global finance apps treat mobile money as a footnote, if they support it at all. Connectivity drops. Data is expensive. And nearly every one of them opens with a sign-up wall demanding an email address before it will show you anything.",
+      "The people who most need to track their money have the least usable tools for doing it.",
     ],
-    before: {
-      description:
-        "The original flow spread a single booking across seven screens. Nothing indicated how far along you were, payment details were requested before any price appeared, and a mistyped field sent you back to the start.", // [MOCK]
-      callouts: [
-        { marker: "01", text: "Seven steps, no progress indicator" },
-        { marker: "02", text: "Payment details requested before pricing shown" },
-        { marker: "03", text: "No error recovery — one mistake restarts the flow" },
+    brief: {
+      title: "The constraints",
+      body: [
+        "Four rules, set before any design work started.",
+        "Works with no connection. Not offline mode as a fallback — local storage as the single source of truth, with sync added later as a feature rather than a dependency.",
+        "No sign-up. No email, no password, no verification code. First transaction recorded inside two minutes.",
+        "Mobile money is a first-class account type, not a spending category.",
+        "Bilingual from day one. Cameroon is officially EN/FR, and shipping English-only would exclude half the market.",
       ],
     },
-    // [MOCK] ~50 words
     whatIDid:
-      "Full scope: brand identity, design system, and the frontend build. The client's developer handled the backend and payment integration. I owned everything the user sees.",
-    // [MOCK] ~80 words
-    research: [
-      "Six user sessions, all on mid-range Android over mobile data — the actual conditions, not a desktop simulation. Two findings reshaped the work: people abandoned when they couldn't see the total, and most were booking one-handed while doing something else.",
-      "Constraint: the existing backend couldn't be changed. Every improvement had to happen in the interface layer.",
-    ],
+      "Everything the user sees and most of what they don't: brand identity, product design, the Flutter mobile app, the React web companion, and the marketing site. Self-initiated. I set the scope, made every call, and shipped it — which also means every weakness in it is mine.",
     decisions: [
       {
-        chose: "Three-step flow with a persistent price summary",
-        rejected: "Single-page form",
-        why: "Long forms test worse on mobile than short sequenced steps. Progress visibility mattered more than page count.",
+        chose: "Local database as the source of truth",
+        rejected: "Cloud-first with an offline cache",
+        why: "Offline-as-fallback breaks in exactly the conditions it's meant for — the app opens, waits on a request, and hangs. Building on Drift over SQLite means there is no network call in the critical path at all. Sync arrives in v2 as an addition, not a repair.",
       },
       {
-        chose: "Saira for headings",
-        rejected: "Inter",
-        why: "Needed technical character without coldness. Inter is clean but anonymous — it would have made the brand disappear.",
+        chose: "No account, no email, no password",
+        rejected: "Standard registration",
+        why: "Every sign-up field is a place people leave. For a finance app the objection is sharper — you're asking for an email before showing any value, in a category where people are already wary about who sees their money. No account also means nothing to breach.",
       },
       {
-        chose: "System-native date picker",
-        rejected: "Custom calendar component",
-        why: "Familiarity beat control. Users already knew how their own picker worked, and it removed an accessibility liability.",
+        chose: "Mobile money as an account type",
+        rejected: "Mobile money as a transaction category",
+        why: "MoMo isn't a kind of spending, it's where the money lives. As a category, users couldn't see a MoMo balance — which is the number most of them check most often.",
       },
       {
-        chose: "Design tokens from day one",
-        rejected: "Styling as I went",
-        why: "The client planned two more products. Tokens meant the second one starts at week zero, not week six.",
+        chose: "Dark-first with a single bright accent",
+        rejected: "Light-first",
+        why: "The app gets opened at the counter, in the market, in the evening. Dark reads better in low light and costs less battery on OLED. One accent means every positive number and every primary action share a colour, so there's one thing to learn instead of four.",
       },
     ],
-    // [MOCK] ~40 words
+    beforeSystem: [
+      {
+        title: "The mark",
+        body: [
+          "The name gave me an M. The product gave me three other things to say — tracking, growth, and money — and I wanted the letter to carry all of them rather than sit beside icons that did.",
+          "Three rounded bars make the M. They're also a bar chart: unequal heights, which is what a month of spending actually looks like. The arrow rises through the valley of the M, so growth is drawn by the letterform instead of added to it. And the middle bar carries a single dot — the wallet clasp, straight from the sketch.",
+          "One shape. Four readings. Nothing bolted on.",
+        ],
+      },
+    ],
     system:
-      "Twelve colour tokens, a six-step type scale, an 8px spacing system, and eighteen components. Documented, versioned, and handed over. The client's developer extended it without asking me a question.",
-    after:
-      "The rebuilt flow across three screens, shown in context — in hand, at desk, and as a flat interface frame.", // [MOCK]
-    // [MOCK] ~60 words
-    outcomes: [
-      "Booking completion improved noticeably in the first month. Support volume on checkout questions dropped to near zero. The client now updates content and adds pages without involving me — which was the point.",
+      "Deep teal #0F766E carries structure — bars, headings, the weight of the mark. Mint #2DD4BF carries movement: the arrow, every positive number, every primary action. Two colours, two jobs. On a dark interface that means the eye learns one accent instead of sorting four.",
+    afterSystem: [
+      {
+        title: "The interface",
+        body: [
+          "The dashboard answers one question first: how much do I have right now? Balance at the top, income and expenses beneath it, then four cards — total in, total out, today's spending, month balance.",
+          "Below that, accounts. Cash, bank, MoMo, savings, each with its own balance, because one combined number hides the thing people actually need to see.",
+          "Five items in the bottom bar, Add Transaction raised in the centre. Recording money is the daily action. Everything else is occasional.",
+        ],
+      },
+      {
+        title: "Built, not just designed",
+        body: [
+          "Flutter for mobile, with Drift over SQLite as the local store. React for the web companion. Both run on the same brand system — same tokens, same type scale, same components — so the phone and the browser feel like one product rather than two builds that happen to share a logo.",
+          "Import and export in CSV, JSON, and XLSX, because data you can't take out isn't really yours. Local backup. Daily reminders. No backend at all in v1.",
+        ],
+      },
     ],
-    testimonial: {
-      quote:
-        "[MOCK — real client quote goes here. Two sentences in their own voice. Do not polish it into corporate language.]",
-      name: "[Name]",
-      role: "[Role], Pikamgo",
-    },
-    // [MOCK] ~40 words
+    afterTitle: "In use",
+    after:
+      "v1.0 is in beta at monilog.vercel.app. Android app and web companion, both live.",
+    outcomes: [
+      "v1.0 is in beta — offline Flutter app, React web companion, and marketing site, all live. Play Store release is next.",
+      "v2 adds cloud sync through Supabase and PowerSync, so the offline-first architecture gains sync without giving up local storage as the source of truth. v3 is the one I'm most interested in: recording a transaction by sending a WhatsApp message.",
+    ],
+    // [MOCK] The source document leaves this one deliberately unwritten: it
+    // wants a real finding from beta, and says a specific finding beats a
+    // plausible one because readers can tell the difference. Replace it.
     differently:
-      "I built the component library before validating the flow with users. It worked out, but it was luck. Next time the flow gets tested first and the components follow.",
+      "I designed the full account model before testing whether anyone wanted six account types. If beta shows most people use two or three, the extra options add setup friction at exactly the moment I was trying to remove it.",
   },
 
   diwa: {
-    // [MOCK] ~80 words
+    // Confidentiality: nothing here describes the earlier marks, their flaws,
+    // or the brief. See the note at the head of this file.
+    problemTitle: "The client",
     problem: [
-      "Diwa was three products wearing three different faces. The mobile app, the marketing site, and the printed materials had each been made by whoever was available, and none of them agreed on a colour, a typeface, or even the shape of a button.",
-      "Customers who met the brand on paper did not recognise it in the app. Internally, every new screen restarted an argument that had already been had twice.",
+      "Diwa Innovation builds solar-powered air coolers and refrigerators out of porous terracotta. Founded in Maroua, in Cameroon's Far North, by an energy engineer who holds a patent on the technology.",
+      "The product works on physics rather than electricity: water evaporating through fired clay pulls heat out of the air. It cools without a grid connection, in a region where 40°C is a normal afternoon and the grid is unreliable.",
+      "They won first prize at EDF Pulse Africa in Paris, and a pan-African TotalEnergies award. The engineering had already been recognised. They came to me to rework the visual identity.",
     ],
-    before: {
-      // No before image exists for this project, so the block is written rather
-      // than shown, and the before/after slider is skipped entirely.
-      description:
-        "Three parallel versions of the same brand: a wordmark set in a different typeface on each surface, four greens in circulation, and spacing that ranged from 5px to 22px with no rule behind either number.", // [MOCK]
-      callouts: [
-        { marker: "01", text: "Four brand greens, none of them documented" },
-        { marker: "02", text: "Wordmark set in a different face on each surface" },
-        { marker: "03", text: "No shared spacing rule between app and print" },
+    brief: {
+      title: "The brief",
+      body: [
+        "The mark had to do four things at once.",
+        "Carry the name — \"Diwa\" means water, life, and gentleness across several Lake Chad basin languages. Carry the product — evaporative cooling, terracotta, sun. Survive one colour, because it prints on white plastic, brown cardboard, adhesive tape, and vehicle panels. And hold at favicon size, because the brand lives on WhatsApp Business as much as anywhere else.",
+        "No gradients. No photographic elements. Flat first, everything else after.",
       ],
     },
-    // [MOCK] ~50 words
     whatIDid:
-      "Brand identity, the design system, and the mobile UI. The client's team built the Flutter app against the library I handed over. I did not touch the backend or the print production.",
-    // [MOCK] ~80 words
+      "Concept development, logo design, colour and type system, and a 31-page guidelines document. Fifteen files across four formats. Two weeks from brief to delivery. The client's team handles engineering, product, and the website — I owned the mark and the rules around it.",
+    researchTitle: "Exploration",
     research: [
-      "I audited every existing asset first — forty-one files across app, web, and print — and grouped them by what they actually shared rather than what they were supposed to. Two greens accounted for most of the real usage, which made the palette decision straightforward.",
-      "Constraint: the app was already in stores with an active user base, so the visual change had to land without a re-onboarding flow.",
+      "Paper first. Four ideas kept coming back: water drop, breeze lines, leaf, and the letters D and A.",
+      "Five made it into vector. Two built from the D, three from the A. Each drawn as a single flat shape before anything else — if it doesn't work in one colour at 20 pixels, nothing else about it matters.",
+      "That's where the problem showed up.",
     ],
     decisions: [
       {
-        chose: "One palette of six, documented as tokens",
-        rejected: "A wider palette with usage guidelines",
-        why: "Guidelines get read once. Tokens get imported. Fewer colours with a name each survived handover; a longer list would have drifted again inside a quarter.",
+        chose: "Killed three of my own concepts",
+        rejected: "02, 03, and 04",
+        why: "They read as flames. 02 as a flame swirl, 03 as fire if used at the wrong size, 04 unmistakably. Diwa sells cooling in a region where 40°C is normal. A mark that reads as fire isn't a stylistic miss — it's the opposite of the product. Two of them were the most interesting shapes I drew. They still had to go.",
       },
       {
-        chose: "Shared 8px spacing scale across app and print",
-        rejected: "Separate scales per medium",
-        why: "One scale meant a layout could move between surfaces without being redrawn. The print team lost some fine control and got consistency in exchange.",
+        chose: "One shape carrying three ideas",
+        rejected: "Adding elements to signal the product",
+        why: "The obvious move is to bolt on airflow lines or fan blades so people know what's being sold. That makes a diagram, not a mark. Instead the D became a water drop, a breeze line cuts through it, and that cut forms a leaf inside the drop. Water, air, and terracotta ecology — one object, no added parts.",
       },
       {
-        chose: "Incremental visual rollout",
-        rejected: "A single redesign release",
-        why: "The app had users who knew where things were. Shipping the system underneath first meant the visible change arrived without moving anything.",
+        chose: "The D as the mark",
+        rejected: "A separate icon beside the wordmark",
+        why: "An icon next to a name is two things to maintain and two things to misuse. Building the drop into the D means the icon and the wordmark are the same object. Pull the D out for a favicon and the brand is still legible.",
+      },
+      {
+        chose: "Merriweather and Inter",
+        rejected: "System defaults",
+        why: "Georgia and Calibri read as \"document\", not \"brand\". Merriweather keeps editorial warmth with proper display weights. Inter holds at 12pt on a packaging back panel.",
       },
     ],
-    // [MOCK] ~40 words
+    beforeSystem: [
+      {
+        title: "Three finalists",
+        body: [
+          "Three concepts made it to full lockups, and each had a risk I wrote down before showing them.",
+          "01 — the A as a drop with a leaf inside. Clean, but it could read as \"diw\" plus a symbol.",
+          "02 — sun, breeze, and a leaflet built from the d. Conceptually the richest, but it risked reading as \"siwa\".",
+          "03 — the D as drop, breeze, and leaf in one form. No reading ambiguity, one object, scales cleanly.",
+          "I presented two. They chose the D.",
+        ],
+      },
+      {
+        title: "The mark",
+        body: [
+          "The D is a water drop. A breeze line cuts through it, and the cut forms a leaf inside the drop. Three meanings, one shape.",
+          "It works in blue, green, ochre, black, or reversed to white. As a fullmark with the tagline, as a wordmark alone, or as the D on its own at 20 pixels.",
+        ],
+      },
+    ],
     system:
-      "Six colour tokens, a five-step type scale, an 8px spacing system, and a Flutter component library the client's team extends themselves. The print templates read from the same token sheet.",
+      "Three variants — icon, wordmark, fullmark — each with a defined use and a defined misuse. Four approved colour versions. Clear space at a quarter of the logo width. Minimum sizes down to 20px. Eight explicit prohibitions, each with a picture, because a rule without an example gets broken. Thirty-one pages. Fifteen files. Four formats each.",
+    afterTitle: "In use",
     after:
-      "The system applied across the app, the site, and printed material — the same brand in three places.", // [MOCK]
-    // [MOCK] ~60 words
+      "Live at diwa-air.com. The same lockup runs white on the dark hero and blue on the loading screen — both pulled from the delivered files, neither redrawn.",
     outcomes: [
-      "The team stopped relitigating colour and spacing on every new screen, which was the real cost. New screens now start from the component library instead of a blank file, and the print templates no longer need me to update them.",
+      "Two weeks from brief to delivered system.",
+      "The mark is live at diwa-air.com in two colourways, working as a header lockup and a loading state without either being redrawn. The icon holds at favicon size. The fullmark holds at vehicle scale. Same files.",
     ],
-    // [MOCK] ~40 words
+    // Testimonial pending from Didier Dinamou, Founder & CEO. Deliberately
+    // absent rather than empty: ship the section without a proof block rather
+    // than with a box waiting to be filled.
     differently:
-      "I documented the system after building it rather than alongside it. The documentation was accurate but it arrived a fortnight late, and in that gap the team made three choices I had to go back and fold in.",
+      "The tagline lockup only exists in French. Their site already has an English toggle, and the expansion plan runs into anglophone markets. I should have drawn the English lockup alongside the French one instead of leaving a gap the client will eventually have to fill without me.",
   },
 
-  qiroke: {
-    // [MOCK] ~80 words
+  pikamgo: {
     problem: [
-      "Every new page at Qiroke needed a developer. Marketing would write copy, file a ticket, and wait — sometimes a fortnight — for a layout that was almost always a rearrangement of blocks the site already had.",
-      "The bottleneck was not capacity. It was that nothing on the site was composable: each page was bespoke markup, so nothing could be reused without being rebuilt.",
+      "In Bamenda, sending a package meant finding someone going that way, negotiating a price, and hoping it arrived. No tracking, no verified courier, no way to confirm a price before committing. Small vendors lost time coordinating deliveries by phone; individuals had no on-demand option for errands or parcels.",
+      "As Creative Director at Qiroke, the studio I co-founded, I was brought in to give this problem a product and a face — a brand and an app that could make local delivery feel as reliable as it should already be.",
     ],
     before: {
       description:
-        "Fourteen pages, each hand-built. The same testimonial block appeared on five of them in five slightly different implementations, so a copy change meant five separate edits.", // [MOCK]
+        "Six early logo directions, explored in parallel: a hand cradling a package with a literal palm and fingers, a hexagonal \"G\" grip, a two-block \"TG\" monogram, a plain cube icon. Every non-hand direction tried to signal trust through pure geometry — a box, a grip shape, a monogram — with nothing carrying the idea of care. The literal hand-and-package sketch carried the right meaning but was too illustrative to survive a 24px app icon.",
       callouts: [
-        { marker: "01", text: "Every page hand-built as bespoke markup" },
-        { marker: "02", text: "The same block reimplemented five times over" },
-        { marker: "03", text: "A copy change required a developer and a deploy" },
+        { marker: "01", text: "Geometry signalling trust, nothing carrying care" },
+        { marker: "02", text: "The literal hand was too illustrative at 24px" },
+        { marker: "03", text: "Three name spellings in circulation at once" },
       ],
     },
-    // [MOCK] ~50 words
     whatIDid:
-      "Product design and the frontend build. I defined the block library and implemented it in Next.js. The client's team handled content modelling in the CMS once the components existed.",
-    // [MOCK] ~80 words
+      "As Creative Director at Qiroke — the studio I co-founded — I led the full identity for PikamGo, our own product: naming direction, logo system, colour palette, and the UI for the app's core screens (Pickers directory, delivery tracking, package detail). Development sat with our CTO; my scope was everything the user sees.",
     research: [
-      "I pulled apart all fourteen existing pages and catalogued every distinct block. What looked like fourteen unique layouts turned out to be nine repeating patterns and a handful of one-offs that nobody had asked for.",
-      "Constraint: no redesign. The client wanted the site they had, assembled differently — which kept the scope to structure rather than surface.",
+      "The name itself needed settling first — PicknGo, PiknGo, and PikamGo all appeared across early drafts before PikamGo locked in, chosen for clearer pronunciation across Bamenda's English/French-mixed context.",
+      "The mark had to work as a full-colour hero image and as a single-colour 24px app icon, on white, black, and brand-orange backgrounds. And it had to avoid reading like the generic \"package + hand\" mark every delivery app defaults to.",
     ],
     decisions: [
       {
-        chose: "Nine composable blocks",
-        rejected: "A general-purpose page builder",
-        why: "A builder would have let them make anything, including a mess. A short list of blocks meant every page they assemble is still on-brand without review.",
+        chose:
+          "The \"P\" abstracted into a folded package cradled by arm and hand forms — carrying, not just holding",
+        rejected: "Pure geometric marks: hexagonal grip, \"TG\" monogram, plain cube icon",
+        why: "Geometry alone made PikamGo interchangeable with any delivery brand. The arm and hand construction keeps the safety-and-care idea structural, not decorative, while abstracting it enough to survive a 24px icon.",
       },
       {
-        chose: "Content modelled in the CMS, layout fixed in code",
-        rejected: "Layout controls exposed to editors",
-        why: "Editors wanted to publish, not to art-direct. Keeping layout in code removed the decision they did not want to be making.",
+        chose: "PikamGo as the final name",
+        rejected: "PicknGo / PiknGo",
+        why: "One spelling, one pronunciation, one search term — inconsistent naming across pitch materials was actively costing recall.",
       },
       {
-        chose: "Progressive enhancement on every block",
-        rejected: "Client-rendered composition",
-        why: "Pages had to be indexable and fast on mobile data. Server components meant the markup arrives complete and the JavaScript is optional.",
+        chose:
+          "Flare Motion palette — International Orange #FF5900 core, warm supporting tones, Cod Gray #1B1B1B for contrast",
+        rejected: "An earlier cool-blue cube exploration",
+        why: "Blue read as generic corporate tech and didn't differentiate from every other delivery app on the App Store. Orange signals urgency and motion — the actual product promise.",
+      },
+      {
+        chose: "A condensed, geometric wordmark",
+        rejected: "A motion-trail glitch treatment on the P, built from dashes and scan-lines",
+        why: "Visually the most distinctive option, but illegible at favicon size — the dashes vanished before the letterform did.",
       },
     ],
-    // [MOCK] ~40 words
     system:
-      "Nine blocks, each with a documented content model, responsive breakpoints, and an accessibility checklist signed off against WCAG AA. Composition happens in the CMS; the rules live in code.",
+      "One primary mark — package and arms carrying it, safety and care built into the \"P\" — plus a monochrome icon-only variant for small placements, and a three-tier orange scale running from #FF5900 down to a soft #FCDED3 tint, anchored by Cod Gray #1B1B1B for text and contrast.",
     after:
-      "Pages assembled from the block library, plus the editor view the team now works in.", // [MOCK]
-    // [MOCK] ~60 words
+      "The mark and palette carried straight into the product: a Pickers directory showing verified couriers with ratings and live availability, a delivery detail screen breaking down package size, priority, and drop-off info, and a home screen surfacing the user's current delivery status at a glance. Same orange, same type, same spacing logic — brand and product built as one system rather than a logo applied after the fact.",
     outcomes: [
-      "The team ships new pages without a developer, which was the entire brief. Time from copy to published page went from a fortnight to an afternoon, and the shared blocks mean a wording change now happens once instead of five times.",
+      // [CONFIRM] pilot status before publishing — the plan targets a Q3 2025
+      // Bamenda launch, and this paragraph says "planned" until that is known.
+      "A single, consistent identity now runs across the app, the pitch deck, and the business plan used to raise pilot funding — no small thing after three name variants and six visual directions were floating across separate documents. The pilot launch in Bamenda is planned, with a founding team of five now working from one brand system instead of five interpretations of it.",
     ],
-    // [MOCK] ~40 words
     differently:
-      "I built all nine blocks before anyone had assembled a page with them. Two turned out to be near-duplicates that should have been one, and I only learned that once the team started composing.",
+      "Lock the name before producing collateral, not after. Three spellings sat in circulation for longer than they should have, and every doc built during that window had to be corrected once PikamGo was confirmed.",
   },
+
+  ronixe: {
+    problem: [
+      "Ronixe is a software development company in Bamenda, Cameroon — web, mobile, e-commerce, UI/UX, API integration, ongoing support. Their own positioning is \"we build applications from conception to launch.\"",
+      "The mark needed to say technical and forward-moving without leaning on the two clichés every dev agency reaches for: a literal code bracket, or a generic rocket.",
+    ],
+    brief: {
+      title: "The starting point",
+      body: [
+        "There wasn't one. No prior identity existed — this was greenfield, not a redesign, so there is no before to show and no transformation to claim.",
+      ],
+    },
+    whatIDid:
+      "Designed the full identity system: wordmark, standalone icon usable alone as a favicon or app icon, and a combined lockup — each built for both light and dark surfaces, since the product itself ships dark-themed.",
+    research: [
+      "The icon had to hold up at favicon size and as a full lockup on a marketing site, and needed to work on Ronixe's actual dark UI as well as light contexts like documents and stationery.",
+    ],
+    decisions: [
+      {
+        chose:
+          "A diagonal upward arrow set inside an open rounded-square frame, with the R built from the negative space where the arrow crosses the frame's edge",
+        rejected: "A literal code-bracket mark",
+        why: "Every second dev-agency logo reaches for a bracket. An upward arrow reads as momentum and launch — which is Ronixe's own stated positioning — and doubles as the letterform instead of sitting beside it. The same design position runs through Diwa, Monilog, Qiroke and Yisi: meaning built into the letter, not added next to it.",
+      },
+      {
+        chose: "Full light and dark variant sets for wordmark, icon and lockup independently",
+        rejected: "A single-colour mark with opacity shifts for dark mode",
+        why: "The live product runs a dark theme by default. A mark that was only adapted for dark rather than purpose-built for it would have looked like an afterthought on the actual site.",
+      },
+    ],
+    system:
+      "A clean geometric wordmark paired with the icon; a standalone R-mark that works down to favicon size; and the two combined as a lockup. Each asset ships light and dark — six files covering every surface the brand would meet.",
+    after:
+      "Live in production at ronixe.com — the mark appears in the site header, the favicon, and the social meta images, running on the dark theme it was built for.",
+    outcomes: [
+      "Unlike brand work that ends at a guidelines PDF, this one is verifiable: the mark is live, in production, on a real client's real site — not a mockup. That is the proof point for this page.",
+    ],
+    differently:
+      "No formal guidelines document shipped alongside the assets — just the file set. It works because the system is simple enough to hold together on its own, but Diwa and Qiroke both got a documented clear-space and misuse spec, and a live production brand arguably needed that discipline too.",
+  },
+
   "lespa-brand": {
-    // [MOCK] ~80 words
+    // [MOCK] Every line of this entry is invented. It is the only case study
+    // here without a source document — see portfolio-project-tier-list.md,
+    // which flags the Lespa brand as not yet written up.
     problem: [
       "I had been building brands for other people for three years and had none of my own. My work went out under three different marks depending on which file I opened last, my proposals were typeset in whatever the template came with, and the site I sent people to was a template I had not touched since I bought it.",
       "The gap that mattered was not vanity. I was asking clients to trust me with their identity while visibly not having solved my own.",
     ],
     before: {
       description:
-        "Three logo variants in circulation, no palette written down anywhere, and a portfolio built on a theme whose spacing I could not change without fighting it. Every new proposal started by hunting for the file I used last time.", // [MOCK]
+        "Three logo variants in circulation, no palette written down anywhere, and a portfolio built on a theme whose spacing I could not change without fighting it. Every new proposal started by hunting for the file I used last time.",
       callouts: [
         { marker: "01", text: "Three marks, no rule about which to use" },
         { marker: "02", text: "No documented palette or type scale" },
         { marker: "03", text: "Portfolio on a theme I could not extend" },
       ],
     },
-    // [MOCK] ~50 words
     whatIDid:
       "All of it, which is the point: the mark, the system it implies, and the site that proves the system works. No handoff, because there was nobody to hand off to — and no excuse for a seam anywhere.",
-    // [MOCK] ~80 words
     research: [
       "The audience is two groups who want opposite things. Founders want to see finished work and be reassured. Developers and students want to see the reasoning and the file underneath. A brand that speaks only to one loses the other.",
       "Constraint I set myself: everything the site is built on has to be publishable. If a token could not be shown on the page without embarrassment, it was the wrong token.",
@@ -276,31 +395,25 @@ export const caseStudies: Record<string, CaseStudy> = {
         why: "A PDF goes stale the day it is exported. The swatches below are read from the running stylesheet, so they cannot disagree with the site.",
       },
     ],
-    // [MOCK] ~40 words
     system:
       "Everything below is read from the stylesheet this page is using — not a screenshot, not a copy. If a value here is wrong, the site is wrong with it, which is the only way a system stays honest.",
     liveSystem: true,
-    after:
-      "The mark in use across the site, the proposal template, and the social set.", // [MOCK]
-    // [MOCK] ~60 words
+    after: "The mark in use across the site, the proposal template, and the social set.",
     outcomes: [
       "Proposals now start from a template instead of a search. The site is the portfolio and the brand guide at once, so there is one thing to keep current rather than two. And the system has already been lifted wholesale as the starting point for two client projects.",
     ],
-    // [MOCK] ~40 words
     differently:
       "I drew the mark before writing a word about who it was for, and spent two weeks refining letterforms for a positioning I had not settled. The palette and the type scale came out of the writing, and they came out quickly. The mark should have waited.",
   },
 };
 
 export const showcases: Record<string, Showcase> = {
-  ronixe: {
-    // [MOCK] ~100 words
+  qiroke: {
     context:
-      "Ronixe needed an identity that would still hold together at scale — a mark that reads at 16px in a browser tab and at two metres on a trade stand, without a special version for either. The wordmark is drawn rather than set, so the letterforms stay even at small sizes, and the symbol works as a standalone avatar. The palette runs deliberately short: two greens and a neutral, each with a defined role, so nobody has to decide which one to use. Everything ships as tokens alongside the artwork.",
+      "Qiroke is a tech collective I co-founded, offering software development, web development, branding, and digital marketing. The brand needed to represent a team, not a product — a mark flexible enough to hold across five services without picking a lane. I built the full identity system: a flowing \"Q\" with meaning constructed into the letterform itself, a four-variant colour system for every background it would meet, and a homepage structured around the visitor's problem rather than a service list. Real stakeholder feedback — on weight, contrast, hierarchy, spacing — got addressed directly. The typography and colour system are documented down to letter-spacing, so nothing downstream is guesswork.",
   },
-  monilog: {
-    // [MOCK] ~100 words
+  yisi: {
     context:
-      "Monilog's dashboard was built for the people who made it. Everyone else — the warehouse staff who actually use it — met a wall of eleven-point tables and unlabelled status codes. The redesign starts from what those staff need to know in the first three seconds: what needs attention, what is on track, and what can wait. Numbers are typeset at a size you can read across a room, status is carried by shape and label rather than colour alone, and the dense table is still there, one tap away, for the people who want it.",
+      "Yisi's wordmark builds the brand's identity directly into the letterform: the Y becomes a fork, the I a spoon, the S a place setting curve, the final I another fork — all resting on a plate, under a chef's hat replacing the dot. No separate icon sits beside the name; the name is the icon. It's the same design position carried through Diwa, Monilog, and Qiroke — meaning constructed into the letters themselves rather than bolted on beside them.",
   },
 };

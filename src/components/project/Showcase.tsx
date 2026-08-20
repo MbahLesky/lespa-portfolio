@@ -5,6 +5,7 @@ import { ProjectHero } from "@/components/project/ProjectHero";
 import { ProjectImage } from "@/components/shared/ProjectImage";
 import { Text } from "@/components/shared/Text";
 import type { Showcase as ShowcaseContent } from "@/content/case-studies";
+import { fileLabel } from "@/lib/utils";
 import type { Project } from "@/types";
 
 /**
@@ -51,7 +52,7 @@ export function Showcase({
                 <ProjectImage
                   src={image}
                   alt={`${project.name} — ${index + 1}`}
-                  name={project.name}
+                  name={fileLabel(image)}
                   sizes="(min-width: 768px) 500px, 100vw"
                 />
               </div>

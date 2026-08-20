@@ -22,7 +22,7 @@ export function ProjectHero({ project }: { project: Project }) {
       <Container className="relative flex h-full flex-col justify-end pb-12">
         <Heading as="h1">{project.name}</Heading>
         <Text size="lg" className="mt-4 max-w-reading text-content-secondary">
-          {project.outcome}
+          {project.hero}
         </Text>
       </Container>
     </section>

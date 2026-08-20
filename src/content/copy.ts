@@ -143,11 +143,17 @@ export const selectedWork = {
   homeCount: 3,
 } as const;
 
-/** The full index, where the count is worth stating. */
+/**
+ * The full index, where the count is worth stating.
+ *
+ * The split is deliberately exact. Two are client engagements, two are
+ * ventures I co-founded, and three are my own — and a co-founded product
+ * described as client work is a claim that does not survive being asked about.
+ */
 export const workPage = {
-  heading: "Six projects. Real constraints, real outcomes.",
+  heading: "Seven projects. Real constraints, real outcomes.",
   intro:
-    "Five for clients and one for myself. Brand, interface, and code — usually all three.",
+    "Client brands, two co-founded ventures, and the products I built for myself. Brand, interface, and code — usually all three.",
 } as const;
 
 /* ---------- 4 · Skills & Services ---------- */
