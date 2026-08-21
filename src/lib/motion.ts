@@ -39,14 +39,16 @@ export const pageVariants = {
  * more than the shape of the curve.
  */
 export const roleSwap = {
-  /** Erasing runs faster than typing, as it does on a real keyboard. */
-  eraseMs: 26,
-  /** The beat at zero characters, where one claim becomes the other. */
-  gapMs: 260,
   /**
-   * How long a finished claim rests before it is erased. A swap is now a
-   * visible rewrite rather than a crossfade, so it needs to be rare: long
-   * enough to read the sentence, look away, and look back.
+   * How long the finished line is left alone before the rest of the page comes
+   * in behind it. The hero has just said the one thing it exists to say;
+   * bringing everything else in on top of that reads as impatience.
+   */
+  secondaryRevealMs: 2000,
+  /**
+   * How long a finished claim rests before it is rewritten. A swap is a visible
+   * rewrite rather than a crossfade, so it needs to be rare: long enough to
+   * read the sentence, look away, and look back.
    */
   holdMs: 6000,
   /** Beat between the name landing and line two starting to type. */
@@ -73,7 +75,10 @@ export const roleSwap = {
  * than an interruption.
  */
 export const scrollCue = {
-  appearAfterMs: 9000,
+  /** After the opening, the typing, the beat that follows it, and the page
+   *  entering behind all three — an invitation to scroll that arrives before
+   *  there is anything to scroll to is just a distraction. */
+  appearAfterMs: 11500,
 } as const;
 
 /**

@@ -9,6 +9,7 @@ import {
 import {
   Typewriter,
   segmentsLength,
+  sharedPrefix,
   type TypeSegment,
 } from "@/components/shared/Typewriter";
 import { hero } from "@/content/copy";
@@ -31,19 +32,50 @@ const segmentsFor = (index: number): TypeSegment[] => {
 
 const lengthOf = (index: number) => segmentsLength(segmentsFor(index));
 
+const textOf = (index: number) =>
+  segmentsFor(index)
+    .map((segment) => segment.text)
+    .join("");
+
+/**
+ * Every line the rewrite passes through, in both directions.
+ *
+ * Sizing the box to the two finished claims is not enough: half way through,
+ * the line is the head of one sentence joined to the tail of the other, and the
+ * join can be wider than either — "Wraphic" is wider than "Graphic", because W
+ * is a wider glyph than G. At some widths that is enough to push the sentence
+ * onto a row neither finished version needs.
+ *
+ * Rather than guess at a margin, the box is measured against every state the
+ * line will ever hold. They are laid out once, hidden, stacked in a single grid
+ * cell, so the cell is the tallest of them by construction — and the reserved
+ * row appears only at the widths that actually need it.
+ */
+const everyState = () => {
+  const states = new Set<string>();
+  for (let i = 0; i < hero.roles.length; i++) {
+    const from = textOf(i);
+    const to = textOf((i + 1) % hero.roles.length);
+    states.add(to);
+    for (let cursor = 0; cursor <= Math.max(from.length, to.length); cursor++) {
+      states.add(to.slice(0, cursor) + from.slice(cursor));
+    }
+  }
+  return [...states];
+};
+
 /**
  * Line two of the hero headline.
  *
- * It types itself out, holds, erases itself and types the other claim, resting
- * on the first. The whole line is one typewriter: the opening sequence lands
- * the name above it and hands over, and every swap afterwards is the same
- * erase-and-retype rather than a crossfade, so the line always reads as one
- * thing being written and rewritten.
+ * It types itself out, holds, and is then rewritten into the other claim in a
+ * single left-to-right pass — never erased to nothing first. The two sentences
+ * share their opening, so the cursor starts where they diverge and everything
+ * past it is still the outgoing line: what you read is one sentence turning
+ * into another, with no blank gap in the middle and no caret jumping home.
  *
  * Both claims are always in the DOM, stacked into one grid cell, so the box is
  * permanently sized to the larger of the two and neither the typing nor the
- * swapping can shift the layout by a pixel. Only one is ever visible, and the
- * changeover happens at zero characters, where there is nothing to see.
+ * rewriting can shift the layout by a pixel. Only one is ever visible.
  *
  * Both are hidden from assistive technology; the hero supplies one clean
  * sentence instead, so a screen reader never hears a stuttering headline.
@@ -53,6 +85,11 @@ export function RoleSwap() {
   const [index, setIndex] = useState(0);
   /** Characters shown. null means the line is simply there, in full. */
   const [count, setCount] = useState<number | null>(null);
+  /**
+   * The claim being typed over, while one is replacing another. Everything
+   * past the cursor is still this one, so the line is never blank mid-swap.
+   */
+  const [replacing, setReplacing] = useState<number | null>(null);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -92,9 +129,15 @@ export function RoleSwap() {
      */
     const releaseRest = () => root.classList.remove(HOLD_REST_CLASS);
 
-    /** The line is finished: show it whole and let the page in behind it. */
-    const settle = () => {
+    /** The line is finished, and stands as an ordinary sentence again. */
+    const finishLine = () => {
+      setReplacing(null);
       setCount(null);
+    };
+
+    /** Finished, and the page may come in behind it. */
+    const settle = () => {
+      finishLine();
       releaseRest();
     };
 
@@ -106,26 +149,34 @@ export function RoleSwap() {
     let claim = 0;
     let cycles = 0;
 
-    /** Erase what is written, type the other claim, and book the next round. */
+    /**
+     * Type one claim over the other in a single left-to-right pass, and book
+     * the next round.
+     *
+     * Not erase-then-retype. The two claims already share their opening, so
+     * the cursor starts where they diverge and every character past it is
+     * still the outgoing sentence: the line reads as being rewritten rather
+     * than deleted and typed again, and it is never blank. Where one claim is
+     * longer, the surplus is typed in or dropped by the same pass rather than
+     * a separate phase.
+     */
     const swapAt = (when: number) => {
       hold(when, () => {
+        const previous = claim;
         const next = (claim + 1) % hero.roles.length;
-        const blank = type(0, lengthOf(claim), 0, roleSwap.eraseMs);
+        const start = sharedPrefix(segmentsFor(previous), segmentsFor(next));
+        const end = Math.max(lengthOf(previous), lengthOf(next));
 
-        // The claims change over at zero characters, where the line is empty
-        // and the switch cannot be seen.
-        hold(blank + roleSwap.gapMs, () => {
-          claim = next;
-          setIndex(next);
+        claim = next;
+        setIndex(next);
+        setReplacing(previous);
+        setCount(start);
+
+        const written = type(0, start, end, TYPE.role);
+        hold(written, () => {
+          setReplacing(null);
+          setCount(null);
         });
-
-        const written = type(
-          blank + roleSwap.gapMs,
-          0,
-          lengthOf(next),
-          TYPE.role,
-        );
-        hold(written, () => setCount(null));
 
         cycles += 1;
         // A cycle is a full there-and-back. Stop only on the first claim, so
@@ -178,7 +229,11 @@ export function RoleSwap() {
       setCount(0);
       const first = timers.length;
       const written = type(roleSwap.afterIntroMs, 0, lengthOf(0), TYPE.role);
-      hold(written, settle);
+      hold(written, finishLine);
+      // The line lands, and is then left alone for a beat before anything else
+      // moves — the hero has just said the one thing it exists to say, and
+      // bringing the rest of the page in on top of that reads as impatience.
+      hold(written + roleSwap.secondaryRevealMs, releaseRest);
       /** Just the typing, captured before the swap is booked on top of it. */
       const typing = timers.slice(first);
       swapAt(written + roleSwap.firstSwapAfterIntroMs);
@@ -227,6 +282,17 @@ export function RoleSwap() {
 
   return (
     <span className="role-swap" aria-hidden="true">
+      {/* Sets the box, and is the only thing that does — see everyState. The
+          line you actually read sits out of flow above this, so nothing it
+          does at any point in the rewrite can move the heading. */}
+      <span className="role-swap-sizer">
+        {everyState().map((state) => (
+          <span key={state} className="role-swap-measure">
+            {state}
+          </span>
+        ))}
+      </span>
+
       {hero.roles.map((role, i) => {
         const isCurrent = i === current;
         return (
@@ -240,7 +306,14 @@ export function RoleSwap() {
             data-current={isCurrent ? "true" : undefined}
           >
             {isCurrent && count !== null ? (
-              <Typewriter segments={segmentsFor(i)} count={count} caret />
+              <Typewriter
+                to={segmentsFor(i)}
+                from={
+                  replacing === null ? undefined : segmentsFor(replacing)
+                }
+                count={count}
+                caret
+              />
             ) : (
               <>
                 {role.before}{" "}

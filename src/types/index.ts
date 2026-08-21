@@ -27,20 +27,41 @@ export interface ProjectImages {
   gallery: string[];
 }
 
+/** One row of the sticky bar under the project hero. */
+export interface MetaField {
+  label: string;
+  value: string;
+}
+
 export interface Project {
   slug: string;
   name: string;
   tier: Tier;
   order: number;
   featured: boolean;
-  /** ≤ 12 words. What CHANGED, not what was built. */
+  /** ≤ 12 words, on the card. What CHANGED, not what was built. */
   outcome: string;
+  /** The line under the name on the project's own hero. */
+  hero: string;
   tags: string[];
+  /**
+   * The meta bar, in the order it should read. A list rather than fixed fields
+   * because the rows genuinely differ: one project ships a stack and platforms,
+   * another a sector and a market, and a blank "Timeline" on a project that
+   * never had one reads worse than no row at all.
+   */
+  meta: MetaField[];
+  /**
+   * Structured duplicates of what machines need — the OG image, the JSON-LD,
+   * and the role list on the case study. The bar above is what people read;
+   * these are what is read about the page.
+   */
   client: string;
   role: string[];
-  timeline: string;
   year: string;
   stack: string[];
+  /** Where it can be seen running, when that is a real place. */
+  liveUrl?: string;
   /**
    * Mine rather than a client's. Labelled in the grid: a self-initiated piece
    * shown unmarked among client engagements invites the reader to work out the

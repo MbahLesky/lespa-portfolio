@@ -3,19 +3,18 @@ import { Container } from "@/components/layout/Container";
 import type { Project } from "@/types";
 
 /**
- * Client · Role · Timeline · Stack · Year, sticky under the nav.
+ * The project's facts, sticky under the nav.
+ *
+ * Rows come from the project itself rather than a fixed set, because they
+ * genuinely differ: one ships a stack and a set of platforms, another a sector
+ * and a market. An empty "Timeline" on a project that never had one reads worse
+ * than no row at all.
  *
  * Collapses to a single scrollable line on mobile rather than wrapping into a
  * block that would eat the viewport it is pinned to.
  */
 export function MetaBar({ project }: { project: Project }) {
-  const fields = [
-    { label: "Client", value: project.client },
-    { label: "Role", value: project.role.join(", ") },
-    { label: "Timeline", value: project.timeline },
-    { label: "Stack", value: project.stack.join(", ") },
-    { label: "Year", value: project.year },
-  ];
+  const fields = project.meta;
 
   return (
     <div className="meta-bar surface-raised border-b border-border">
