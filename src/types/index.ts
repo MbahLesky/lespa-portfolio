@@ -13,12 +13,19 @@
  */
 export type Tier = "case-study" | "showcase";
 
+/**
+ * null where the file does not exist yet.
+ *
+ * Deliberately not "a path we will add later": a path with nothing behind it
+ * is still fetched, still 404s, and on a priority image puts a failed request
+ * on the critical path. null renders the reserved frame and asks for nothing.
+ */
 export interface ProjectImages {
   /** Card default state. */
-  final: string;
+  final: string | null;
   /** Card hover-reveal target — wireframe or sketch. */
-  sketch: string;
-  hero: string;
+  sketch: string | null;
+  hero: string | null;
   /**
    * Optional. When absent the case study renders the written "before"
    * description and omits the before/after slider entirely.

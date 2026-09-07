@@ -58,7 +58,8 @@ export function CaseStudy({
   content: CaseStudyContent;
 }) {
   const next = getNextProject(project.slug);
-  const hasBefore = Boolean(project.images.before);
+  // Both halves have to exist for a comparison to mean anything.
+  const hasBefore = Boolean(project.images.before && project.images.final);
 
   return (
     <main id="main">
@@ -212,21 +213,25 @@ export function CaseStudy({
               </Heading>
               <Text muted>{content.after}</Text>
             </div>
-            <div className="case-wide grid gap-6 md:grid-cols-2">
-              {project.images.gallery.map((image, index) => (
-                <div
-                  key={image}
-                  className="ratio-4-3 relative w-full overflow-hidden rounded-md"
-                >
-                  <ProjectImage
-                    src={image}
-                    alt={`${project.name} — final screen ${index + 1}`}
-                    name={fileLabel(image)}
-                    sizes="(min-width: 768px) 500px, 100vw"
-                  />
-                </div>
-              ))}
-            </div>
+            {/* Skipped entirely where the imagery has not arrived: an empty
+                grid reads as a broken page, where no grid reads as prose. */}
+            {project.images.gallery.length > 0 && (
+              <div className="case-wide grid gap-6 md:grid-cols-2">
+                {project.images.gallery.map((image, index) => (
+                  <div
+                    key={image}
+                    className="ratio-4-3 relative w-full overflow-hidden rounded-md"
+                  >
+                    <ProjectImage
+                      src={image}
+                      alt={`${project.name} — final screen ${index + 1}`}
+                      name={fileLabel(image)}
+                      sizes="(min-width: 768px) 500px, 100vw"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* 10 — only when there is genuinely something to compare. */}
@@ -237,7 +242,7 @@ export function CaseStudy({
               </Heading>
               <BeforeAfterSlider
                 before={project.images.before as string}
-                after={project.images.final}
+                after={project.images.final as string}
                 name={project.name}
               />
             </section>

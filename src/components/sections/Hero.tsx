@@ -1,9 +1,9 @@
 import { Button } from "@/components/shared/Button";
 import { Heading } from "@/components/shared/Heading";
-import { MediaFallback, ProjectImage } from "@/components/shared/ProjectImage";
 import { Text } from "@/components/shared/Text";
 import { RoleSwap } from "@/components/sections/RoleSwap";
 import { ScrollCue } from "@/components/shared/ScrollCue";
+import { ThemedPhoto } from "@/components/shared/ThemedPhoto";
 import { Section } from "@/components/sections/Section";
 import { hero } from "@/content/copy";
 
@@ -113,24 +113,11 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Reserved at its final size, so dropping the real file in cannot
-            shift the page. Renders a labelled frame until then rather than a
-            broken image. */}
+        {/* Sized by its ratio, so the photograph cannot shift the page as it
+            loads, and drawn per theme — see ThemedPhoto. */}
         <div className="enter lg:col-span-4" style={step(STEP.media)}>
           <div className="hero-media elevated relative w-full overflow-hidden rounded-md">
-            {hero.image.src ? (
-              <ProjectImage
-                src={hero.image.src}
-                alt={hero.image.alt}
-                name={hero.image.label}
-                sizes="(min-width: 1024px) 32vw, 100vw"
-                priority
-              />
-            ) : (
-              <MediaFallback
-                name={`${hero.image.label} — ${hero.image.ratio}`}
-              />
-            )}
+            <ThemedPhoto token="--hero-photo-url" alt={hero.image.alt} />
           </div>
         </div>
       </div>

@@ -49,7 +49,13 @@
        shade off its background — you notice it only once you look for it. 0.5
        was loud enough to compete with the copy on top, so the pattern now runs
        far lower and is masked out behind the content column. */
-    --pattern-url:        url('/assets/pattern-light.svg');
+    --pattern-url:        url('/assets/patterns/pattern-light.svg');
+
+    /* ---------- PHOTOGRAPHY ---------- *
+       Shot for each theme rather than one image dimmed for the other, so the
+       token carries the file and exactly one of the pair is ever requested. */
+    --hero-photo-url:     url('/global_assets/hero-photo-light.webp');
+    --about-photo-url:    url('/global_assets/about-photo-light.webp');
     --pattern-opacity:    0.16;
     --pattern-scale:      620px;
 
@@ -108,7 +114,9 @@
     --gradient-warm:      linear-gradient(135deg, #0E1110 0%, #141A17 100%);
 
     --wordmark-url:       url('/assets/logos/dark-theme/Lespa/Wordmark.svg');
-    --pattern-url:        url('/assets/pattern-dark.svg');
+    --pattern-url:        url('/assets/patterns/pattern-dark.svg');
+    --hero-photo-url:     url('/global_assets/hero-photo-dark.webp');
+    --about-photo-url:    url('/global_assets/about-photo-dark.webp');
 
     --elevation-1:        inset 0 0 0 1px rgba(255, 255, 255, 0.10);
     --elevation-2:        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
@@ -210,7 +218,7 @@
     /* Brand Deep is a dark surface in both themes, so it always takes the dark
        pattern. The light pattern is white, and white at 50% over deep green
        is loud enough to fight the copy sitting on it. */
-    --pattern-url:          url('/assets/pattern-dark.svg');
+    --pattern-url:          url('/assets/patterns/pattern-dark.svg');
   }
 
   .surface-warm {
@@ -536,6 +544,18 @@
     min-height: 40px;
     padding-inline: 1rem;
     font-size: var(--text-body-sm);
+  }
+
+  /* ---------- PHOTOGRAPHY ---------- */
+
+  /* Fills whatever box it is given, at the ratio the box sets. cover, because
+     the reserved slots are fixed ratios and a portrait must not letterbox. */
+  .themed-photo {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   /* ---------- SCROLL CUE ---------- */

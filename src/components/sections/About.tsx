@@ -4,14 +4,15 @@ import { Button } from "@/components/shared/Button";
 import { Heading } from "@/components/shared/Heading";
 import { RichText } from "@/components/shared/RichText";
 import { Section } from "@/components/sections/Section";
+import { ThemedPhoto } from "@/components/shared/ThemedPhoto";
 import { SectionLabel, Text } from "@/components/shared/Text";
 import { about } from "@/content/copy";
 
 /**
  * The human section. Copy is verbatim from the About copy deck.
  *
- * The photo slot reserves its 4:5 box now so dropping the real portrait in
- * later cannot shift the page. Beliefs are a two-column text list with rules
+ * The photo keeps its 4:5 box whatever the file does, so it cannot shift the
+ * page as it loads. Beliefs are a two-column text list with rules
  * above and below — deliberately not cards.
  */
 export function About() {
@@ -24,14 +25,11 @@ export function About() {
       aria-labelledby="about-heading"
     >
       <div className="grid gap-12 md:grid-cols-5 md:gap-16">
-        {/* [MOCK] Portrait pending. Dimensions reserved at 4:5.
-            self-start matters: a stretched grid item takes the row's height,
+        {/* self-start matters: a stretched grid item takes the row's height,
             and aspect-ratio would then derive its width from that — the box
             grew to 775px and pushed the text column out of the section. */}
-        <div className="surface-raised elevated flex aspect-4-5 w-full items-center justify-center self-start rounded-md md:col-span-2">
-          <Text size="sm" muted>
-            Portrait — 4:5
-          </Text>
+        <div className="elevated aspect-4-5 w-full self-start overflow-hidden rounded-md md:col-span-2">
+          <ThemedPhoto token="--about-photo-url" alt={about.portraitAlt} />
         </div>
 
         <div className="flex flex-col gap-6 md:col-span-3">

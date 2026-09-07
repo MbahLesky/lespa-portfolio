@@ -7,8 +7,8 @@ import { useHoverCapable } from "@/hooks/useHoverCapable";
 import { cn } from "@/lib/utils";
 
 interface CardMediaProps {
-  final: string;
-  sketch: string;
+  final: string | null;
+  sketch: string | null;
   name: string;
   outcome: string;
   featured?: boolean;
@@ -49,7 +49,7 @@ export function CardMedia({
     // paint — and while the project images are missing every one of these
     // requests pulls back a full 404 page instead of a small error.
     const preload = () => {
-      if (cancelled) return;
+      if (cancelled || !sketch) return;
       const image = new window.Image();
       image.fetchPriority = "low";
       image.onload = () => {

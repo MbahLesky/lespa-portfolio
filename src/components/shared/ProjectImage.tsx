@@ -6,7 +6,9 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface ProjectImageProps {
-  src: string;
+  /** null where no file exists yet — the frame is drawn and nothing is
+   *  requested, rather than a dead path being fetched and failing. */
+  src: string | null;
   alt: string;
   /** Shown in the fallback, so an empty frame still says what belongs there. */
   name: string;
@@ -59,7 +61,7 @@ export function ProjectImage({
 }: ProjectImageProps) {
   const [failed, setFailed] = useState(false);
 
-  if (failed) return <MediaFallback name={name} className={className} />;
+  if (!src || failed) return <MediaFallback name={name} className={className} />;
 
   return (
     <Image

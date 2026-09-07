@@ -84,24 +84,15 @@ export const hero = {
     target: "work",
   },
   /**
-   * [MOCK] The hero visual. Nothing exists at this path yet, so the slot renders
-   * its reserved frame instead — the box is already the right size, so dropping
-   * the real file in cannot shift the page.
+   * The hero photograph. The files themselves are declared as tokens in
+   * globals.css — one shot per theme — so only this description lives here.
    *
-   * Wants a portrait-orientation frame: a working shot, or a piece of brand
-   * work strong enough to carry the top of the page. The alt text below
-   * describes the placeholder and must be rewritten to describe the real image.
+   * [CONFIRM] Written from the filename, not from looking at the photograph.
+   * Alt text has to describe what is actually in the frame, so replace it with
+   * a real description of the image.
    */
   image: {
-    /**
-     * Null until a real file exists. Pointing this at a path that 404s made the
-     * slot preload a missing resource at top priority, which put a failed
-     * request on the critical path and cost roughly half the performance score.
-     * Set the path and alt text together when the image is ready.
-     */
-    src: null as string | null,
-    alt: "",
-    label: "Hero image",
+    alt: "Lespa, photographed at work",
     ratio: "Portrait · 4:5",
   },
 } as const;
@@ -323,6 +314,8 @@ export const proof = {
 export const about = {
   label: "About",
   heading: "I'm Lesky.",
+  /** [CONFIRM] Written from the filename rather than from the photograph. */
+  portraitAlt: "Lespa — portrait",
   opening: [
     "I'm a software engineer and designer in Bamenda, Cameroon. I build brands, websites, and mobile apps for people who want something that actually feels like them.",
     "I started as a developer. The problem was that I didn't like how the interfaces I was building looked, so I started redesigning them myself. That's how I got into design.",

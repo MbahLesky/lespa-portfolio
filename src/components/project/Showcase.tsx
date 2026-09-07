@@ -28,7 +28,7 @@ export function Showcase({
     project.images.final,
     ...project.images.gallery,
     project.images.sketch,
-  ];
+  ].filter((image): image is string => Boolean(image));
 
   return (
     <main id="main">

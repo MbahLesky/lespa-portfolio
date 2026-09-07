@@ -10,9 +10,11 @@
  * document flagged as unverified. The markers are deliberately left in source
  * so they stay greppable — see the open items at the foot of each doc.
  *
- * No image files exist yet. Every path below is where its file will go, named
- * after the image list in that project's document; until one lands the slot
- * renders a labelled frame at the right size rather than a broken image.
+ * Imagery so far covers the global assets, the homepage cards, and the Monilog
+ * case study. Each card pairs the default image with what its document says the
+ * hover reveals. Where a gallery is still empty the block is skipped rather
+ * than rendered as an empty grid, and any path without a file behind it falls
+ * back to a labelled frame at the right size rather than a broken image.
  */
 
 import type { Project } from "@/types";
@@ -52,16 +54,20 @@ export const projects: Project[] = [
     stack: ["Flutter", "Drift (SQLite)", "React", "Vercel"],
     liveUrl: "https://monilog.vercel.app",
     images: {
-      final: "/projects/monilog/mobile-dashboard.webp",
-      sketch: "/projects/monilog/pencil-sketch.webp",
-      hero: "/projects/monilog/phone-mockup-teal.webp",
+      // "Mobile dashboard -> hover reveals the pencil sketch."
+      final: "/homepage_project_cards/monilog-mobile.webp",
+      sketch: "/monilog_case_study_images/pencil_sketch.webp",
+      hero: "/monilog_case_study_images/phone_mockup.webp",
       gallery: [
-        "/projects/monilog/mark-construction-diagram.webp",
-        "/projects/monilog/colour-swatches.webp",
-        "/projects/monilog/add-transaction.webp",
-        "/projects/monilog/accounts-list.webp",
-        "/projects/monilog/web-and-mobile.webp",
-        "/projects/monilog/marketing-site-hero.webp",
+        "/monilog_case_study_images/construction_diagram.webp",
+        "/monilog_case_study_images/icon_flat.webp",
+        "/monilog_case_study_images/favicon_vs.webp",
+        "/monilog_case_study_images/mobile_dashboard.webp",
+        "/monilog_case_study_images/mobile_transaction.webp",
+        "/monilog_case_study_images/mobile_account.webp",
+        "/monilog_case_study_images/web_dashboard.webp",
+        "/monilog_case_study_images/mobile_with_web.webp",
+        "/monilog_case_study_images/landing_page.webp",
       ],
     },
   },
@@ -95,19 +101,11 @@ export const projects: Project[] = [
     stack: ["Illustrator", "Figma"],
     liveUrl: "https://diwa-air.com",
     images: {
-      final: "/projects/diwa/primary-fullmark.webp",
-      sketch: "/projects/diwa/five-traced-concepts.webp",
-      hero: "/projects/diwa/five-traced-concepts.webp",
-      gallery: [
-        "/projects/diwa/pencil-sheet-01.webp",
-        "/projects/diwa/pencil-sheet-02.webp",
-        "/projects/diwa/three-finalist-lockups.webp",
-        "/projects/diwa/d-form-breakdown.webp",
-        "/projects/diwa/icon-colourways.webp",
-        "/projects/diwa/guidelines-pages.webp",
-        "/projects/diwa/site-header.webp",
-        "/projects/diwa/site-loading-state.webp",
-      ],
+      // "diwa_primary_fullmark -> hover reveals the five traced concepts."
+      final: "/homepage_project_cards/diwa_logo_on_dress.webp",
+      sketch: "/homepage_project_cards/diwa_concepts.webp",
+      hero: "/homepage_project_cards/diwa_concepts.webp",
+      gallery: [],
     },
   },
   {
@@ -135,17 +133,11 @@ export const projects: Project[] = [
     year: "2024–2025",
     stack: ["Figma"],
     images: {
-      final: "/projects/pikamgo/wordmark-orange.webp",
-      sketch: "/projects/pikamgo/six-logo-directions.webp",
-      hero: "/projects/pikamgo/wordmark-on-dark.webp",
-      before: "/projects/pikamgo/six-logo-directions.webp",
-      gallery: [
-        "/projects/pikamgo/mark-construction.webp",
-        "/projects/pikamgo/orange-scale.webp",
-        "/projects/pikamgo/pickers-directory.webp",
-        "/projects/pikamgo/delivery-detail.webp",
-        "/projects/pikamgo/home-screen.webp",
-      ],
+      // "pikamgo_wordmark_orange on dark -> hover reveals the mark alone."
+      final: "/homepage_project_cards/pikamgo-wordmark-dark.webp",
+      sketch: "/homepage_project_cards/pikamgo_mobile.webp",
+      hero: "/homepage_project_cards/pikamgo-wordmark-dark.webp",
+      gallery: [],
     },
   },
   {
@@ -174,14 +166,11 @@ export const projects: Project[] = [
     year: "2024",
     stack: ["Figma"],
     images: {
-      final: "/projects/qiroke/wordmark-gradient.webp",
-      sketch: "/projects/qiroke/lettermark-construction.webp",
-      hero: "/projects/qiroke/wordmark-on-dark.webp",
-      gallery: [
-        "/projects/qiroke/variant-grid.webp",
-        "/projects/qiroke/colour-type-system.webp",
-        "/projects/qiroke/homepage-hero.webp",
-      ],
+      // "qiroke_wordmark_gradient on dark -> hover reveals the lettermark."
+      final: "/homepage_project_cards/qiroke_homepage.webp",
+      sketch: "/homepage_project_cards/qiroke_icon.webp",
+      hero: "/homepage_project_cards/qiroke_icon.webp",
+      gallery: [],
     },
   },
   {
@@ -210,14 +199,11 @@ export const projects: Project[] = [
     stack: ["Adobe Illustrator"],
     liveUrl: "https://ronixe.com",
     images: {
-      final: "/projects/ronixe/fullmark-dark.webp",
-      sketch: "/projects/ronixe/icon-light.webp",
-      hero: "/projects/ronixe/full-lockup.webp",
-      gallery: [
-        "/projects/ronixe/icon-construction.webp",
-        "/projects/ronixe/light-dark-variants.webp",
-        "/projects/ronixe/live-site-header.webp",
-      ],
+      // "ronixe_fullmark_dark on white -> hover reveals ronixe_icon_light."
+      final: "/homepage_project_cards/ronixe_wordmark.webp",
+      sketch: "/homepage_project_cards/ronixe-icon-dark.webp",
+      hero: "/homepage_project_cards/ronixe_wordmark.webp",
+      gallery: [],
     },
   },
   {
@@ -239,13 +225,11 @@ export const projects: Project[] = [
     year: "",
     stack: [],
     images: {
-      final: "/projects/yisi/wordmark-orange-on-white.webp",
-      sketch: "/projects/yisi/wordmark-white-on-orange.webp",
-      hero: "/projects/yisi/logo-for-black-background.webp",
-      gallery: [
-        "/projects/yisi/texture-pattern.webp",
-        "/projects/yisi/contact-card.webp",
-      ],
+      // "yisi_wordmark_orange on white -> hover reveals the dark variant."
+      final: "/homepage_project_cards/yisi_logo_orange.webp",
+      sketch: "/homepage_project_cards/yisi_artboard.webp",
+      hero: "/homepage_project_cards/yisi_artboard.webp",
+      gallery: [],
     },
   },
   {
@@ -276,13 +260,11 @@ export const projects: Project[] = [
     year: "2025", // [MOCK]
     stack: ["Figma", "Next.js", "TypeScript", "Tailwind"],
     images: {
-      final: "/projects/lespa-brand/final.webp",
-      sketch: "/projects/lespa-brand/wireframe.webp",
-      hero: "/projects/lespa-brand/hero.webp",
-      gallery: [
-        "/projects/lespa-brand/01.webp",
-        "/projects/lespa-brand/02.webp",
-      ],
+      // No imagery yet, and null rather than a path that would 404.
+      final: null,
+      sketch: null,
+      hero: null,
+      gallery: [],
     },
   },
 ];

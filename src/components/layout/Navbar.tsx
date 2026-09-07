@@ -95,7 +95,12 @@ export function Navbar() {
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="hidden md:block">
+          {/* The wordmark is the only part of the bar that belongs to the
+              opening sequence — it is what the mark flies into. Everything
+              else waits with the rest of the page, so the bar assembles
+              around a mark that has already landed rather than appearing
+              whole while the headline is still being written. */}
+          <nav aria-label="Primary" className="enter hidden md:block" style={{ "--enter-step": "80ms" } as React.CSSProperties}>
             <ul className="flex items-center gap-8">
               {nav.map((item) => {
                 const current = currentState(pathname, activeSection, item);
@@ -117,7 +122,10 @@ export function Navbar() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div
+            className="enter flex items-center gap-2"
+            style={{ "--enter-step": "160ms" } as React.CSSProperties}
+          >
             {/* The action, not a destination. Desktop only: on a phone the
                 Contact link in the menu already goes to the same place, and a
                 second control would only crowd the bar. */}
