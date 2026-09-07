@@ -50,6 +50,29 @@ export const metadata: Metadata = {
   },
   description:
     "I design brands, build the websites and mobile apps they live in, and teach you to run them. Custom-coded. Based in Bamenda, working worldwide.",
+  /**
+   * The mark is drawn for each theme, so the tab icon follows suit.
+   *
+   * These key off the operating system rather than the site's own theme, and
+   * that is correct: the icon sits in the browser's chrome, not on the page,
+   * so it should match the chrome around it rather than whichever theme the
+   * visitor last chose here. favicon.ico stays as the fallback for anything
+   * that will not take an SVG.
+   */
+  icons: {
+    icon: [
+      {
+        url: "/global_assets/lespa_icon_green_light.svg",
+        media: "(prefers-color-scheme: light)",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/global_assets/lespa_icon_green_dark.svg",
+        media: "(prefers-color-scheme: dark)",
+        type: "image/svg+xml",
+      },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
