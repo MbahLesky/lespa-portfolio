@@ -1,100 +1,59 @@
-import Link from "next/link";
+import {
+  Dribbble,
+  Facebook,
+  Github,
+  Linkedin,
+  Music2,
+  Palette,
+  Twitter,
+} from "lucide-react";
 
-import { Container } from "@/components/layout/Container";
-import { SoundToggle } from "@/components/shared/SoundToggle";
-import { Text } from "@/components/shared/Text";
-import { ThemeToggle } from "@/components/shared/ThemeToggle";
-import { Wordmark } from "@/components/shared/Wordmark";
-import { footer, nav, site } from "@/content/copy";
-
-function ColumnHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <Text size="caption" muted as="div" className="uppercase">
-      {children}
-    </Text>
-  );
-}
+const socials = [
+  { label: "LinkedIn", href: "https://www.linkedin.com", icon: Linkedin },
+  { label: "GitHub", href: "https://github.com", icon: Github },
+  { label: "Facebook", href: "https://facebook.com", icon: Facebook },
+  { label: "X", href: "https://x.com", icon: Twitter },
+  { label: "TikTok", href: "https://tiktok.com", icon: Music2 },
+  { label: "Behance", href: "https://www.behance.net", icon: Palette },
+  { label: "Dribbble", href: "https://dribbble.com", icon: Dribbble },
+];
 
 export function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="surface-flat border-t border-border">
-      <Container>
-        <div className="section-standard flex flex-col gap-12">
-          <div className="flex flex-col gap-4">
-            <Wordmark height={32} />
-            <Text muted>
-              {footer.tagline}
-              <br />
-              {footer.location}
-            </Text>
+    <footer className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[var(--color-dark-background)]/85 backdrop-blur-md">
+      <div className="mx-auto flex max-w-[1200px] flex-col gap-4 px-6 py-4 md:flex-row md:items-center md:justify-between md:px-8">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-[var(--color-dark-surface)] text-xs font-medium tracking-[0.18em] text-[var(--color-dark-text)]">
+            L
           </div>
-
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-3">
-            <div className="flex flex-col gap-4">
-              <ColumnHeading>Navigate</ColumnHeading>
-              <ul className="flex flex-col gap-2">
-                {nav.map((item) => (
-                  <li key={item.href}>
-                    <Link href={item.href} className="link-underline text-body-sm">
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <ColumnHeading>Connect</ColumnHeading>
-              <ul className="flex flex-col gap-2">
-                {site.socials.map((social) => (
-                  <li key={social.label}>
-                    <a
-                      href={social.href}
-                      className="link-underline text-body-sm"
-                      rel="me noopener noreferrer"
-                      target="_blank"
-                    >
-                      {social.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <Text size="caption" muted>
-                All {site.handle}
-              </Text>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <ColumnHeading>Contact</ColumnHeading>
-              {/* Plain-text address as well as the form — some people won't use one. */}
-              <a
-                href={`mailto:${site.email}`}
-                className="link-underline text-body-sm"
-              >
-                {site.email}
-              </a>
-              <Text size="caption" muted>
-                Response: 2 days
-              </Text>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-6 border-t border-border pt-8 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-col gap-1">
-              <Text size="caption" muted>
-                {footer.copyright}
-              </Text>
-              <Text size="caption" muted>
-                {footer.colophon}
-              </Text>
-            </div>
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-              <SoundToggle />
-            </div>
+          <div>
+            <div className="text-xs uppercase tracking-[0.22em] text-[var(--color-dark-text)]">Lespa</div>
+            <div className="text-xs text-[var(--color-dark-muted)]">@iamlespa</div>
           </div>
         </div>
-      </Container>
+
+        <div className="flex flex-wrap items-center gap-3">
+          {socials.map(({ label, href, icon: Icon }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={label}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-[var(--color-dark-surface)] text-[var(--color-dark-text)] transition hover:border-white/20"
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          ))}
+        </div>
+
+        <div className="text-right text-[10px] uppercase tracking-[0.2em] text-[var(--color-dark-muted)]">
+          <div>© {year}</div>
+          <div className="mt-1 text-[9px] tracking-[0.18em] text-[var(--color-dark-text)]">Built with Next.js, TypeScript, Tailwind CSS, Framer Motion.</div>
+        </div>
+      </div>
     </footer>
   );
 }
