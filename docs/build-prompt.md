@@ -1,3 +1,13 @@
+> **SUPERSEDED — reference only.**
+> This document describes the multi-page site that the Phase 1 restructure replaced.
+> Nothing here is authoritative for the current codebase. The sources of truth are
+> [`core-visual.md`](./core-visual.md) (tokens),
+> [`lespa-restructure-structure-and-motion.md`](./lespa-restructure-structure-and-motion.md) (structure and motion),
+> [`lespa-restructure-copy.md`](./lespa-restructure-copy.md) (copy) and
+> [`lespa-restructure-assets.md`](./lespa-restructure-assets.md) (assets).
+> Where this file and any of those disagree, those win.
+> Kept because later phases still need its case-study and service detail.
+
 # BUILD PROMPT — Lespa Portfolio
 
 ---
