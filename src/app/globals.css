@@ -54,6 +54,14 @@
   --border: rgb(231 236 233 / 10%);
   --border-strong: rgb(231 236 233 / 18%);
 
+  /**
+   * Glass surfaces. Cards and chrome are a translucent white veil over the page
+   * gradient rather than a solid fill, so the gradient reads through them.
+   */
+  --glass: rgb(231 236 233 / 4%);
+  --glass-strong: rgb(231 236 233 / 7%);
+  --glass-chrome: color-mix(in srgb, var(--background) 72%, transparent);
+
   /* Action — CTA surfaces. Brand green never carries text on dark (contrast). */
   --action: var(--brand);
   --action-hover: var(--brand-light);
@@ -106,18 +114,33 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+
+  /**
+   * Sections settle to their own top rather than stopping wherever the gesture
+   * ran out. Proximity, not mandatory: sections taller than the viewport — About
+   * especially — still scroll freely instead of fighting the reader.
+   */
+  scroll-snap-type: y proximity;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+    scroll-snap-type: none;
   }
 }
 
+/**
+ * One gradient for the whole page, not one per section.
+ *
+ * Painted on <body> and fixed to the viewport, so every section sits on the same
+ * continuous field and no seam appears at a section boundary. Sections are
+ * transparent; anything that needs to read as a surface is glass over this.
+ */
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--background);
+  background: var(--gradient-dark-surface) fixed;
   color: var(--text-primary);
   font-family: var(--font-body), system-ui, sans-serif;
   line-height: 1.6;
@@ -177,6 +200,75 @@ textarea {
     background-repeat: repeat;
     background-size: var(--pattern-size);
     opacity: var(--pattern-opacity);
+  }
+
+  /**
+   * The pointer-reactive light in the page gradient. Sits between <body>'s
+   * gradient and the content, so it lifts the background without touching text.
+   *
+   * --pointer-intensity runs 0 → 1 while the pointer is held down: the wash
+   * widens and brightens as you drag, then settles back on release.
+   * BackdropField writes all three variables on rAF.
+   */
+  .pointer-field {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    --pointer-x: 50vw;
+    --pointer-y: 50vh;
+    --pointer-intensity: 0;
+    background:
+      radial-gradient(
+        circle
+          calc(320px + 280px * var(--pointer-intensity))
+          at var(--pointer-x) var(--pointer-y),
+        color-mix(
+            in srgb,
+            var(--accent) calc(7% + 9% * var(--pointer-intensity)),
+            transparent
+          )
+          0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        circle
+          calc(640px + 360px * var(--pointer-intensity))
+          at var(--pointer-x) var(--pointer-y),
+        color-mix(in srgb, var(--surface) 55%, transparent) 0%,
+        transparent 72%
+      );
+  }
+
+  /**
+   * Glass surface. A translucent veil over the page gradient rather than a solid
+   * fill, so the gradient reads through every card and every piece of chrome.
+   */
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-strong {
+    background: var(--glass-strong);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  /** Fixed chrome — header and footer — sits closer to the page colour. */
+  .glass-chrome {
+    background: var(--glass-chrome);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  /**
+   * A section that settles to its own top when scrolling stops near it.
+   * Sections taller than the viewport opt out, so they never trap the reader.
+   */
+  .snap-section {
+    scroll-snap-align: start;
   }
 
   /**

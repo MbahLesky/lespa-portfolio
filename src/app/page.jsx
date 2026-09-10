@@ -10,6 +10,7 @@ import { Intro } from "@/components/sections/Intro";
 import { Process } from "@/components/sections/Process";
 import { SelectedWork } from "@/components/sections/SelectedWork";
 import { WhatIDo } from "@/components/sections/WhatIDo";
+import { BackdropField } from "@/components/shared/BackdropField";
 import { CursorFollower } from "@/components/shared/CursorFollower";
 
 /**
@@ -27,13 +28,17 @@ export default function Home() {
 
   return (
     <>
+      {/* The page gradient's pointer-reactive light. Behind everything. */}
+      <BackdropField />
+
       {/* Starts at the hero and persists for everything below it. */}
       <CursorFollower />
 
       <SiteHeader revealed={introComplete} />
 
-      {/* Clears the pinned footer: two rows below md, one row above it. */}
-      <main id="main" className="pb-24 md:pb-20">
+      {/* Clears the pinned footer: two rows below md, one row above it.
+          Above the backdrop field, which is fixed at z-0. */}
+      <main id="main" className="relative z-10 pb-24 md:pb-20">
         <Hero onIntroComplete={() => setIntroComplete(true)} />
         <Intro />
         <SelectedWork />

@@ -18,12 +18,23 @@ export const nav = [
   { label: "Contact", href: "#contact" },
 ];
 
+/**
+ * The hero's typed lines, split into the beats they are typed in.
+ *
+ * The rendered copy is always the segments joined, so adding or moving a beat
+ * cannot change a word — the break is purely a pause in the typing.
+ */
+const headlineSegments = ["Hi,", " I am Lespa"];
+const roleSegments = [
+  ["A Graphic Designer", " who builds products."],
+  ["And A Software Developer", " who designs interfaces."],
+];
+
 export const hero = {
-  headline: "Hi, I am Lespa",
-  roleLines: [
-    "A Graphic Designer who builds products.",
-    "And A Software Developer who designs interfaces.",
-  ],
+  headlineSegments,
+  roleSegments,
+  headline: headlineSegments.join(""),
+  roleLines: roleSegments.map((segments) => segments.join("")),
   subtext:
     "I design brands and interfaces that feel like you, then build the websites and apps they live in.",
   ctas: {
@@ -197,6 +208,18 @@ export const contact = {
   submit: "Send message",
   success: "Thanks — your message is in. I'll reply within a day.",
   failure: "That didn't send. Try again, or email me directly.",
+  /**
+   * Direct routes, beside the form. The footer keeps its icon row; here the same
+   * accounts are spelled out as handles so they can be read and copied.
+   *
+   * TODO: confirm before launch — `phone` is a placeholder, and `email` is the
+   * personal address on file. Swap in whichever address should be public.
+   */
+  direct: {
+    heading: "Or reach me directly",
+    email: "mbahlesky4@gmail.com",
+    phone: "+237 6 00 00 00 00",
+  },
 };
 
 export const footer = {

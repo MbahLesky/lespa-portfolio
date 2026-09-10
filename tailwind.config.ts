@@ -89,6 +89,13 @@ const config: Config = {
         caption: ["0.75rem", { lineHeight: "1.5", letterSpacing: "0.05em", fontWeight: "400" }],
       },
 
+      /* The 0fr → 1fr trick: animates a panel to its own content height
+         without hard-coding one. */
+      gridTemplateRows: {
+        collapsed: "0fr",
+        expanded: "1fr",
+      },
+
       aspectRatio: {
         card: "4 / 3",
         portrait: "4 / 5",

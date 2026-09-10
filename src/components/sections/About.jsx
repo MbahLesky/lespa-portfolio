@@ -18,13 +18,13 @@ import { about } from "@/content/copy";
  */
 export function About() {
   return (
-    <section id="about" className="relative overflow-hidden bg-background py-24 md:py-30">
+    <section id="about" className="snap-section relative overflow-hidden py-24 md:py-30">
       <SplitBackdrop />
 
       <div className="relative mx-auto grid max-w-content gap-12 px-6 md:px-8 lg:grid-cols-[320px_1fr] lg:gap-16">
         <Reveal className="flex flex-col gap-8">
           {/* The photo is a card — the exception to the blended rule here. */}
-          <figure className="overflow-hidden rounded-xl border border-border bg-surface p-2">
+          <figure className="overflow-hidden glass rounded-xl border border-border p-2">
             {/* TODO: asset needed — assets doc §6, "Your photo (card-mounted, not
                 blended) — professional". Using the existing portrait until the
                 new one is shot. */}
@@ -49,7 +49,7 @@ export function About() {
                 {group.items.map((tool) => (
                   <li
                     key={tool}
-                    className="rounded-sm border border-border px-4 py-1 text-caption text-content"
+                    className="glass cursor-default rounded-sm border border-border px-4 py-1 text-caption text-content transition-colors duration-fast hover:border-accent-soft hover:text-accent"
                   >
                     {tool}
                   </li>

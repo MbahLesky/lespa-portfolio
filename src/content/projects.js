@@ -13,9 +13,12 @@
  * URLs below come from the case-study docs in /docs (Ronixe) and the project
  * records kept from the previous build (Monilog, Diwa).
  *
+ * `image` is the card's mockup; `backdrop` is a second image from the same
+ * project that fills the card behind everything on hover, at low opacity.
+ *
  * TODO: asset needed — assets doc §3, "Updated project mockup/image … one per
- * project (6 total)". The images below are the real existing Lespa project
- * images; swap each for its updated mockup when those are produced.
+ * project (6 total)". Both use the real existing Lespa project images; swap each
+ * for its updated mockup when those are produced.
  */
 export const projects = [
   {
@@ -29,6 +32,7 @@ export const projects = [
     liveUrl: "https://monilog.vercel.app",
     image: "/homepage_project_cards/monilog-mobile.webp",
     imageAlt: "Monilog's mobile app screens beside its brand mark.",
+    backdrop: "/homepage_project_cards/monilog-logo-green.webp",
   },
   {
     slug: "diwa",
@@ -41,6 +45,7 @@ export const projects = [
     liveUrl: "https://diwa-air.com",
     image: "/homepage_project_cards/diwa_logo_on_dress.webp",
     imageAlt: "The Diwa mark applied to a garment.",
+    backdrop: "/homepage_project_cards/diwa_concepts.webp",
   },
   {
     slug: "ronixe",
@@ -55,6 +60,7 @@ export const projects = [
     liveUrl: "https://ronixe.com",
     image: "/homepage_project_cards/ronixe_wordmark.webp",
     imageAlt: "The Ronixe wordmark and icon lockup.",
+    backdrop: "/homepage_project_cards/ronixe-icon-dark.webp",
   },
   {
     slug: "qiroke",
@@ -66,6 +72,7 @@ export const projects = [
     accentVar: "--project-qiroke",
     image: "/homepage_project_cards/qiroke_icon.webp",
     imageAlt: "The Qiroke icon, a flowing Q.",
+    backdrop: "/homepage_project_cards/qiroke_homepage.webp",
   },
   {
     slug: "pikamgo",
@@ -78,6 +85,7 @@ export const projects = [
     accentVar: "--project-pikamgo",
     image: "/homepage_project_cards/pikamgo_mobile.webp",
     imageAlt: "PikamGo's delivery tracking screens.",
+    backdrop: "/homepage_project_cards/pikamgo-wordmark-dark.webp",
   },
   {
     slug: "yisi",
@@ -89,5 +97,6 @@ export const projects = [
     accentVar: "--project-yisi",
     image: "/homepage_project_cards/yisi_logo_orange.webp",
     imageAlt: "The Yisi wordmark, drawn from cutlery.",
+    backdrop: "/homepage_project_cards/yisi_artboard.webp",
   },
 ];

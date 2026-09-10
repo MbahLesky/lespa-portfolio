@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
-import { AssetPlaceholder } from "@/components/shared/AssetPlaceholder";
 import { EmphasizedText } from "@/components/shared/EmphasizedText";
 import { PatternBackdrop } from "@/components/shared/PatternBackdrop";
 import { Reveal } from "@/components/shared/Reveal";
@@ -11,24 +12,43 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
 // the bundler may rewrite is a needless risk.
 import { process as processCopy } from "@/content/copy";
 import { useFinePointer } from "@/hooks/useFinePointer";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
  * Process — five steps, list on one side and the hovered step's detail on the
- * other (itssharl.ee/work reference). Each step also reveals an image beside its
- * detail text (Brice Clain reference).
+ * other (itssharl.ee/work reference). Each step reveals its own image alongside
+ * the detail text (Brice Clain reference): the description leads, the image fills
+ * the pane beneath it.
  *
  * Hover drives the selection on a precise pointer; tap and keyboard focus drive
  * it otherwise, and the detail renders inline beneath the tapped step on narrow
  * screens where there is no second column to put it in. Step one is selected at
  * rest so the pane is never empty.
  */
+
+/**
+ * One image per step, revealed with its detail text.
+ *
+ * TODO: asset needed — assets doc §5, "5 hover-reveal images, one per step". Real
+ * project work stands in, chosen to match each step: a phone for the first
+ * message, a concept sheet for research, an artboard for sketching, app-and-web
+ * together for the build, a shipped landing page for the deploy.
+ */
+const STEP_IMAGES = [
+  "/monilog_case_study_images/phone_mockup.webp",
+  "/homepage_project_cards/diwa_concepts.webp",
+  "/homepage_project_cards/yisi_artboard.webp",
+  "/monilog_case_study_images/mobile_with_web.webp",
+  "/monilog_case_study_images/landing_page.webp",
+];
+
 export function Process() {
   const finePointer = useFinePointer();
   const [activeIndex, setActiveIndex] = useState(0);
   const active = processCopy.steps[activeIndex];
 
   return (
-    <section id="process" className="relative overflow-hidden py-24 md:py-30">
+    <section id="process" className="snap-section relative overflow-hidden py-24 md:py-30">
       <PatternBackdrop />
 
       <div className="relative mx-auto flex max-w-content flex-col gap-12 px-6 md:px-8">
@@ -67,7 +87,7 @@ export function Process() {
 
                   {/* No second column below lg, so the detail opens in place. */}
                   <div className={`pb-6 lg:hidden ${selected ? "block" : "hidden"}`}>
-                    <StepDetail step={step} />
+                    <StepDetail step={step} image={STEP_IMAGES[index]} />
                   </div>
                 </li>
               );
@@ -75,7 +95,7 @@ export function Process() {
           </Reveal>
 
           <div className="hidden lg:sticky lg:top-24 lg:block">
-            <StepDetail key={active.title} step={active} />
+            <StepDetail key={active.title} step={active} image={STEP_IMAGES[activeIndex]} />
           </div>
         </div>
 
@@ -93,23 +113,46 @@ export function Process() {
 }
 
 /**
- * The hovered step's detail: the image beside the text, not above it — the Brice
- * Clain reference puts the image next to the message. Stacks below sm, where
- * there is not enough width for two columns.
+ * The hovered step's detail: the description first, then the image filling the
+ * rest of the pane beneath it.
+ *
+ * Both move in rather than appearing — the text leads, the image follows a beat
+ * later, so switching steps reads as a change rather than a flicker. The
+ * component is keyed on the step at the call site, so changing step remounts it
+ * and the entry animation replays.
  */
-function StepDetail({ step }) {
-  return (
-    <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-      {/* TODO: asset needed — assets doc §5, "5 hover-reveal images, one per step
-          (Reach Out, Research, Define, Design/Build, Present and Deploy)". */}
-      <AssetPlaceholder
-        label={step.title}
-        className="aspect-card w-full shrink-0 sm:w-60"
-      />
+function StepDetail({ step, image }) {
+  const reducedMotion = useReducedMotion();
 
-      <p className="text-body text-content-secondary">
+  const enter = (delay) =>
+    reducedMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 12 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.4, delay, ease: [0.16, 1, 0.3, 1] },
+        };
+
+  return (
+    <div className="flex flex-col gap-6">
+      <motion.p {...enter(0)} className="text-body text-content-secondary">
         <EmphasizedText text={step.body} emphasis={step.emphasis} />
-      </p>
+      </motion.p>
+
+      {/* Fills the remaining width of the pane. Shorter on mobile, where the
+          detail sits inside the list and the pane is the full column. */}
+      <motion.div
+        {...enter(0.1)}
+        className="glass relative aspect-video w-full overflow-hidden rounded-xl border border-border sm:aspect-card"
+      >
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 640px, 100vw"
+          className="object-cover"
+        />
+      </motion.div>
     </div>
   );
 }

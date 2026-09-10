@@ -47,6 +47,19 @@ Phase 3. Dark mode is fixed on `<html>`; there is no theme toggle in Phase 1.
 - **Selected Work themes per project.** Each card scopes its own `--project`
   colour, and its title, tags, link and hover glow read from it rather than the
   site green. A project renders a link only where a live URL exists.
+- **One gradient for the whole page.** It is painted once on `body`, fixed to the
+  viewport, so no seam appears at a section boundary. Sections are transparent;
+  anything that needs to read as a surface uses `.glass` over it. A fixed
+  pointer-reactive wash (`BackdropField`) sits above the gradient and below the
+  content, and swells while the pointer is dragged.
+- **Sections snap.** `scroll-snap-type: y proximity` on `html`, `.snap-section` on
+  each section. Proximity rather than mandatory, so sections taller than the
+  viewport still scroll freely.
+- **Selected Work turns vertical scroll into project-stepping.** The section is six
+  viewports tall with a pinned stage inside; scrolling swaps which project shows,
+  and reaching either end releases to the neighbouring section. Native scroll —
+  no wheel interception. All six cards stay in the DOM so every project is in the
+  HTML; the five inactive ones are `inert` and hidden from assistive tech.
 - **Cards vs. blended backgrounds are never the same treatment.** The About photo
   and the Selected Work images are cards. Everything else — the pattern on Intro,
   What I Do and Process, and the split code/sketch composition behind About — is
@@ -54,11 +67,15 @@ Phase 3. Dark mode is fixed on `<html>`; there is no theme toggle in Phase 1.
 
 ## Outstanding
 
-Assets still pending are marked in the code with `// TODO: asset needed —`
-comments naming the item in `docs/lespa-restructure-assets.md`, and render a
-visible "Asset pending" placeholder rather than a stand-in image. Currently: the
-five Process step images, updated project mockups, the final About portrait and
-split-background fragments, the tool icon set, and the social icon set.
+Every image slot holds a real existing Lespa image chosen to fit it — there are
+no placeholder frames anywhere. Slots still waiting on their intended asset carry
+a `// TODO: asset needed —` comment naming the item in
+`docs/lespa-restructure-assets.md`: the five Process step images, updated project
+mockups, the final About portrait and split-background fragments, the tool icon
+set, and the social icon set.
+
+The contact section's phone number is a placeholder and its email is the personal
+address on file. Both are marked `TODO: confirm` in `src/content/copy.js`.
 
 The contact form validates on both sides but does not deliver yet —
 `src/app/api/contact/route.js` logs and acknowledges. Wire a mail provider and

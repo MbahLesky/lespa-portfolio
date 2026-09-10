@@ -59,7 +59,7 @@ export function Hero({ onIntroComplete }) {
   return (
     <section
       id="hero"
-      className="relative flex min-h-screen items-center overflow-hidden bg-gradient-dark-surface"
+      className="snap-section relative flex min-h-screen items-center overflow-hidden"
     >
       <div className="relative mx-auto flex w-full max-w-content flex-col items-center px-6 pb-24 pt-30 text-center md:px-8">
         {/* The full lines live in aria-label; the typed characters are hidden from
@@ -69,8 +69,10 @@ export function Hero({ onIntroComplete }) {
           aria-label={hero.headline}
         >
           <Typewriter
-            text={hero.headline}
+            text={hero.headlineSegments}
             active
+            speed={58}
+            segmentPause={460}
             onDone={() => advanceTo(STAGE.ROLE_ONE)}
           />
         </h1>
@@ -79,20 +81,27 @@ export function Hero({ onIntroComplete }) {
           className="mt-6 flex flex-col items-center gap-1 text-h3-m text-brand-light md:text-h4"
           aria-label={hero.roleLines.join(" ")}
         >
+          {/* The beat before each line is the pause the reader needs to take
+              the previous one in. */}
           <Typewriter
-            text={hero.roleLines[0]}
+            text={hero.roleSegments[0]}
             active={stage >= STAGE.ROLE_ONE}
+            startDelay={520}
             onDone={() => advanceTo(STAGE.ROLE_TWO)}
           />
           <Typewriter
-            text={hero.roleLines[1]}
+            text={hero.roleSegments[1]}
             active={stage >= STAGE.ROLE_TWO}
+            startDelay={420}
             onDone={() => advanceTo(STAGE.SUBTEXT)}
           />
         </p>
 
+        {/* Holds a beat after the last role line lands, then moves in — not
+            typed. The CTAs and nav follow once this has settled. */}
         <motion.p
           {...moveIn}
+          transition={{ duration: 0.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
           animate={
             stage >= STAGE.SUBTEXT ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }
           }
