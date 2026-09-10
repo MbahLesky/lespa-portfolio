@@ -58,9 +58,9 @@ const STAGE = {
  * Five phrases at 0.2s apart is ~1s to land the line. The same stagger applied
  * word by word would take nearly four.
  */
-const READING_PAUSE = 1400;
-const SUBTEXT_STAGGER = 0.2;
-const SUBTEXT_DURATION = 0.5;
+const READING_PAUSE = 800;
+const SUBTEXT_STAGGER = 0.5;
+const SUBTEXT_DURATION = 1.0;
 
 export function Hero({ onIntroComplete }) {
   const reducedMotion = useReducedMotion();
