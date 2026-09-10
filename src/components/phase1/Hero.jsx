@@ -7,8 +7,8 @@ import { Emphasis } from "@/components/phase1/Emphasis";
 import { Typewriter } from "@/components/phase1/Typewriter";
 import { hero } from "@/content/phase1";
 
-/** Where the role statement starts, once the headline has finished. */
-const ROLE_DELAY = 900;
+/** The pause between the name landing and the role statement starting. */
+const ROLE_BEAT = 320;
 
 const EASE = [0.16, 1, 0.3, 1];
 const HIDDEN = { opacity: 0, y: 16 };
@@ -34,6 +34,7 @@ const SHOWN = { opacity: 1, y: 0 };
  */
 export function Hero({ onReady }) {
   const reduced = useReducedMotion();
+  const [headlineDone, setHeadlineDone] = useState(false);
   const [rolesDone, setRolesDone] = useState(false);
 
   return (
@@ -49,13 +50,22 @@ export function Hero({ onReady }) {
             {hero.headline}. {hero.roles.join(" ")}
           </span>
 
-          <Typewriter lines={[hero.headline]} speed={70} as="span" />
+          <Typewriter
+            lines={[hero.headline]}
+            speed={70}
+            onDone={() => setHeadlineDone(true)}
+            as="span"
+          />
 
+          {/* Held until the name has actually landed, rather than started on a
+              delay guessed from its length — a guess that was 33ms short, so
+              the two lines overlapped. */}
           <span className="hero-roles">
             <Typewriter
               lines={hero.roles}
               speed={42}
-              startDelay={ROLE_DELAY}
+              start={headlineDone}
+              startDelay={ROLE_BEAT}
               onDone={() => setRolesDone(true)}
               as="span"
             />

@@ -260,20 +260,27 @@
 
   /* ============================================================
      TYPEWRITER
-     The untyped remainder stays in the box at visibility:hidden, so the line
-     already occupies its final size and nothing below it moves as the text
-     grows. The caret is display:inline with an absolutely positioned bar — an
+     The finished line is drawn invisibly to hold the box open and the typed
+     text is laid over it, so the line occupies its final size from the first
+     frame and stays centred as it grows. The caret is display:inline with an
+     absolutely positioned bar — an
      inline-block caret is an atomic inline, which adds a line-break
      opportunity and a few pixels of width, and that is enough to push a
      heading onto an extra row and back again as it types.
      ============================================================ */
 
   .type-line {
+    position: relative;
     display: block;
   }
 
-  .type-rest {
+  .type-sizer {
     visibility: hidden;
+  }
+
+  .type-shown {
+    position: absolute;
+    inset: 0;
   }
 
   .caret {
