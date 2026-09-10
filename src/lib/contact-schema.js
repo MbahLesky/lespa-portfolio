@@ -14,4 +14,11 @@ export const contactSchema = z.object({
     .string()
     .trim()
     .min(20, "Tell me a little more — at least 20 characters."),
+
+  /**
+   * Honeypot. Rendered as a hidden field no person can see or tab into, so a
+   * value here means a bot filled the form in. Optional and unvalidated — the
+   * route decides what to do with it; the schema only has to let it through.
+   */
+  company: z.string().optional(),
 });

@@ -76,6 +76,22 @@ export function Contact() {
               multiline
             />
 
+            {/* Honeypot. Positioned off-screen rather than display:none, since
+                some bots skip what is explicitly hidden; taken out of the tab
+                order and out of the accessibility tree, so no person can reach
+                it by any route. Anything that fills it in is automated, and the
+                route handler drops that submission. */}
+            <div className="honeypot" aria-hidden="true">
+              <label htmlFor="company">Company</label>
+              <input
+                id="company"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                {...register("company")}
+              />
+            </div>
+
             <div className="flex flex-wrap items-center gap-6">
               <button
                 type="submit"

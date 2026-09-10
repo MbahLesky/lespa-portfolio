@@ -42,3 +42,6 @@ next-env.d.ts
 
 # build prompt scratch
 /.claude-scratch
+
+# ...except the documented template, which carries no secrets.
+!.env.example

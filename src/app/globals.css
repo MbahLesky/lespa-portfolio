@@ -191,6 +191,22 @@ textarea {
 
 @layer components {
   /**
+   * The contact form's honeypot wrapper.
+   *
+   * Moved off-screen rather than hidden with display:none or visibility:hidden —
+   * the simpler bots skip anything explicitly hidden, and this field is only
+   * useful if they fill it in. It is already aria-hidden and out of the tab
+   * order in the markup, so nothing reaches it but a script reading the DOM.
+   */
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /**
    * Pattern overlay — CORE VISUAL §Pattern System. Layer order is gradient
    * background → pattern at 50% → content. Blended: it carries no border and no
    * shadow, so it reads as part of the background rather than a card.

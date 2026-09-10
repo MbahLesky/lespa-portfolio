@@ -12,6 +12,34 @@ npm run dev
 
 Open http://localhost:3000
 
+## Contact form
+
+Submissions are delivered by [Resend](https://resend.com). Copy `.env.example`
+to `.env.local`, and set the same values in Vercel under
+**Settings → Environment Variables**:
+
+| Variable | Required | Holds |
+|---|---|---|
+| `RESEND_API_KEY` | yes | A sending key from resend.com/api-keys. |
+| `CONTACT_TO_EMAIL` | yes | Where submissions are delivered. |
+| `CONTACT_FROM_EMAIL` | no | Who they come from. Defaults to Resend's shared sender. |
+
+**Until a domain is verified in Resend**, mail goes out from the shared
+`onboarding@resend.dev`, which delivers *only* to the address that owns the
+Resend account — so `CONTACT_TO_EMAIL` has to be that address. Once a domain is
+verified, point `CONTACT_FROM_EMAIL` at an address on it and mail can go
+anywhere.
+
+With the environment unset the endpoint answers 502 and logs
+`[contact] mail is not configured`, rather than silently accepting messages
+nobody receives.
+
+The form carries a honeypot field (`company`) that no person can see, tab to, or
+reach through assistive technology. A submission that fills it in is answered
+with an ordinary success and never delivered. There is also a per-instance flood
+guard of five submissions a minute per IP — worth having, but not a substitute
+for real rate limiting, since Vercel runs many instances.
+
 ## Phase 1 scope
 
 One page, one theme. Sections in order: Hero, Intro, Selected Work, What I Do,
@@ -83,11 +111,9 @@ a `// TODO: asset needed —` comment naming the item in
 mockups, the final About portrait and split-background fragments, the tool icon
 set, and the social icon set.
 
-The contact section's email is the personal address on file, marked
-`TODO: confirm` in `src/content/copy.js`.
-
-The contact form validates on both sides but does not deliver yet —
-`src/app/api/contact/route.js` logs and acknowledges. Wire a mail provider and
-test end to end before launch.
+The contact section's *displayed* email is the personal address on file, marked
+`TODO: confirm` in `src/content/copy.js`. It is deliberately not the same thing
+as `CONTACT_TO_EMAIL` below — one is what visitors read, the other is where
+submissions land.
 
 See `docs/README.md` for which documents are current and which are superseded.
