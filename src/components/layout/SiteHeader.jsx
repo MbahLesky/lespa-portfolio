@@ -48,7 +48,7 @@ export function SiteHeader({ revealed = false }) {
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="glass-chrome fixed inset-x-0 top-0 z-40 border-b border-border"
     >
-      <div className="mx-auto flex max-w-content items-center justify-between gap-4 px-6 py-2 md:gap-6 md:px-8 md:py-4">
+      <div className="mx-auto flex max-w-content items-center justify-between gap-4 px-6 py-2 md:gap-6 md:px-8 md:pt-4">
         {/* Small screens: the mark alone is the way home. */}
         <a href="#hero" aria-label="Lespa — back to top" className="flex items-center">
           <Image
@@ -64,7 +64,7 @@ export function SiteHeader({ revealed = false }) {
             <Image
               src="/global_assets/lespa_wordmark_green_dark.svg"
               alt="Lespa"
-              width={96}
+              width={80}
               height={24}
               priority
             />
@@ -127,7 +127,7 @@ function Avatar({ className = "" }) {
       className={`relative block shrink-0 overflow-hidden rounded-full border border-border-strong ${className}`}
     >
       <Image
-        src="/global_assets/about-photo-dark.webp"
+        src="/global_assets/hero-photo-dark.webp"
         alt="Mbah Lesky, known as Lespa."
         fill
         sizes="40px"
