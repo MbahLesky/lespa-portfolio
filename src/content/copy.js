@@ -28,11 +28,18 @@ const headlineSegments = [{ text: "Hi," }, { text: " I am Lespa" }];
 
 /**
  * The two roles are the keywords of the whole hero, so they carry their own
- * colour and a hover. `keyword: true` is what marks them — the Typewriter styles
- * the segment, it does not rewrite it.
+ * colour and a hover.
+ *
+ * `keyword: true` is the only marker needed — the Typewriter styles that segment
+ * and nothing else. The words themselves stay exactly as the copy doc has them,
+ * with no brackets or hashes around them.
  */
 const roleSegments = [
-  [{ text: "A " }, { text: "Graphic Designer", keyword: true }, { text: " who builds products." }],
+  [
+    { text: "A " },
+    { text: "Graphic Designer", keyword: true },
+    { text: " who builds products." },
+  ],
   [
     { text: "And a " },
     { text: "Software Developer", keyword: true },
@@ -224,13 +231,13 @@ export const contact = {
    * Direct routes, beside the form. The footer keeps its icon row; here the same
    * accounts are spelled out as handles so they can be read and copied.
    *
-   * TODO: confirm before launch — `phone` is a placeholder, and `email` is the
-   * personal address on file. Swap in whichever address should be public.
+   * TODO: confirm before launch — `email` is the personal address on file. Swap
+   * in whichever address should be public.
    */
   direct: {
     heading: "Or reach me directly",
     email: "mbahlesky4@gmail.com",
-    phone: "+237 6 00 00 00 00",
+    phone: "+237 6 79 68 26 26",
   },
 };
 

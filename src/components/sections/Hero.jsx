@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 
 import { Typewriter } from "@/components/shared/Typewriter";
+import { WordReveal } from "@/components/shared/WordReveal";
 import { hero } from "@/content/copy";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -39,8 +40,22 @@ const STAGE = {
   ACTIONS: 4,
 };
 
-/** How long the subtext is left alone to be read before the CTAs and nav arrive. */
+/**
+ * ── Hero timing. Tune the sequence here. ──────────────────────────────────────
+ *
+ * READING_PAUSE is the one to change for "give me longer before the buttons
+ * appear": it is the gap, in milliseconds, between the subtext's last word
+ * settling and the CTAs plus the nav arriving. Raise it to hold the hero on the
+ * sentence for longer; lower it to get to the buttons sooner.
+ *
+ * The other two shape the subtext's own word-by-word reveal:
+ * SUBTEXT_STAGGER is the gap between consecutive words, and SUBTEXT_DURATION is
+ * how long each single word takes to fade up. Both in seconds, because that is
+ * what Framer Motion takes.
+ */
 const READING_PAUSE = 1400;
+const SUBTEXT_STAGGER = 0.045;
+const SUBTEXT_DURATION = 0.42;
 
 export function Hero({ onIntroComplete }) {
   const reducedMotion = useReducedMotion();
@@ -94,7 +109,7 @@ export function Hero({ onIntroComplete }) {
         </h1>
 
         <p
-          className="mt-6 flex flex-col items-center gap-1 text-h3-m text-brand-light md:text-h4"
+          className="mt-6 flex flex-col items-center gap-1 text-h3-m text-content-secondary md:text-h4"
           aria-label={hero.roleLines.join(" ")}
         >
           {/* The beat before each line is the pause the reader needs to take
@@ -113,21 +128,19 @@ export function Hero({ onIntroComplete }) {
           />
         </p>
 
-        {/* Holds a beat after the last role line lands, then moves in — not
-            typed. The CTAs and nav follow once this has settled. */}
-        <motion.p
-          {...moveIn}
-          transition={{ duration: 0.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          animate={
-            stage >= STAGE.SUBTEXT ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }
-          }
-          onAnimationComplete={() => {
-            if (stage >= STAGE.SUBTEXT) setSubtextSettled(true);
-          }}
+        {/* Holds a beat after the last role line lands, then arrives word by
+            word, each one lifting from just below — not typed. Quick enough to
+            read as one sentence landing. The CTAs and nav wait out READING_PAUSE
+            after its last word settles. */}
+        <WordReveal
+          text={hero.subtext}
+          active={stage >= STAGE.SUBTEXT}
+          startDelay={0.5}
+          stagger={SUBTEXT_STAGGER}
+          duration={SUBTEXT_DURATION}
+          onDone={() => setSubtextSettled(true)}
           className="mt-8 max-w-reading text-balance text-body-lg text-content-secondary"
-        >
-          {hero.subtext}
-        </motion.p>
+        />
 
         <motion.div
           {...moveIn}

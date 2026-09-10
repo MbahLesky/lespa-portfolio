@@ -28,6 +28,13 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  * component knows a literal colour — see src/content/projects.js for where each
  * colour comes from.
  *
+ * Two independent hovers, deliberately not the same gesture:
+ *
+ * - group/card — anywhere on the card fades in that project's blended backdrop
+ *   behind everything, and lights the border and glow in its colour.
+ * - group/photo — the mockup frame only. Crossfades the mockup to that project's
+ *   sketch or working artefact. Hovering the copy does not trigger it.
+ *
  * A project with no live URL renders no link at all. No placeholder href.
  */
 export function SelectedWork() {
@@ -142,14 +149,14 @@ function ProjectCard({ project }) {
     <article
       // The project's own primary colour, scoped to this card only.
       style={{ "--project": `var(${project.accentVar})` }}
-      className="project-card group glass relative grid gap-8 overflow-hidden rounded-2xl border border-border p-6 md:grid-cols-2 md:items-center md:p-10"
+      className="project-card group/card glass relative grid gap-8 overflow-hidden rounded-2xl border border-border p-6 md:grid-cols-2 md:items-center md:p-10"
     >
       {/* Fills the card behind everything, and only on hover. Low opacity and
           masked, so it blends into the card rather than competing with the copy.
           The mockup in its own frame below is untouched by this. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-slow ease-out group-hover:opacity-100 group-focus-within:opacity-100"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-slow ease-out group-hover/card:opacity-100 group-focus-within/card:opacity-100"
       >
         <div className="mask-fade-l absolute inset-0 opacity-20">
           <Image
@@ -162,25 +169,28 @@ function ProjectCard({ project }) {
         </div>
       </div>
 
-      {/* The mockup frame. Hovering crossfades it to the project's sketch or
-          working artefact — the same frame, a different view of the work.
+      {/* The mockup frame — its own hover, independent of the card's.
+          `group/photo` scopes it to this frame, so crossfading to the sketch
+          happens only when the pointer is over the image itself. Hovering the
+          copy or the card's padding leaves the mockup alone and moves only the
+          card-wide backdrop above.
           TODO: asset needed — assets doc §3, "Updated project mockup/image …
           one per project (6 total)". Both views use existing real project images;
           only Monilog has a true hand sketch so far. */}
-      <div className="glass-strong relative aspect-card overflow-hidden rounded-xl border border-border">
+      <div className="group/photo glass-strong relative aspect-card overflow-hidden rounded-xl border border-border">
         <Image
           src={project.image}
           alt={project.imageAlt}
           fill
           sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
-          className="object-cover transition-opacity duration-slow ease-out group-hover:opacity-0 group-focus-within:opacity-0"
+          className="object-cover transition-opacity duration-slow ease-out group-hover/photo:opacity-0"
         />
         <Image
           src={project.hoverImage}
           alt={project.hoverImageAlt}
           fill
           sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
-          className="object-cover opacity-0 transition-opacity duration-slow ease-out group-hover:opacity-100 group-focus-within:opacity-100"
+          className="object-cover opacity-0 transition-opacity duration-slow ease-out group-hover/photo:opacity-100"
         />
       </div>
 

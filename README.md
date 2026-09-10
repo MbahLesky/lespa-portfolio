@@ -64,8 +64,10 @@ Phase 3. Dark mode is fixed on `<html>`; there is no theme toggle in Phase 1.
   and the Selected Work images are cards. Everything else — the pattern on Intro,
   What I Do and Process, and the split design/code compositions behind the Hero
   and About — is blended into the background with no border and no shadow.
-- **Selected Work images have two states.** The mockup at rest crossfades to the
-  project's sketch or working artefact on hover, inside the same frame.
+- **Project cards carry two independent hovers.** `group/card` — anywhere on the
+  card — fades in that project's blended backdrop and lights its glow.
+  `group/photo` — the mockup frame only — crossfades the mockup to that project's
+  sketch. Hovering the copy does not change the image.
 
 ## Outstanding
 
@@ -76,8 +78,8 @@ a `// TODO: asset needed —` comment naming the item in
 mockups, the final About portrait and split-background fragments, the tool icon
 set, and the social icon set.
 
-The contact section's phone number is a placeholder and its email is the personal
-address on file. Both are marked `TODO: confirm` in `src/content/copy.js`.
+The contact section's email is the personal address on file, marked
+`TODO: confirm` in `src/content/copy.js`.
 
 The contact form validates on both sides but does not deliver yet —
 `src/app/api/contact/route.js` logs and acknowledges. Wire a mail provider and
