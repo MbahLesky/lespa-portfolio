@@ -37,14 +37,30 @@ const headlineSegments = [{ text: "Hi," }, { text: " I am Lespa" }];
 const roleSegments = [
   [
     { text: "A " },
-    { text: "Graphic Designer", keyword: true },
+    { text: "# Graphic Designer #", keyword: true },
     { text: " who builds products." },
   ],
   [
     { text: "And a " },
-    { text: "Software Developer", keyword: true },
+    { text: "< Software Developer >", keyword: true },
     { text: " who designs interfaces." },
   ],
+];
+
+/**
+ * The phrases the subtext arrives in — each one comes up at once rather than
+ * word by word.
+ *
+ * `subtext` is these joined, so the sentence is whatever this list says and the
+ * two can never disagree. Regroup freely; just keep the punctuation attached to
+ * the phrase it belongs to.
+ */
+const subtextPhrases = [
+  "I design brands",
+  "and interfaces",
+  "that feel like you,",
+  "then build the websites",
+  "and apps they live in.",
 ];
 
 const joinSegments = (segments) => segments.map((segment) => segment.text).join("");
@@ -52,10 +68,10 @@ const joinSegments = (segments) => segments.map((segment) => segment.text).join(
 export const hero = {
   headlineSegments,
   roleSegments,
+  subtextPhrases,
   headline: joinSegments(headlineSegments),
   roleLines: roleSegments.map(joinSegments),
-  subtext:
-    "I design brands and interfaces that feel like you, then build the websites and apps they live in.",
+  subtext: subtextPhrases.join(" "),
   ctas: {
     primary: { label: "See my work", href: "#work" },
     secondary: { label: "About me", href: "#about" },

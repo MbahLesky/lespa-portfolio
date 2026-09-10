@@ -12,8 +12,18 @@ Hi, I am Lespa
 A Graphic Designer who builds products.
 And a Software Developer who designs interfaces.
 
+*As rendered:* the two role names are keywords, and they type wrapped in markers —
+`# Graphic Designer #` and `< Software Developer >` — alongside their own colour
+and hover. The markers are decoration on the keyword, not a change to the wording.
+They live on the keyword segment in `src/content/copy.js`.
+
 **Subtext (moves in):**
 I design brands and interfaces that feel like you, then build the websites and apps they live in.
+
+*As rendered:* arrives a phrase at a time, not word by word. The phrases are
+`hero.subtextPhrases`, which join back to the sentence above exactly:
+"I design brands" · "and interfaces" · "that feel like you," ·
+"then build the websites" · "and apps they live in."
 
 **CTAs:**
 See my work / About me

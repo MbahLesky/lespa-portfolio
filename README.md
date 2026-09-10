@@ -44,6 +44,11 @@ Phase 3. Dark mode is fixed on `<html>`; there is no theme toggle in Phase 1.
 - **8px spacing scale only** (4px for micro-adjustment), per `docs/core-visual.md`.
 - **Copy changes start in `docs/lespa-restructure-copy.md`,** then land in
   `src/content/copy.js`. That document is locked; nothing is paraphrased.
+- **The hero's reveal rhythm lives in the copy, not the component.**
+  `hero.headlineSegments` and `hero.roleSegments` are the typing beats;
+  `hero.subtextPhrases` are the phrases the subtext arrives in. Each list joins
+  back to its sentence, so regrouping cannot drop or alter a word. Timing knobs
+  are the labelled block at the top of `Hero.jsx`.
 - **Selected Work themes per project.** Each card scopes its own `--project`
   colour, and its title, tags, link and hover glow read from it rather than the
   site green. A project renders a link only where a live URL exists.

@@ -48,14 +48,19 @@ const STAGE = {
  * settling and the CTAs plus the nav arriving. Raise it to hold the hero on the
  * sentence for longer; lower it to get to the buttons sooner.
  *
- * The other two shape the subtext's own word-by-word reveal:
- * SUBTEXT_STAGGER is the gap between consecutive words, and SUBTEXT_DURATION is
- * how long each single word takes to fade up. Both in seconds, because that is
- * what Framer Motion takes.
+ * The other two shape the subtext's own reveal. It arrives a phrase at a time —
+ * the phrases are `hero.subtextPhrases` in src/content/copy.js, and regrouping
+ * them there changes the rhythm without touching this file. SUBTEXT_STAGGER is
+ * the gap between one phrase and the next, and SUBTEXT_DURATION is how long a
+ * single phrase takes to fade up. Both in seconds, because that is what Framer
+ * Motion takes.
+ *
+ * Five phrases at 0.2s apart is ~1s to land the line. The same stagger applied
+ * word by word would take nearly four.
  */
 const READING_PAUSE = 1400;
-const SUBTEXT_STAGGER = 0.045;
-const SUBTEXT_DURATION = 0.42;
+const SUBTEXT_STAGGER = 0.2;
+const SUBTEXT_DURATION = 0.5;
 
 export function Hero({ onIntroComplete }) {
   const reducedMotion = useReducedMotion();
@@ -128,12 +133,14 @@ export function Hero({ onIntroComplete }) {
           />
         </p>
 
-        {/* Holds a beat after the last role line lands, then arrives word by
-            word, each one lifting from just below — not typed. Quick enough to
-            read as one sentence landing. The CTAs and nav wait out READING_PAUSE
-            after its last word settles. */}
+        {/* Holds a beat after the last role line lands, then arrives a phrase at
+            a time, each lifting from just below — not typed. The CTAs and nav
+            wait out READING_PAUSE after its last phrase settles.
+
+            Drop the `groups` line to go back to one word at a time. */}
         <WordReveal
           text={hero.subtext}
+          groups={hero.subtextPhrases}
           active={stage >= STAGE.SUBTEXT}
           startDelay={0.5}
           stagger={SUBTEXT_STAGGER}
