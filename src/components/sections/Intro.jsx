@@ -16,7 +16,7 @@ export function Intro() {
 
       <div className="relative mx-auto max-w-content px-6 md:px-8">
         <Reveal>
-          <p className="max-w-reading text-balance text-h4-m text-content md:text-h4">
+          <p className="max-w-reading text-balance text-h5-m text-content md:text-h5">
             <EmphasizedText text={intro.body} emphasis={intro.emphasis} />
           </p>
         </Reveal>

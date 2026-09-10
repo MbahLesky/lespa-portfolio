@@ -65,7 +65,7 @@ export function Hero({ onIntroComplete }) {
         {/* The full lines live in aria-label; the typed characters are hidden from
             assistive tech so nothing is read out half-finished. */}
         <h1
-          className="flex flex-col items-center text-h1-m text-content md:text-h1"
+          className="flex flex-col items-center text-h1 text-content md:text-h1"
           aria-label={hero.headline}
         >
           <Typewriter
@@ -76,7 +76,7 @@ export function Hero({ onIntroComplete }) {
         </h1>
 
         <p
-          className="mt-6 flex flex-col items-center gap-1 text-h4-m text-content md:text-h4"
+          className="mt-6 flex flex-col items-center gap-1 text-h3-m text-brand-light md:text-h4"
           aria-label={hero.roleLines.join(" ")}
         >
           <Typewriter

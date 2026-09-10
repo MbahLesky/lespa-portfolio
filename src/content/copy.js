@@ -22,10 +22,10 @@ export const hero = {
   headline: "Hi, I am Lespa",
   roleLines: [
     "A Graphic Designer who builds products.",
-    "A Developer who designs interfaces.",
+    "And A Software Developer who designs interfaces.",
   ],
   subtext:
-    "I design brands that feel like you, then build the websites and apps they live in.",
+    "I design brands and interfaces that feel like you, then build the websites and apps they live in.",
   ctas: {
     primary: { label: "See my work", href: "#work" },
     secondary: { label: "About me", href: "#about" },
@@ -34,7 +34,7 @@ export const hero = {
 
 export const intro = {
   body: "I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both — so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across — from idea to product.",
-  emphasis: ["I kept both", "from idea to product"],
+  emphasis: ["I taught myself", "I kept both", "from idea to product"],
 };
 
 export const whatIDo = {
@@ -97,7 +97,7 @@ export const about = {
   label: "About",
   bio: [
     {
-      body: "I'm Mbah Lesky. Call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.",
+      body: "I'm Mbah Lesky, but call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.",
       emphasis: ["Bamenda, Cameroon"],
     },
     {
@@ -106,7 +106,7 @@ export const about = {
     },
     {
       body: "I taught myself all of it. No mentor, no bootcamp, just building things, breaking them, and building again. Across client work, business projects, and a long list of personal ones, some of which made it online and some didn't. Somewhere in that process, graphic design and software development stopped feeling like two jobs with UI/UX standing between them. They became one job to me.",
-      emphasis: ["They became one job to me"],
+      emphasis: ["I taught myself", "They became one job to me"],
     },
     {
       body: "While studying software engineering at university, I had a part-time job teaching web development and graphic design. Mostly, I was figuring out alongside my students what I actually wanted to be good at. What I landed on is simple: brands and products that feel intentional, not generic. That's still the standard I hold every project to, whether I'm building the brand, the visuals, or acting as creative director on someone else's.",
@@ -146,7 +146,7 @@ export const about = {
       },
       {
         body: "I don't use page builders or templates either. Every project gets designed and built from scratch, because a template can look nice, but it can't feel like you.",
-        emphasis: ["from scratch"],
+        emphasis: ["built from scratch"],
       },
       {
         body: "And I don't rush. I have a process for a reason. Each of the outlined steps above needs its own time to come out right.",
