@@ -162,16 +162,25 @@ function ProjectCard({ project }) {
         </div>
       </div>
 
+      {/* The mockup frame. Hovering crossfades it to the project's sketch or
+          working artefact — the same frame, a different view of the work.
+          TODO: asset needed — assets doc §3, "Updated project mockup/image …
+          one per project (6 total)". Both views use existing real project images;
+          only Monilog has a true hand sketch so far. */}
       <div className="glass-strong relative aspect-card overflow-hidden rounded-xl border border-border">
-        {/* TODO: asset needed — assets doc §3, "Updated project mockup/image …
-            one per project (6 total)". Showing the existing real project image
-            until the updated mockup is produced. */}
         <Image
           src={project.image}
           alt={project.imageAlt}
           fill
           sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
-          className="object-cover"
+          className="object-cover transition-opacity duration-slow ease-out group-hover:opacity-0 group-focus-within:opacity-0"
+        />
+        <Image
+          src={project.hoverImage}
+          alt={project.hoverImageAlt}
+          fill
+          sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
+          className="object-cover opacity-0 transition-opacity duration-slow ease-out group-hover:opacity-100 group-focus-within:opacity-100"
         />
       </div>
 

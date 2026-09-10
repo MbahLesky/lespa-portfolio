@@ -62,8 +62,10 @@ Phase 3. Dark mode is fixed on `<html>`; there is no theme toggle in Phase 1.
   HTML; the five inactive ones are `inert` and hidden from assistive tech.
 - **Cards vs. blended backgrounds are never the same treatment.** The About photo
   and the Selected Work images are cards. Everything else — the pattern on Intro,
-  What I Do and Process, and the split code/sketch composition behind About — is
-  blended into the background with no border and no shadow.
+  What I Do and Process, and the split design/code compositions behind the Hero
+  and About — is blended into the background with no border and no shadow.
+- **Selected Work images have two states.** The mockup at rest crossfades to the
+  project's sketch or working artefact on hover, inside the same frame.
 
 ## Outstanding
 

@@ -36,9 +36,9 @@ export default function Home() {
 
       <SiteHeader revealed={introComplete} />
 
-      {/* Clears the pinned footer: two rows below md, one row above it.
+      {/* Clears the pinned footer: one icon row below lg, a full row above it.
           Above the backdrop field, which is fixed at z-0. */}
-      <main id="main" className="relative z-10 pb-24 md:pb-20">
+      <main id="main" className="relative z-10 pb-16 lg:pb-20">
         <Hero onIntroComplete={() => setIntroComplete(true)} />
         <Intro />
         <SelectedWork />

@@ -327,6 +327,27 @@ textarea {
       color 250ms ease;
   }
 
+  /**
+   * A keyword inside a typed line — the hero's two roles. Carries the accent at
+   * rest, because the role is the point of the sentence, and brightens with the
+   * underline on hover. The inverse of .emphasis, which is quiet until hovered.
+   */
+  .emphasis-keyword {
+    color: var(--accent);
+    background-image: linear-gradient(var(--text-primary), var(--text-primary));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition:
+      background-size 300ms cubic-bezier(0.16, 1, 0.3, 1),
+      color 250ms ease;
+  }
+
+  .emphasis-keyword:hover {
+    color: var(--text-primary);
+    background-size: 100% 1px;
+  }
+
   .emphasis:hover {
     color: var(--accent);
     background-size: 100% 1px;

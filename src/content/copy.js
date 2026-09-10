@@ -24,17 +24,29 @@ export const nav = [
  * The rendered copy is always the segments joined, so adding or moving a beat
  * cannot change a word — the break is purely a pause in the typing.
  */
-const headlineSegments = ["Hi,", " I am Lespa"];
+const headlineSegments = [{ text: "Hi," }, { text: " I am Lespa" }];
+
+/**
+ * The two roles are the keywords of the whole hero, so they carry their own
+ * colour and a hover. `keyword: true` is what marks them — the Typewriter styles
+ * the segment, it does not rewrite it.
+ */
 const roleSegments = [
-  ["A Graphic Designer", " who builds products."],
-  ["And A Software Developer", " who designs interfaces."],
+  [{ text: "A " }, { text: "Graphic Designer", keyword: true }, { text: " who builds products." }],
+  [
+    { text: "And a " },
+    { text: "Software Developer", keyword: true },
+    { text: " who designs interfaces." },
+  ],
 ];
+
+const joinSegments = (segments) => segments.map((segment) => segment.text).join("");
 
 export const hero = {
   headlineSegments,
   roleSegments,
-  headline: headlineSegments.join(""),
-  roleLines: roleSegments.map((segments) => segments.join("")),
+  headline: joinSegments(headlineSegments),
+  roleLines: roleSegments.map(joinSegments),
   subtext:
     "I design brands and interfaces that feel like you, then build the websites and apps they live in.",
   ctas: {

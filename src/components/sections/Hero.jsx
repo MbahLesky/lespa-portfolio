@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 
@@ -14,18 +15,19 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  * Sequence, per the structure doc: headline types in → role statement types in
  * → subtext moves in (slide/fade, not typed) → CTAs and nav animate in last.
  * Each line is typed exactly once; nothing loops and nothing toggles between
- * variants.
+ * variants. The roles themselves are the keywords of the sentence, so they type
+ * in the accent colour and carry a hover.
  *
  * Centred, not left-aligned.
  *
- * Background is the dark neutral gradient (#0E1110 → #141A17) with no image.
+ * Background is the dark neutral gradient, painted page-wide on <body>, with two
+ * blended fragments at the sides — design on the left, code on the right,
+ * mirroring the split the copy makes. Blended, not cards: no border, no shadow.
  *
- * FLAG — conflict between source documents: the structure doc's Hero section and
- * the assets doc (§1, "Background is a CSS gradient … not an image") both
- * specify gradient only, while the structure doc's BACKGROUND IMAGERY RULE lists
- * Hero among the sections using the abstract SVG pattern. Built gradient-only
- * here, matching the two specific statements; resolve in the docs if the pattern
- * is wanted.
+ * NOTE — this departs from the assets doc (§1, "Background is a CSS gradient …
+ * not an image"), on Lespa's instruction to carry the same split composition the
+ * About section uses up into the hero. The structure doc's BACKGROUND IMAGERY
+ * RULE, which lists Hero among the blended-imagery sections, agrees with this.
  */
 
 /** Named stages, so the order of the sequence is readable. */
@@ -37,9 +39,13 @@ const STAGE = {
   ACTIONS: 4,
 };
 
+/** How long the subtext is left alone to be read before the CTAs and nav arrive. */
+const READING_PAUSE = 1400;
+
 export function Hero({ onIntroComplete }) {
   const reducedMotion = useReducedMotion();
   const [stage, setStage] = useState(STAGE.HEADLINE);
+  const [subtextSettled, setSubtextSettled] = useState(false);
 
   const advanceTo = useCallback(
     (next) => {
@@ -48,6 +54,15 @@ export function Hero({ onIntroComplete }) {
     },
     [onIntroComplete],
   );
+
+  // The subtext gets the stage to itself for a beat. Only then do the CTAs and
+  // the nav arrive, so the reader is not handed buttons mid-sentence.
+  useEffect(() => {
+    if (!subtextSettled) return;
+
+    const timer = window.setTimeout(() => advanceTo(STAGE.ACTIONS), READING_PAUSE);
+    return () => window.clearTimeout(timer);
+  }, [advanceTo, subtextSettled]);
 
   const moveIn = reducedMotion
     ? {}
@@ -61,6 +76,7 @@ export function Hero({ onIntroComplete }) {
       id="hero"
       className="snap-section relative flex min-h-screen items-center overflow-hidden"
     >
+      <SplitBackdrop />
       <div className="relative mx-auto flex w-full max-w-content flex-col items-center px-6 pb-24 pt-30 text-center md:px-8">
         {/* The full lines live in aria-label; the typed characters are hidden from
             assistive tech so nothing is read out half-finished. */}
@@ -106,7 +122,7 @@ export function Hero({ onIntroComplete }) {
             stage >= STAGE.SUBTEXT ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }
           }
           onAnimationComplete={() => {
-            if (stage >= STAGE.SUBTEXT) advanceTo(STAGE.ACTIONS);
+            if (stage >= STAGE.SUBTEXT) setSubtextSettled(true);
           }}
           className="mt-8 max-w-reading text-balance text-body-lg text-content-secondary"
         >
@@ -145,5 +161,46 @@ export function Hero({ onIntroComplete }) {
         <ArrowDown className="h-4 w-4 animate-pulse-down text-content-secondary" />
       </motion.div>
     </section>
+  );
+}
+
+/**
+ * The hero's blended split: design on the left, code on the right, mirroring the
+ * two roles the copy names and echoing the same composition the About section
+ * uses.
+ *
+ * Both fragments are real Lespa work. They are faded hard and masked towards the
+ * centre so the centred text always has clear ground under it, and they carry no
+ * frame of any kind — they are the background, not images placed on it. Narrower
+ * and fainter below lg, where the text reaches closer to the edges.
+ *
+ * TODO: asset needed — assets doc §6 names the split composition for About only;
+ * the hero now uses the same treatment. A dedicated pair — a real code fragment
+ * rather than a built UI on the right — would be better than these stand-ins.
+ */
+function SplitBackdrop() {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="mask-fade-r absolute inset-y-0 left-0 w-2/5 opacity-5 lg:w-1/3 lg:opacity-10">
+        <Image
+          src="/homepage_project_cards/diwa_concepts.webp"
+          alt=""
+          fill
+          sizes="40vw"
+          priority
+          className="object-cover"
+        />
+      </div>
+      <div className="mask-fade-l absolute inset-y-0 right-0 w-2/5 opacity-5 lg:w-1/3 lg:opacity-10">
+        <Image
+          src="/monilog_case_study_images/web_dashboard.webp"
+          alt=""
+          fill
+          sizes="40vw"
+          priority
+          className="object-cover"
+        />
+      </div>
+    </div>
   );
 }

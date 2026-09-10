@@ -48,7 +48,7 @@ export function SiteHeader({ revealed = false }) {
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="glass-chrome fixed inset-x-0 top-0 z-40 border-b border-border"
     >
-      <div className="mx-auto flex max-w-content items-center justify-between gap-6 px-6 py-4 md:px-8">
+      <div className="mx-auto flex max-w-content items-center justify-between gap-4 px-6 py-2 md:gap-6 md:px-8 md:py-4">
         {/* Small screens: the mark alone is the way home. */}
         <a href="#hero" aria-label="Lespa — back to top" className="flex items-center">
           <Image

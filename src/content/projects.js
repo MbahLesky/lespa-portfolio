@@ -32,6 +32,8 @@ export const projects = [
     liveUrl: "https://monilog.vercel.app",
     image: "/homepage_project_cards/monilog-mobile.webp",
     imageAlt: "Monilog's mobile app screens beside its brand mark.",
+    hoverImage: "/monilog_case_study_images/pencil_sketch.webp",
+    hoverImageAlt: "Monilog's mark sketched by hand.",
     backdrop: "/homepage_project_cards/monilog-logo-green.webp",
   },
   {
@@ -45,6 +47,8 @@ export const projects = [
     liveUrl: "https://diwa-air.com",
     image: "/homepage_project_cards/diwa_logo_on_dress.webp",
     imageAlt: "The Diwa mark applied to a garment.",
+    hoverImage: "/homepage_project_cards/diwa_concepts.webp",
+    hoverImageAlt: "Diwa's annotated concept sheet.",
     backdrop: "/homepage_project_cards/diwa_concepts.webp",
   },
   {
@@ -60,6 +64,8 @@ export const projects = [
     liveUrl: "https://ronixe.com",
     image: "/homepage_project_cards/ronixe_wordmark.webp",
     imageAlt: "The Ronixe wordmark and icon lockup.",
+    hoverImage: "/homepage_project_cards/ronixe-icon-dark.webp",
+    hoverImageAlt: "The Ronixe icon on its dark theme.",
     backdrop: "/homepage_project_cards/ronixe-icon-dark.webp",
   },
   {
@@ -70,8 +76,10 @@ export const projects = [
       "Brand and web design for a tech collective I co-founded, offering five services under one identity.",
     // Qiroke aqua — sampled from the delivered icon.
     accentVar: "--project-qiroke",
-    image: "/homepage_project_cards/qiroke_icon.webp",
+    image: "/homepage_project_cards/qiroke_homepage.webp",
     imageAlt: "The Qiroke icon, a flowing Q.",
+    hoverImage: "/homepage_project_cards/qiroke_icon.webp",
+    hoverImageAlt: "The Qiroke icon, a flowing Q.",
     backdrop: "/homepage_project_cards/qiroke_homepage.webp",
   },
   {
@@ -85,6 +93,8 @@ export const projects = [
     accentVar: "--project-pikamgo",
     image: "/homepage_project_cards/pikamgo_mobile.webp",
     imageAlt: "PikamGo's delivery tracking screens.",
+    hoverImage: "/homepage_project_cards/pikamgo-wordmark-dark.webp",
+    hoverImageAlt: "The PikamGo wordmark on dark.",
     backdrop: "/homepage_project_cards/pikamgo-wordmark-dark.webp",
   },
   {
@@ -97,6 +107,8 @@ export const projects = [
     accentVar: "--project-yisi",
     image: "/homepage_project_cards/yisi_logo_orange.webp",
     imageAlt: "The Yisi wordmark, drawn from cutlery.",
+    hoverImage: "/homepage_project_cards/yisi_artboard.webp",
+    hoverImageAlt: "The Yisi wordmark drawn out on its artboard.",
     backdrop: "/homepage_project_cards/yisi_artboard.webp",
   },
 ];

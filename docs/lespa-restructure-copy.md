@@ -10,7 +10,7 @@ Hi, I am Lespa
 
 **Role statement (typed, 2 lines):**
 A Graphic Designer who builds products.
-And A Software Developer who designs interfaces.
+And a Software Developer who designs interfaces.
 
 **Subtext (moves in):**
 I design brands and interfaces that feel like you, then build the websites and apps they live in.
