@@ -1,3 +1,14 @@
+> **SUPERSEDED — do not build from this document.**
+>
+> This is multi-page build instructions and the v1 section flow, from before the Phase 1 restructure. It describes a
+> structure, copy and motion layer that no longer exist in the codebase.
+>
+> The current sources of truth are `docs/core-visual.md`,
+> `docs/lespa-restructure-structure-and-motion.md`,
+> `docs/lespa-restructure-copy.md` and `docs/lespa-restructure-assets.md`.
+> Kept for history only.
+
+---
 # BUILD PROMPT — Lespa Portfolio
 
 ---

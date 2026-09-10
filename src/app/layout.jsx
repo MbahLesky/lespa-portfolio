@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 
-import { Footer } from "@/components/layout/Footer";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const saira = localFont({
@@ -23,24 +24,13 @@ const ibmPlexSans = localFont({
   fallback: ["system-ui", "sans-serif"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lespa.dev";
-
 export const metadata = {
   metadataBase: new URL(siteUrl),
-  title: {
-    default: "Lespa — Brand & Product Designer, Developer | Bamenda, Cameroon",
-    template: "%s | Lespa",
-  },
+  title: "Lespa — A Graphic Designer who builds products",
   description:
-    "I design brands, build the websites and mobile apps they live in, and teach you to run them. Custom-coded. Based in Bamenda, working worldwide.",
+    "I design brands that feel like you, then build the websites and apps they live in. Graphic designer and software engineer, based in Bamenda, Cameroon.",
   icons: {
-    icon: [
-      {
-        url: "/global_assets/lespa_icon_green_dark.svg",
-        media: "(prefers-color-scheme: dark)",
-        type: "image/svg+xml",
-      },
-    ],
+    icon: [{ url: "/global_assets/lespa_icon_green_dark.svg", type: "image/svg+xml" }],
   },
 };
 
@@ -48,19 +38,23 @@ export const viewport = {
   themeColor: "#0E1110",
 };
 
+/**
+ * Dark-first and, in Phase 1, dark-only: the `dark` class is fixed on <html> and
+ * there is no theme toggle. The footer lives here rather than in the page so it
+ * persists across every route.
+ */
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${saira.variable} ${ibmPlexSans.variable} dark`}
-      suppressHydrationWarning
-    >
-      <body className="font-body antialiased bg-[var(--color-dark-background)] text-[var(--color-dark-text)]">
-        <a href="#main" className="sr-only focus:not-sr-only">
+    <html lang="en" className={`${saira.variable} ${ibmPlexSans.variable} dark`}>
+      <body className="bg-background font-body text-content antialiased">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-6 focus:z-50 focus:rounded-md focus:bg-surface focus:px-6 focus:py-4 focus:text-body-sm focus:text-content"
+        >
           Skip to content
         </a>
         {children}
-        <Footer />
+        <SiteFooter />
       </body>
     </html>
   );

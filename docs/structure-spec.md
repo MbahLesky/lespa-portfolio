@@ -1,3 +1,14 @@
+> **SUPERSEDED — do not build from this document.**
+>
+> This is the v1 multi-page content and layout specification, from before the Phase 1 restructure. It describes a
+> structure, copy and motion layer that no longer exist in the codebase.
+>
+> The current sources of truth are `docs/core-visual.md`,
+> `docs/lespa-restructure-structure-and-motion.md`,
+> `docs/lespa-restructure-copy.md` and `docs/lespa-restructure-assets.md`.
+> Kept for history only.
+
+---
 # Lespa Portfolio — Content & Layout Specification
 **Version:** v1 (build-ready)
 **Owner:** Mbah Lesky / Lespa

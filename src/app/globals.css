@@ -2,19 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * LESPA — design tokens.
+ *
+ * Every value here comes from /docs/core-visual.md. Nothing in a component may
+ * carry a literal colour: components reference the Tailwind tokens in
+ * tailwind.config.ts, which reference these variables.
+ *
+ * Phase 1 is dark-only — no light-mode toggle — so the semantic tokens below
+ * resolve straight to the dark-mode palette. The light neutrals are recorded
+ * but unused until a theme toggle lands.
+ */
 :root {
-  --color-dark-background: #0E1110;
-  --color-dark-surface: #141A17;
-  --color-dark-text: #E7ECE9;
-  --color-dark-muted: #9AA5A0;
-  --color-brand-green: #2FA86A;
-  --project-monilog: #5CC8BF;
-  --project-diwa: #FFB84D;
-  --project-ronixe: #F28C28;
-  --project-qiroke: #B36AFF;
-  --project-pikamgo: #FF6B57;
-  --project-yisi: #D9B261;
-  --pattern-url: url('/assets/patterns/pattern-dark.svg');
+  /* Brand */
+  --brand-light: #0f8a36;
+  --brand: #0d6d2b;
+  --brand-dark: #075520;
+  --brand-soft: #e6f2eb;
+  --brand-muted: #9bbfa9;
+
+  /* Neutral — dark mode */
+  --dark-background: #0e1110;
+  --dark-surface: #141a17;
+  --dark-text: #e7ece9;
+  --dark-muted: #9aa5a0;
+  --dark-accent: #2fa86a;
+
+  /* Neutral — light mode (recorded for Phase 2's theme toggle, unused now) */
+  --light-background: #fafbf9;
+  --light-surface: #ffffff;
+  --light-border: #e4eae6;
+  --light-text: #1a1f1c;
+  --light-text-secondary: #5e6b63;
+
+  /* Secondary */
+  --accent-warm: #ede7db;
+
+  /* Semantic — dark-first. Phase 1 maps these to the dark palette. */
+  --background: var(--dark-background);
+  --surface: var(--dark-surface);
+  --text-primary: var(--dark-text);
+  --text-secondary: var(--dark-muted);
+  --accent: var(--dark-accent);
+
+  /**
+   * CORE VISUAL specifies a border colour for light mode only (#E4EAE6) and
+   * names no dark-mode equivalent. Derived here from Text Primary at 10%, which
+   * reads as a hairline on both Background and Surface. Flagged rather than
+   * invented silently — replace if a dark border token is added to the doc.
+   */
+  --border: rgb(231 236 233 / 10%);
+  --border-strong: rgb(231 236 233 / 18%);
+
+  /* Action — CTA surfaces. Brand green never carries text on dark (contrast). */
+  --action: var(--brand);
+  --action-hover: var(--brand-light);
+  --action-active: var(--brand-dark);
+  --action-fg: #ffffff;
+
+  /* Gradients — CORE VISUAL §Gradients, all 135deg */
+  --gradient-brand-deep: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+  --gradient-brand-lift: linear-gradient(135deg, var(--brand) 0%, var(--dark-accent) 100%);
+  --gradient-dark-surface: linear-gradient(135deg, var(--dark-background) 0%, var(--dark-surface) 100%);
+  --gradient-warm: linear-gradient(135deg, var(--light-background) 0%, var(--accent-warm) 100%);
+
+  /* Pattern system — dark variant only in Phase 1, always at 50% opacity */
+  --pattern-url: url("/assets/patterns/pattern-dark.svg");
+  --pattern-size: 1052px 1048px;
+  --pattern-opacity: 0.5;
+
+  /* Layout */
+  --content-max: 1200px;
+  --reading-max: 72ch;
+
+  /**
+   * Per-project primary brand colours — Selected Work themes each card's title,
+   * link, tags and hover glow with its own project colour rather than the site
+   * green. Provenance per project is recorded in src/content/projects.js.
+   * Tones are lifted where the source brand colour would fail AA on #0E1110.
+   */
+  --project-monilog: #2dd4bf;
+  --project-diwa: #5ba3c9;
+  --project-ronixe: #c7b9a8;
+  --project-qiroke: #60c4bc;
+  --project-pikamgo: #ff6a1f;
+  --project-yisi: #f9931f;
+
+  /**
+   * Translucent shades. Tailwind's slash-opacity syntax cannot be applied to a
+   * hex-valued custom property, so each one is its own token. color-mix keeps
+   * them tied to the colour they derive from.
+   */
+  --accent-soft: color-mix(in srgb, var(--accent) 40%, transparent);
+  --accent-faint: color-mix(in srgb, var(--accent) 10%, transparent);
+  --surface-veil: color-mix(in srgb, var(--surface) 60%, transparent);
+  --project-soft: color-mix(in srgb, var(--project) 40%, transparent);
+  --project-faint: color-mix(in srgb, var(--project) 12%, transparent);
+
+  /* Falls back to the dark accent until a card scopes its own project colour. */
+  --project: var(--accent);
 }
 
 html {
@@ -22,22 +108,30 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--color-dark-background);
-  color: var(--color-dark-text);
-  font-family: var(--font-body), sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
   line-height: 1.6;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 ::selection {
-  background: var(--color-brand-green);
-  color: var(--color-dark-background);
+  background: var(--accent);
+  color: var(--background);
 }
 
 h1,
@@ -46,15 +140,17 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-heading), sans-serif;
+  font-family: var(--font-heading), system-ui, sans-serif;
   margin: 0;
 }
 
-p {
+p,
+figure {
   margin: 0;
 }
 
 a {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -62,11 +158,110 @@ button,
 input,
 textarea {
   font: inherit;
+  color: inherit;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@layer components {
+  /**
+   * Pattern overlay — CORE VISUAL §Pattern System. Layer order is gradient
+   * background → pattern at 50% → content. Blended: it carries no border and no
+   * shadow, so it reads as part of the background rather than a card.
+   */
+  .pattern-overlay {
+    background-image: var(--pattern-url);
+    background-repeat: repeat;
+    background-size: var(--pattern-size);
+    opacity: var(--pattern-opacity);
+  }
+
+  /**
+   * Hover glow for a project card, tinted with that project's own colour. The
+   * card scopes --project; nothing here knows a literal value.
+   */
+  .project-card {
+    transition:
+      box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 250ms ease;
+  }
+
+  .project-card:hover,
+  .project-card:focus-within {
+    border-color: color-mix(in srgb, var(--project) 40%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--project) 24%, transparent),
+      0 32px 64px -32px color-mix(in srgb, var(--project) 45%, transparent);
+    transform: translateY(-4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card:hover,
+    .project-card:focus-within {
+      transform: none;
+    }
+  }
+
+  /**
+   * The typewriter caret. Sized optically against the line it sits on rather
+   * than from the spacing scale, per CORE VISUAL's optical-correction note.
+   */
+  .type-caret {
+    display: inline-block;
+    width: 2px;
+    height: 0.8em;
+    margin-left: 0.12em;
+    background: var(--accent);
+    vertical-align: middle;
+    transform: translateY(0.04em);
+  }
+
+  /**
+   * Standout words inside body copy — a selective emphasis, not a treatment for
+   * every word and never for headings. Underline grows from the left on hover.
+   */
+  .emphasis {
+    color: var(--text-primary);
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition:
+      background-size 300ms cubic-bezier(0.16, 1, 0.3, 1),
+      color 250ms ease;
+  }
+
+  .emphasis:hover {
+    color: var(--accent);
+    background-size: 100% 1px;
   }
 }
 
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Fades the blended About background out before it can reach the copy. */
+  .mask-fade-r {
+    mask-image: linear-gradient(to right, black, transparent);
+  }
+
+  .mask-fade-l {
+    mask-image: linear-gradient(to left, black, transparent);
+  }
+}
