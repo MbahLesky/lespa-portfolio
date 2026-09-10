@@ -30,11 +30,11 @@ export const projects = [
     // Monilog mint — docs/monilog-case-study-final.md: "Mint #2DD4BF carries movement".
     accentVar: "--project-monilog",
     liveUrl: "https://monilog.vercel.app",
-    image: "/homepage_project_cards/monilog-mobile.webp",
+    image: "/monilog_images/phone_mockup.webp",
     imageAlt: "Monilog's mobile app screens beside its brand mark.",
-    hoverImage: "/monilog_case_study_images/pencil_sketch.webp",
+    hoverImage: "/monilog_images/monilog-logo-green.webp",
     hoverImageAlt: "Monilog's mark sketched by hand.",
-    backdrop: "/homepage_project_cards/monilog-logo-green.webp",
+    backdrop: "/monilog_images/monilog_sketch.jpg",
   },
   {
     slug: "diwa",
@@ -45,11 +45,11 @@ export const projects = [
     // Diwa blue — sampled from the delivered mark, lifted to clear AA on #0E1110.
     accentVar: "--project-diwa",
     liveUrl: "https://diwa-air.com",
-    image: "/homepage_project_cards/diwa_logo_on_dress.webp",
+    image: "/diwa_images/diwa_logo_on_dress.webp",
     imageAlt: "The Diwa mark applied to a garment.",
-    hoverImage: "/homepage_project_cards/diwa_concepts.webp",
+    hoverImage: "/diwa_images/diwa_fullmark_on_white.jpg",
     hoverImageAlt: "Diwa's annotated concept sheet.",
-    backdrop: "/homepage_project_cards/diwa_concepts.webp",
+    backdrop: "/diwa_images/diwa_concepts.jpg",
   },
   {
     slug: "ronixe",
@@ -62,11 +62,11 @@ export const projects = [
     // doc, so this is a warm neutral standing in until the real value arrives.
     accentVar: "--project-ronixe",
     liveUrl: "https://ronixe.com",
-    image: "/homepage_project_cards/ronixe_wordmark.webp",
+    image: "/ronixe_images/ronixe_wordmark.webp",
     imageAlt: "The Ronixe wordmark and icon lockup.",
-    hoverImage: "/homepage_project_cards/ronixe-icon-dark.webp",
+    hoverImage: "/ronixe_images/ronixe-icon-dark.webp",
     hoverImageAlt: "The Ronixe icon on its dark theme.",
-    backdrop: "/homepage_project_cards/ronixe-icon-dark.webp",
+    backdrop: "/ronixe_images/ronixe-icon-dark.webp",
   },
   {
     slug: "qiroke",
@@ -76,26 +76,26 @@ export const projects = [
       "Brand and web design for a tech collective I co-founded, offering five services under one identity.",
     // Qiroke aqua — sampled from the delivered icon.
     accentVar: "--project-qiroke",
-    image: "/homepage_project_cards/qiroke_homepage.webp",
+    image: "/qiroke_images/qiroke_brand_design.png",
     imageAlt: "The Qiroke icon, a flowing Q.",
-    hoverImage: "/homepage_project_cards/qiroke_icon.webp",
+    hoverImage: "/qiroke_images/qiroke_fullmark.jpg",
     hoverImageAlt: "The Qiroke icon, a flowing Q.",
-    backdrop: "/homepage_project_cards/qiroke_homepage.webp",
+    backdrop: "/qiroke_images/qiroke_homepage.webp",
   },
   {
     slug: "pikamgo",
     name: "PikamGo",
-    tags: ["Brand Identity", "Logistics"],
+    tags: ["Brand Identity", "Mobile App", "Logistics"],
     subtext:
       "A delivery app for tracking packages from pickup to drop-off, built under Qiroke.",
     // PikamGo International Orange — docs/pikamgo-case-study.md (#FF5900),
     // lifted slightly for AA on #0E1110.
     accentVar: "--project-pikamgo",
-    image: "/homepage_project_cards/pikamgo_mobile.webp",
+    image: "/pikamgo_images/pikamgo_t-shirt.png",
     imageAlt: "PikamGo's delivery tracking screens.",
-    hoverImage: "/homepage_project_cards/pikamgo-wordmark-dark.webp",
+    hoverImage: "/pikamgo_images/pikamgo_wordmark_primary.png",
     hoverImageAlt: "The PikamGo wordmark on dark.",
-    backdrop: "/homepage_project_cards/pikamgo-wordmark-dark.webp",
+    backdrop: "/pikamgo_images/pikamgo-wordmark-dark.webp",
   },
   {
     slug: "yisi",
@@ -105,10 +105,10 @@ export const projects = [
       "Brand identity for Ndzi Ernestine's catering service. A wordmark built entirely from cutlery.",
     // Yisi orange — sampled from the delivered wordmark.
     accentVar: "--project-yisi",
-    image: "/homepage_project_cards/yisi_logo_orange.webp",
+    image: "/yisi_images/yisi_logo_orange.webp",
     imageAlt: "The Yisi wordmark, drawn from cutlery.",
-    hoverImage: "/homepage_project_cards/yisi_artboard.webp",
+    hoverImage: "/yisi_images/yisi_artboard.webp",
     hoverImageAlt: "The Yisi wordmark drawn out on its artboard.",
-    backdrop: "/homepage_project_cards/yisi_artboard.webp",
+    backdrop: "/yisi_images/yisi_artboard.webp",
   },
 ];

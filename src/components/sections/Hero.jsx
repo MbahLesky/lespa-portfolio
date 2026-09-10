@@ -201,24 +201,24 @@ export function Hero({ onIntroComplete }) {
 function SplitBackdrop() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="mask-fade-r absolute inset-y-0 left-0 w-2/5 opacity-5 lg:w-1/3 lg:opacity-10">
+      <div className="hidden md:block mask-fade-r absolute md:inset-y-0 md:left-0 w-full md:opacity-10 md:w-1/2">
         <Image
-          src="/homepage_project_cards/diwa_concepts.webp"
+          src="/global_assets/lespa_design_laptop.png"
           alt=""
           fill
-          sizes="40vw"
+          sizes="60vw"
           priority
-          className="object-cover"
+          className="object-contain lg:object-contain"
         />
       </div>
-      <div className="mask-fade-l absolute inset-y-0 right-0 w-2/5 opacity-5 lg:w-1/3 lg:opacity-10">
+      <div className="opacity-30 sm:opacity-20 mask-fade-l absolute inset-y-0 right-0 w-full md:opacity-10 md:w-1/2">
         <Image
-          src="/monilog_case_study_images/web_dashboard.webp"
+          src="/global_assets/lespa_code_laptop.png"
           alt=""
           fill
-          sizes="40vw"
+          sizes="60vw"
           priority
-          className="object-cover"
+          className="object-contain lg:object-contain"
         />
       </div>
     </div>

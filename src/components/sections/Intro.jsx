@@ -26,10 +26,10 @@ export function Intro() {
 
         {/* Blended, not a card: masked and faded so it reads as part of the page.
             Hidden below lg, where it would crowd the copy rather than frame it. */}
-        <Reveal className="relative hidden aspect-card lg:block" delay={0.15}>
-          <div aria-hidden="true" className="mask-fade-l absolute inset-0 opacity-25">
+        <Reveal className="relative aspect-card" delay={0.15}>
+          <div aria-hidden="true" className="mask-fade-l absolute inset-0 opacity-100">
             <Image
-              src="/monilog_case_study_images/construction_diagram.webp"
+              src="/global_assets/lespa_intro_image.png"
               alt=""
               fill
               sizes="(min-width: 1024px) 480px, 0px"
