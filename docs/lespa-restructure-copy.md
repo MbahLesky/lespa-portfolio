@@ -10,10 +10,20 @@ Hi, I am Lespa
 
 **Role statement (typed, 2 lines):**
 A Graphic Designer who builds products.
-A Developer who designs interfaces.
+And a Software Developer who designs interfaces.
+
+*As rendered:* the two role names are keywords, and they type wrapped in markers —
+`# Graphic Designer #` and `< Software Developer >` — alongside their own colour
+and hover. The markers are decoration on the keyword, not a change to the wording.
+They live on the keyword segment in `src/content/copy.js`.
 
 **Subtext (moves in):**
-I design brands that feel like you, then build the websites and apps they live in.
+I design brands and interfaces that feel like you, then build the websites and apps they live in.
+
+*As rendered:* arrives a phrase at a time, not word by word. The phrases are
+`hero.subtextPhrases`, which join back to the sentence above exactly:
+"I design brands" · "and interfaces" · "that feel like you," ·
+"then build the websites" · "and apps they live in."
 
 **CTAs:**
 See my work / About me
@@ -67,7 +77,7 @@ At every step, we talk it through — together. The goal was never something gen
 
 ## 6. ABOUT — LOCKED
 
-I'm Mbah Lesky. Call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.
+I'm Mbah Lesky, but call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.
 
 I started building simple websites in 2019. They worked, but I didn't like how they looked, mine or most other people's. So in 2021 I got into graphic design, chasing better colors, fonts, and structure. But even with that, something didn't click. The feel was missing. A nice interface still isn't the same as an easy one. So in 2022 I moved into UI/UX to fix that. By late 2022, I'd picked up Flutter and mobile development too.
 

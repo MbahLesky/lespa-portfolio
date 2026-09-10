@@ -1,3 +1,14 @@
+> **SUPERSEDED — do not build from this document.**
+>
+> This is the v1 homepage copy deck, from before the Phase 1 restructure. It describes a
+> structure, copy and motion layer that no longer exist in the codebase.
+>
+> The current sources of truth are `docs/core-visual.md`,
+> `docs/lespa-restructure-structure-and-motion.md`,
+> `docs/lespa-restructure-copy.md` and `docs/lespa-restructure-assets.md`.
+> Kept for history only.
+
+---
 # Lespa Homepage — Copy Deck v1
 
 Ready to paste. Placeholders in `[brackets]` need your input.
