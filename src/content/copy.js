@@ -79,7 +79,7 @@ export const hero = {
 };
 
 export const intro = {
-  body: "I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both — so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across — from idea to product.",
+  body: "I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across, from idea to product.",
   emphasis: ["I taught myself", "I kept both", "from idea to product"],
 };
 
@@ -88,12 +88,12 @@ export const whatIDo = {
   cards: [
     {
       label: "Graphic Design",
-      body: "I design logos, visuals, and full brand systems — colors, typography, the whole identity — for individuals and businesses. Not just a logo on its own, but everything that has to work together around it.",
+      body: "I design logos, visuals, and full brand systems; colors, typography, the whole identity for individuals and businesses. Not just a logo on its own, but everything that has to work together around it.",
       emphasis: ["full brand systems"],
     },
     {
       label: "Web Development",
-      body: "I code websites for individuals and businesses, from simple one-page sites to full platform web apps — all by hand. No templates, no page builders.",
+      body: "I code websites for individuals and businesses, from simple one-page sites to full platform web apps, I build all by hand. No templates, no page builders.",
       emphasis: ["all by hand"],
     },
     {
@@ -109,32 +109,83 @@ export const process = {
   steps: [
     {
       title: "Reach Out",
-      body: "Tell me the idea — what you're building, or what you want designed. I read every message myself, and I reply within a day.",
-      emphasis: ["I reply within a day"],
+      body: "Tell me the idea of whatever you're building or want designed. I will read every message myself, and get back to you within a day.",
+      emphasis: ["I will read every message myself", "within a day"],
     },
     {
       title: "Research",
-      body: "Before I touch anything visual, I look into what actually fits you — who you're speaking to, what's already out there, what's been tried and didn't work. Not just moodboards. Real digging.",
-      emphasis: ["Real digging"],
+      body: "Then, I'll look into what actually fits you, who you're talking to, what's already out there, what's been tried before. Not just moodboards, real digging.",
+      emphasis: ["real digging"],
     },
     {
-      title: "Define",
-      body: "Then I sketch. Concepts, flow, structure — for the brand, the site, or the app. This is where the idea starts taking real shape, before a single pixel is final.",
+      title: "Define/Sketch",
+      body: "Then I sketch it out. The concepts, the flow, the structure, whether it's your brand, your site, or your app. This is where your idea starts taking real shape.",
       emphasis: ["taking real shape"],
     },
     {
       title: "Design/Build",
-      body: "Once we agree on direction, I build it — design and code, myself. Nothing gets lost between the sketch and the real thing, because there's no handoff.",
-      emphasis: ["there's no handoff"],
+      body: "Once we agree on the direction, I then head on to implement. I design, code and build it.",
+      emphasis: ["I design, code and build it"],
     },
     {
       title: "Present and Deploy",
-      body: "I show you how it actually feels, not just how it looks in a mockup. Then we ship it — live, working, yours.",
-      emphasis: ["live, working, yours"],
+      body: "Lastly, I show you how it actually feels and how to use it, not just how it looks in a mockup. Then we ship it live so you or others can start using.",
+      emphasis: ["ship it live"],
     },
   ],
+
+  /**
+   * The Reach Out sample exchange — the chat-bubble showcase (Brice Clain
+   * reference), shown in place of a step image on the first step.
+   *
+   * The message text is locked copy from the doc. The times and the day divider
+   * are not: they are the chrome of the mock, here so the exchange reads as a
+   * real conversation rather than a transcript. Adjust them freely.
+   *
+   * `from` decides the side and colour. "lespa" is the phone's owner — right,
+   * green, with delivery ticks — so the visitor reads the conversation from
+   * Lespa's side of it. Flip these to put the client on the right instead.
+   */
+  reachOutExchange: {
+    day: "Today",
+    messages: [
+      { from: "client", text: "Hi Lespa, I need a logo and flyer for my business.", time: "9:04 am" },
+      {
+        from: "client",
+        text: "Not an AI logo, please, I want something professional.",
+        time: "9:04 am",
+      },
+      { from: "lespa", text: "Say no more, I design everything by hand.", time: "9:06 am" },
+      {
+        from: "client",
+        text: "And then, is it also possible to have a website or something like that for the whole business?",
+        time: "9:07 am",
+      },
+      {
+        from: "lespa",
+        text: "Very possible. I'll handle everything. I will do a proposal first, then I build it once it's approved.",
+        time: "9:09 am",
+      },
+      { from: "client", text: "So what's the way forward?", time: "9:10 am" },
+      {
+        from: "lespa",
+        text: "Tell me more about the business, and we start from there.",
+        time: "9:11 am",
+      },
+      {
+        from: "client",
+        text: "Alright then...",
+        time: "9:11 am",
+      },
+      {
+        from: "client",
+        text: "...",
+        time: "9:12 am",
+      },
+    ],
+  },
   closing: {
-    body: "At every step, we talk it through — together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.",
+    body: "At every step, we talk it through together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.",
     emphasis: ["feels like you", "From your roots"],
   },
 };
@@ -143,8 +194,8 @@ export const about = {
   label: "About",
   bio: [
     {
-      body: "I'm Mbah Lesky, but call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.",
-      emphasis: ["Bamenda, Cameroon"],
+      body: "I'm Mbah Lesky, but you can call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.",
+      emphasis: ["Mbah Lesky", "Lespa", "Bamenda, Cameroon"],
     },
     {
       body: "I started building simple websites in 2019. They worked, but I didn't like how they looked, mine or most other people's. So in 2021 I got into graphic design, chasing better colors, fonts, and structure. But even with that, something didn't click. The feel was missing. A nice interface still isn't the same as an easy one. So in 2022 I moved into UI/UX to fix that. By late 2022, I'd picked up Flutter and mobile development too.",
@@ -241,7 +292,7 @@ export const contact = {
     message: "Message",
   },
   submit: "Send message",
-  success: "Thanks — your message is in. I'll reply within a day.",
+  success: "Thanks, your message is in. I'll reply within a day.",
   failure: "That didn't send. Try again, or email me directly.",
   /**
    * Direct routes, beside the form. The footer keeps its icon row; here the same
@@ -252,7 +303,7 @@ export const contact = {
    */
   direct: {
     heading: "Or reach me directly",
-    email: "mbahlesky4@gmail.com",
+    email: "mbahlesky2@gmail.com",
     phone: "+237 6 79 68 26 26",
   },
 };
@@ -268,11 +319,11 @@ export const footer = {
  * each profile URL before launch.
  */
 export const socials = [
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/iamlespa" },
-  { label: "GitHub", href: "https://github.com/iamlespa" },
-  { label: "Facebook", href: "https://www.facebook.com/iamlespa" },
-  { label: "X", href: "https://x.com/iamlespa" },
-  { label: "TikTok", href: "https://www.tiktok.com/@iamlespa" },
-  { label: "Behance", href: "https://www.behance.net/iamlespa" },
-  { label: "Dribbble", href: "https://dribbble.com/iamlespa" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/iamlespa", username: "iamlespa" },
+  { label: "GitHub", href: "https://github.com/MbahLesky", username: "MbahLesky" },
+  { label: "Facebook", href: "https://www.facebook.com/iamlespa", username: "iamlespa" },
+  { label: "X", href: "https://x.com/iamlespa", username: "iamlespa" },
+  { label: "TikTok", href: "https://www.tiktok.com/@iamlespa", username: "iamlespa" },
+  { label: "Behance", href: "https://www.behance.net/iamlespa", username: "iamlespa" },
+  { label: "Dribbble", href: "https://dribbble.com/iamlespa", username: "iamlespa" },
 ];

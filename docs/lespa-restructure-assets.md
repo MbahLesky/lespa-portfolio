@@ -23,7 +23,8 @@ For each of Monilog, Diwa, Ronixe, Qiroke, PikamGo, Yisi:
 
 ## 5. PROCESS (×5 steps)
 - Reuses the abstract SVG pattern asset for the section background.
-- [ ] **5 hover-reveal images**, one per step (Reach Out, Research, Define, Design/Build, Present and Deploy) — Brice Clain-style image-beside-message reveal. These can be illustrative/abstract rather than literal photos — your call on style.
+- [ ] **4 hover-reveal images**, one per remaining step (Research, Define, Design/Build, Present and Deploy) — abstract/illustrative placeholders, not literal photos. **Confirmed:** these stay generic, no project-specific real visuals needed (unlike Reach Out).
+- [ ] **Reach Out step:** no static image needed here instead, a WhatsApp chatbot-style chat UI (the sample exchange already locked in the copy doc). **Needs:** WhatsApp background/wallpaper reference image from Lespa to match the styling.
 
 ## 6. ABOUT
 - [ ] **Your photo** (card-mounted, not blended) — professional, per earlier note that the Adham-style hero image reference "should be more professional."

@@ -59,7 +59,7 @@ const STAGE = {
  * word by word would take nearly four.
  */
 const READING_PAUSE = 800;
-const SUBTEXT_STAGGER = 0.5;
+const SUBTEXT_STAGGER = 0.25;
 const SUBTEXT_DURATION = 1.0;
 
 export function Hero({ onIntroComplete }) {
@@ -201,9 +201,9 @@ export function Hero({ onIntroComplete }) {
 function SplitBackdrop() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="hidden md:block mask-fade-r absolute md:inset-y-0 md:left-0 w-full md:opacity-10 md:w-1/2">
+      <div className="hidden md:block mask-fade-r absolute md:inset-y-0 md:-left-1/4 w-full md:opacity-70 md:w-1/2">
         <Image
-          src="/global_assets/lespa_design_laptop.png"
+          src="/qiroke_images/lespa_qiroke_brandguide.webp"
           alt=""
           fill
           sizes="60vw"
@@ -211,9 +211,9 @@ function SplitBackdrop() {
           className="object-contain lg:object-contain"
         />
       </div>
-      <div className="opacity-30 sm:opacity-20 mask-fade-l absolute inset-y-0 right-0 w-full md:opacity-10 md:w-1/2">
+      <div className="opacity-30 sm:opacity-20 mask-fade-l absolute inset-y-0 md:-right-1/4 w-full md:opacity-70 md:w-1/2">
         <Image
-          src="/global_assets/lespa_code_laptop.png"
+          src="/global_assets/lespa_code.webp"
           alt=""
           fill
           sizes="60vw"

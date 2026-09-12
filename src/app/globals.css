@@ -74,6 +74,18 @@
   --gradient-dark-surface: linear-gradient(135deg, var(--dark-background) 0%, var(--dark-surface) 100%);
   --gradient-warm: linear-gradient(135deg, var(--light-background) 0%, var(--accent-warm) 100%);
 
+  /**
+   * Scrim for copy laid over an image. Opaque at the bottom edge where the text
+   * sits, gone by the top, so the picture is still readable as a picture.
+   */
+  --scrim-up: linear-gradient(
+    to top,
+    var(--background) 0%,
+    color-mix(in srgb, var(--background) 88%, transparent) 40%,
+    color-mix(in srgb, var(--background) 55%, transparent) 70%,
+    transparent 100%
+  );
+
   /* Pattern system — dark variant only in Phase 1, always at 50% opacity */
   --pattern-url: url("/assets/patterns/pattern-dark.svg");
   --pattern-size: 1052px 1048px;

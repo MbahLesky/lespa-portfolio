@@ -32,7 +32,7 @@ See my work / About me
 
 ## 2. INTRO — LOCKED
 
-I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both — so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across — from idea to product.
+I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across, from idea to product.
 
 ---
 
@@ -40,44 +40,54 @@ I taught myself design because I didn't like how the interfaces I was coding loo
 
 | # | Project | Tags | Subtext |
 |---|---|---|---|
-| 1 | Monilog | Brand · Product Design · Flutter · React | A personal finance app for people without reliable internet or a bank account. Works offline, no sign-up required. I designed and built it myself, brand to code. |
+| 1 | Monilog | Brand · Product Design · Mobile App · Web App | A personal finance app for people without reliable internet or a bank account. Works offline, no sign-up required. I designed and built it myself, brand to code. |
 | 2 | Diwa | Brand Identity · Logo Design · Guidelines | Brand identity for a solar-powered cooling company in Cameroon. Logo, colors, and a full guidelines system, built to work in one color on any surface. |
-| 3 | Ronixe | Brand Identity | Brand identity for a software development company. A wordmark and icon built around momentum, live on their site today. |
-| 4 | Qiroke | Brand Identity · Web UX | Brand and web design for a tech collective I co-founded, offering five services under one identity. |
-| 5 | PikamGo | Brand Identity · Logistics | A delivery app for tracking packages from pickup to drop-off, built under Qiroke. |
-| 6 | Yisi | Brand Identity | Brand identity for Ndzi Ernestine's catering service. A wordmark built entirely from cutlery. |
+| 3 | Ronixe | Logo Design | Logo Design for a software development company. A wordmark and icon built around momentum, live on their site today. |
+| 4 | Qiroke | Brand Identity · Web UI | Brand and web design for a tech collective I co-founded, offering five services under one identity. |
+| 5 | PikamGo | Brand Identity · Mobile App | A delivery app for tracking packages from pickup to drop-off, built under Qiroke. |
+| 6 | Yisi | Brand Identity | Brand identity for Yisi catering service. A wordmark built entirely from cutlery. |
 
 ## 4. WHAT I DO — LOCKED
 
 | Card | Label | Copy |
 |---|---|---|
-| 1 | Graphic Design | I design logos, visuals, and full brand systems — colors, typography, the whole identity — for individuals and businesses. Not just a logo on its own, but everything that has to work together around it. |
-| 2 | Web Development | I code websites for individuals and businesses, from simple one-page sites to full platform web apps — all by hand. No templates, no page builders. |
+| 1 | Graphic Design | I design logos, visuals, and full brand systems; colors, typography, the whole identity for individuals and businesses. Not just a logo on its own, but everything that has to work together around it. |
+| 2 | Web Development | I code websites for individuals and businesses, from simple one-page sites to full platform web apps, I build all by hand. No templates, no page builders. |
 | 3 | Mobile Development | I build custom Android and iOS applications for productivity or business use. |
 
 ## 5. PROCESS — LOCKED
 
 **Reach Out**
-Tell me the idea — what you're building, or what you want designed. I read every message myself, and I reply within a day.
+Tell me the idea of whatever you're building or want designed. I will read every message myself, and get back to you within a day.
+
+**Reach Out — Sample Exchange** (chat-bubble showcase, Brice Clain reference style)
+
+Client: Hi Lespa, I need a logo and flyer for my business.
+Client: Not an AI logo, please, I want something professional.
+Lespa: Say no more, I design everything by hand.
+Client: And then, is it also possible to have a website or something like that for the whole business?
+Lespa: Very possible. I'll handle everything. I will do a proposal first, then I build it once it's approved.
+Client: So what's the way forward?
+Lespa: Tell me more about the business, and we start from there.
 
 **Research**
-Before I touch anything visual, I look into what actually fits you — who you're speaking to, what's already out there, what's been tried and didn't work. Not just moodboards. Real digging.
+Then, I'll look into what actually fits you, who you're talking to, what's already out there, what's been tried before. Not just moodboards, real digging.
 
-**Define**
-Then I sketch. Concepts, flow, structure — for the brand, the site, or the app. This is where the idea starts taking real shape, before a single pixel is final.
+**Define/Sketch**
+Then I sketch it out. The concepts, the flow, the structure, whether it's your brand, your site, or your app. This is where your idea starts taking real shape.
 
 **Design/Build**
-Once we agree on direction, I build it — design and code, myself. Nothing gets lost between the sketch and the real thing, because there's no handoff.
+Once we agree on the direction, I then head on to implement. I design, code and build it.
 
 **Present and Deploy**
-I show you how it actually feels, not just how it looks in a mockup. Then we ship it — live, working, yours.
+Lastly, I show you how it actually feels and how to use it, not just how it looks in a mockup. Then we ship it live so you or others can start using.
 
 **Closing line (after all 5 steps):**
-At every step, we talk it through — together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.
+At every step, we talk it through together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.
 
 ## 6. ABOUT — LOCKED
 
-I'm Mbah Lesky, but call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.
+I'm Mbah Lesky, but you can call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.
 
 I started building simple websites in 2019. They worked, but I didn't like how they looked, mine or most other people's. So in 2021 I got into graphic design, chasing better colors, fonts, and structure. But even with that, something didn't click. The feel was missing. A nice interface still isn't the same as an easy one. So in 2022 I moved into UI/UX to fix that. By late 2022, I'd picked up Flutter and mobile development too.
 

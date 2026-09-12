@@ -59,6 +59,7 @@ const config: Config = {
         "gradient-dark-surface": "var(--gradient-dark-surface)",
         "gradient-warm": "var(--gradient-warm)",
         pattern: "var(--pattern-url)",
+        "scrim-up": "var(--scrim-up)",
       },
 
       fontFamily: {
@@ -121,9 +122,16 @@ const config: Config = {
         "30": "7.5rem", // 120
       },
 
+      /* A detail pane stays inside the viewport, whatever it holds. */
+      maxHeight: {
+        pane: "60svh",
+      },
+
       maxWidth: {
         content: "var(--content-max)",
         reading: "var(--reading-max)",
+        // A chat bubble never spans the full thread width.
+        bubble: "85%",
       },
 
       borderRadius: {

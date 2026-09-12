@@ -24,7 +24,7 @@ export const projects = [
   {
     slug: "monilog",
     name: "Monilog",
-    tags: ["Brand", "Product Design", "Flutter", "React"],
+    tags: ["Brand", "Product Design", "Mobile App", "Web App"],
     subtext:
       "A personal finance app for people without reliable internet or a bank account. Works offline, no sign-up required. I designed and built it myself, brand to code.",
     // Monilog mint — docs/monilog-case-study-final.md: "Mint #2DD4BF carries movement".
@@ -34,7 +34,7 @@ export const projects = [
     imageAlt: "Monilog's mobile app screens beside its brand mark.",
     hoverImage: "/monilog_images/monilog-logo-green.webp",
     hoverImageAlt: "Monilog's mark sketched by hand.",
-    backdrop: "/monilog_images/monilog_sketch.jpg",
+    backdrop: "/monilog_images/monilog_sketch.webp",
   },
   {
     slug: "diwa",
@@ -47,16 +47,16 @@ export const projects = [
     liveUrl: "https://diwa-air.com",
     image: "/diwa_images/diwa_logo_on_dress.webp",
     imageAlt: "The Diwa mark applied to a garment.",
-    hoverImage: "/diwa_images/diwa_fullmark_on_white.jpg",
+    hoverImage: "/diwa_images/diwa_fullmark_on_white.webp",
     hoverImageAlt: "Diwa's annotated concept sheet.",
-    backdrop: "/diwa_images/diwa_concepts.jpg",
+    backdrop: "/diwa_images/diwa_concepts.webp",
   },
   {
     slug: "ronixe",
     name: "Ronixe",
-    tags: ["Brand Identity"],
+    tags: ["Logo Design"],
     subtext:
-      "Brand identity for a software development company. A wordmark and icon built around momentum, live on their site today.",
+      "Logo Design for a software development company. A wordmark and icon built around momentum, live on their site today.",
     // TODO: asset needed — assets doc §3, "per-project primary brand color (hex
     // value)". Ronixe's mark is monochrome and no brand hex is recorded in any
     // doc, so this is a warm neutral standing in until the real value arrives.
@@ -71,7 +71,7 @@ export const projects = [
   {
     slug: "qiroke",
     name: "Qiroke",
-    tags: ["Brand Identity", "Web UX"],
+    tags: ["Brand Identity", "Web UI"],
     subtext:
       "Brand and web design for a tech collective I co-founded, offering five services under one identity.",
     // Qiroke aqua — sampled from the delivered icon.
@@ -85,15 +85,15 @@ export const projects = [
   {
     slug: "pikamgo",
     name: "PikamGo",
-    tags: ["Brand Identity", "Mobile App", "Logistics"],
+    tags: ["Brand Identity", "Mobile App"],
     subtext:
       "A delivery app for tracking packages from pickup to drop-off, built under Qiroke.",
     // PikamGo International Orange — docs/pikamgo-case-study.md (#FF5900),
     // lifted slightly for AA on #0E1110.
     accentVar: "--project-pikamgo",
-    image: "/pikamgo_images/pikamgo_t-shirt.png",
+    image: "/pikamgo_images/pikamgo_t-shirt.webp",
     imageAlt: "PikamGo's delivery tracking screens.",
-    hoverImage: "/pikamgo_images/pikamgo_wordmark_primary.png",
+    hoverImage: "/pikamgo_images/pikamgo_wordmark_primary.webp",
     hoverImageAlt: "The PikamGo wordmark on dark.",
     backdrop: "/pikamgo_images/pikamgo-wordmark-dark.webp",
   },
@@ -102,7 +102,7 @@ export const projects = [
     name: "Yisi",
     tags: ["Brand Identity"],
     subtext:
-      "Brand identity for Ndzi Ernestine's catering service. A wordmark built entirely from cutlery.",
+      "Brand identity for Yisi catering service. A wordmark built entirely from cutlery.",
     // Yisi orange — sampled from the delivered wordmark.
     accentVar: "--project-yisi",
     image: "/yisi_images/yisi_logo_orange.webp",

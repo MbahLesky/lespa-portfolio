@@ -32,9 +32,9 @@ const ICONS = [Brush, Code2, Smartphone];
  * built dashboard for web, app screens for mobile.
  */
 const BACKDROPS = [
-  "/homepage_project_cards/diwa_concepts.webp",
-  "/monilog_case_study_images/web_dashboard.webp",
-  "/monilog_case_study_images/mobile_dashboard.webp",
+  "/global_assets/lespa_laptop_design.webp",
+  "/global_assets/lespa_skuulabs_web.webp",
+  "/global_assets/lespa_android_studio.webp",
 ];
 
 export function WhatIDo() {
@@ -76,7 +76,7 @@ export function WhatIDo() {
                       open ? "opacity-100" : "opacity-0"
                     }`}
                   >
-                    <span className="mask-fade-l absolute inset-0 block opacity-15">
+                    <span className="mask-fade-l absolute inset-0 block opacity-30">
                       <Image
                         src={BACKDROPS[index]}
                         alt=""

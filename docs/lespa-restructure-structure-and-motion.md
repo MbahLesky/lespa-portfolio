@@ -74,6 +74,7 @@ Anchor nav, scroll-progress indicator (Monilog pattern). No mentorship link.
   5. **Present and Deploy**
 - First step models Brice Clain's "outreach" opening step.
 - **Image reveal on hover:** each step also reveals an accompanying image beside the detail text on hover (Brice Clain chat-bubble reference — image appears next to the message, not just text).
+- **Reach Out specifically:** the reveal is styled as a WhatsApp chatbot conversation, not a generic chat bubble. Uses the sample exchange from the copy doc. Background/styling reference (WhatsApp wallpaper look) to be provided by Lespa before build.
 
 ### 6. About (section, not a page in Phase 1)
 - Photo included — **photo sits in a card**, not blended into the background.
@@ -83,6 +84,7 @@ Anchor nav, scroll-progress indicator (Monilog pattern). No mentorship link.
 - **By Day, Part Designer / By Night, Part Coder** — two short bullet lists (Adham Dannaway split-list structure), not prose blocks.
 - **What I don't do** section: AI use boundaries, no page builders/templates, no rushing — a differentiation block, added beyond original scope.
 - Background: **literal blended imagery** here — a faded sketch element or real code/wireframe fragment, blended directly into the background (not in a card, not the photo — this sits behind/around it). **Split composition: code image on one side, design/sketch on the other** — mirroring the Designer/Developer split. Must be authentic (real Lespa work), not generic stock like Tamal's.
+- The left side is sticky/fixed when scrolling, while the right side scrolls for this section.
 
 ### 8. Footer (persistent, site-wide)
 - Logo, handle (@iamlespa), social icons (LinkedIn, GitHub, Facebook, X, TikTok, Behance, Dribbble), year (auto-updating), and a "built with" line naming the site's own stack.
