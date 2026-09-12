@@ -109,30 +109,71 @@ export const process = {
   steps: [
     {
       title: "Reach Out",
-      body: "Tell me the idea — what you're building, or what you want designed. I read every message myself, and I reply within a day.",
-      emphasis: ["I reply within a day"],
+      body: "Tell me the idea of whatever you're building or want designed. I will read every message myself, and get back to you within a day.",
+      emphasis: ["I will read every message myself", "within a day"],
     },
     {
       title: "Research",
-      body: "Before I touch anything visual, I look into what actually fits you — who you're speaking to, what's already out there, what's been tried and didn't work. Not just moodboards. Real digging.",
-      emphasis: ["Real digging"],
+      body: "Then, I'll look into what actually fits you, who you're talking to, what's already out there, what's been tried before. Not just moodboards, real digging.",
+      emphasis: ["real digging"],
     },
     {
       title: "Define",
-      body: "Then I sketch. Concepts, flow, structure — for the brand, the site, or the app. This is where the idea starts taking real shape, before a single pixel is final.",
+      body: "Then I sketch it out. The concepts, the flow, the structure, whether it's your brand, your site, or your app. This is where your idea starts taking real shape.",
       emphasis: ["taking real shape"],
     },
     {
       title: "Design/Build",
-      body: "Once we agree on direction, I build it — design and code, myself. Nothing gets lost between the sketch and the real thing, because there's no handoff.",
-      emphasis: ["there's no handoff"],
+      body: "Once we agree on the direction, I then head on to implement. I design, code and build it.",
+      emphasis: ["I design, code and build it"],
     },
     {
       title: "Present and Deploy",
-      body: "I show you how it actually feels, not just how it looks in a mockup. Then we ship it — live, working, yours.",
-      emphasis: ["live, working, yours"],
+      body: "Lastly, I show you how it actually feels and how to use it, not just how it looks in a mockup. Then we ship it live so you or others can start using.",
+      emphasis: ["ship it live"],
     },
   ],
+
+  /**
+   * The Reach Out sample exchange — the chat-bubble showcase (Brice Clain
+   * reference), shown in place of a step image on the first step.
+   *
+   * The message text is locked copy from the doc. The times and the day divider
+   * are not: they are the chrome of the mock, here so the exchange reads as a
+   * real conversation rather than a transcript. Adjust them freely.
+   *
+   * `from` decides the side and colour. "lespa" is the phone's owner — right,
+   * green, with delivery ticks — so the visitor reads the conversation from
+   * Lespa's side of it. Flip these to put the client on the right instead.
+   */
+  reachOutExchange: {
+    day: "Today",
+    messages: [
+      { from: "client", text: "Hi Lespa, I need a logo and flyer for my business.", time: "9:04 am" },
+      {
+        from: "client",
+        text: "Not an AI logo, please, I want something professional.",
+        time: "9:04 am",
+      },
+      { from: "lespa", text: "Say no more, I design everything by hand.", time: "9:06 am" },
+      {
+        from: "client",
+        text: "And then, is it also possible to have a website or something like that for the whole business?",
+        time: "9:07 am",
+      },
+      {
+        from: "lespa",
+        text: "Very possible. I'll handle everything. I will do a proposal first, then I build it once it's approved.",
+        time: "9:09 am",
+      },
+      { from: "client", text: "So what's the way forward?", time: "9:10 am" },
+      {
+        from: "lespa",
+        text: "Tell me more about the business, and we start from there.",
+        time: "9:11 am",
+      },
+    ],
+  },
   closing: {
     body: "At every step, we talk it through — together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.",
     emphasis: ["feels like you", "From your roots"],
@@ -143,7 +184,7 @@ export const about = {
   label: "About",
   bio: [
     {
-      body: "I'm Mbah Lesky, but call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.",
+      body: "I'm Mbah Lesky, but you can call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.",
       emphasis: ["Bamenda, Cameroon"],
     },
     {

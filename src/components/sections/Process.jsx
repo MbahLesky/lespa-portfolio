@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+import { ChatExchange } from "@/components/shared/ChatExchange";
 import { EmphasizedText } from "@/components/shared/EmphasizedText";
 import { PatternBackdrop } from "@/components/shared/PatternBackdrop";
 import { Reveal } from "@/components/shared/Reveal";
@@ -30,9 +31,10 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  * One image per step, revealed with its detail text.
  *
  * TODO: asset needed — assets doc §5, "5 hover-reveal images, one per step". Real
- * project work stands in, chosen to match each step: a phone for the first
- * message, a concept sheet for research, an artboard for sketching, app-and-web
- * together for the build, a shipped landing page for the deploy.
+ * project work stands in, chosen to match each step: a concept sheet for
+ * research, an artboard for sketching, app-and-web together for the build, a
+ * shipped landing page for the deploy. Reach Out uses the sample exchange rather
+ * than an image, so its slot here is unused.
  */
 const STEP_IMAGES = [
   "/monilog_case_study_images/phone_mockup.webp",
@@ -87,7 +89,11 @@ export function Process() {
 
                   {/* No second column below lg, so the detail opens in place. */}
                   <div className={`pb-6 lg:hidden ${selected ? "block" : "hidden"}`}>
-                    <StepDetail step={step} image={STEP_IMAGES[index]} />
+                    <StepDetail
+                      step={step}
+                      image={STEP_IMAGES[index]}
+                      exchange={index === 0 ? processCopy.reachOutExchange : null}
+                    />
                   </div>
                 </li>
               );
@@ -95,7 +101,12 @@ export function Process() {
           </Reveal>
 
           <div className="hidden lg:sticky lg:top-24 lg:block">
-            <StepDetail key={active.title} step={active} image={STEP_IMAGES[activeIndex]} />
+            <StepDetail
+              key={active.title}
+              step={active}
+              image={STEP_IMAGES[activeIndex]}
+              exchange={activeIndex === 0 ? processCopy.reachOutExchange : null}
+            />
           </div>
         </div>
 
@@ -121,7 +132,7 @@ export function Process() {
  * component is keyed on the step at the call site, so changing step remounts it
  * and the entry animation replays.
  */
-function StepDetail({ step, image }) {
+function StepDetail({ step, image, exchange }) {
   const reducedMotion = useReducedMotion();
 
   const enter = (delay) =>
@@ -139,20 +150,32 @@ function StepDetail({ step, image }) {
         <EmphasizedText text={step.body} emphasis={step.emphasis} />
       </motion.p>
 
-      {/* Fills the remaining width of the pane. Shorter on mobile, where the
-          detail sits inside the list and the pane is the full column. */}
-      <motion.div
-        {...enter(0.1)}
-        className="glass relative aspect-video w-full overflow-hidden rounded-xl border border-border sm:aspect-card"
-      >
-        <Image
-          src={image}
-          alt=""
-          fill
-          sizes="(min-width: 1024px) 640px, 100vw"
-          className="object-cover"
-        />
-      </motion.div>
+      {/* Reach Out shows the sample exchange in the slot the other steps give to
+          an image — what reaching out actually looks like, rather than a picture
+          of it. */}
+      {exchange ? (
+        <motion.div {...enter(0.1)}>
+          <ChatExchange
+            exchange={exchange}
+            label={`A sample first exchange for the ${step.title} step.`}
+          />
+        </motion.div>
+      ) : (
+        // Fills the remaining width of the pane. Shorter on mobile, where the
+        // detail sits inside the list and the pane is the full column.
+        <motion.div
+          {...enter(0.1)}
+          className="glass relative aspect-video w-full overflow-hidden rounded-xl border border-border sm:aspect-card"
+        >
+          <Image
+            src={image}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 640px, 100vw"
+            className="object-cover"
+          />
+        </motion.div>
+      )}
     </div>
   );
 }

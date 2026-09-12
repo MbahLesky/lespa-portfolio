@@ -124,6 +124,8 @@ const config: Config = {
       maxWidth: {
         content: "var(--content-max)",
         reading: "var(--reading-max)",
+        // A chat bubble never spans the full thread width.
+        bubble: "85%",
       },
 
       borderRadius: {

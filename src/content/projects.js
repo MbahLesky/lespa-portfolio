@@ -24,7 +24,7 @@ export const projects = [
   {
     slug: "monilog",
     name: "Monilog",
-    tags: ["Brand", "Product Design", "Monile App", "Web App"],
+    tags: ["Brand", "Product Design", "Mobile App", "Web App"],
     subtext:
       "A personal finance app for people without reliable internet or a bank account. Works offline, no sign-up required. I designed and built it myself, brand to code.",
     // Monilog mint — docs/monilog-case-study-final.md: "Mint #2DD4BF carries movement".

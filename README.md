@@ -69,6 +69,11 @@ Phase 3. Dark mode is fixed on `<html>`; there is no theme toggle in Phase 1.
   and the Selected Work images are cards. Everything else — the pattern on Intro,
   What I Do and Process, and the split design/code compositions behind the Hero
   and About — is blended into the background with no border and no shadow.
+- **Reach Out shows a sample exchange, not an image.** The other four Process
+  steps reveal an image; the first reveals `process.reachOutExchange` drawn as a
+  messaging thread (`ChatExchange`). The message text is locked copy; the times
+  and the day divider are the mock's chrome and can be changed freely. `from`
+  decides the side — `"lespa"` is the phone's owner, right and green.
 - **Project cards carry two independent hovers.** `group/card` — anywhere on the
   card — fades in that project's blended backdrop and lights its glow.
   `group/photo` — the mockup frame only — crossfades the mockup to that project's
@@ -79,7 +84,8 @@ Phase 3. Dark mode is fixed on `<html>`; there is no theme toggle in Phase 1.
 Every image slot holds a real existing Lespa image chosen to fit it — there are
 no placeholder frames anywhere. Slots still waiting on their intended asset carry
 a `// TODO: asset needed —` comment naming the item in
-`docs/lespa-restructure-assets.md`: the five Process step images, updated project
+`docs/lespa-restructure-assets.md`: four Process step images (Reach Out uses the
+sample exchange instead), updated project
 mockups, the final About portrait and split-background fragments, the tool icon
 set, and the social icon set.
 

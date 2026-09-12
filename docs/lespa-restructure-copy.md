@@ -40,12 +40,12 @@ I taught myself design because I didn't like how the interfaces I was coding loo
 
 | # | Project | Tags | Subtext |
 |---|---|---|---|
-| 1 | Monilog | Brand · Product Design · Flutter · React | A personal finance app for people without reliable internet or a bank account. Works offline, no sign-up required. I designed and built it myself, brand to code. |
+| 1 | Monilog | Brand · Product Design · Mobile App · Web App | A personal finance app for people without reliable internet or a bank account. Works offline, no sign-up required. I designed and built it myself, brand to code. |
 | 2 | Diwa | Brand Identity · Logo Design · Guidelines | Brand identity for a solar-powered cooling company in Cameroon. Logo, colors, and a full guidelines system, built to work in one color on any surface. |
-| 3 | Ronixe | Brand Identity | Brand identity for a software development company. A wordmark and icon built around momentum, live on their site today. |
-| 4 | Qiroke | Brand Identity · Web UX | Brand and web design for a tech collective I co-founded, offering five services under one identity. |
-| 5 | PikamGo | Brand Identity · Logistics | A delivery app for tracking packages from pickup to drop-off, built under Qiroke. |
-| 6 | Yisi | Brand Identity | Brand identity for Ndzi Ernestine's catering service. A wordmark built entirely from cutlery. |
+| 3 | Ronixe | Logo Design | Logo Design for a software development company. A wordmark and icon built around momentum, live on their site today. |
+| 4 | Qiroke | Brand Identity · Web UI | Brand and web design for a tech collective I co-founded, offering five services under one identity. |
+| 5 | PikamGo | Brand Identity · Mobile App | A delivery app for tracking packages from pickup to drop-off, built under Qiroke. |
+| 6 | Yisi | Brand Identity | Brand identity for Yisi catering service. A wordmark built entirely from cutlery. |
 
 ## 4. WHAT I DO — LOCKED
 
