@@ -33,7 +33,7 @@ const ibmPlexSans = localFont({
   fallback: ["system-ui", "sans-serif"],
 });
 
-const title = `${personName} — ${jobTitle} in ${locality}, ${country}`;
+const title = `${personName} | ${jobTitle} in ${locality}, ${country}`;
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -76,7 +76,7 @@ export const metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/global_assets/lespa_social_share.webp",
+        url: "/global_assets/social_share.webp",
         width: 1200,
         height: 630,
         alt: `${personName} — ${jobTitle}`,
@@ -88,7 +88,7 @@ export const metadata = {
     title,
     description: siteDescription,
     creator: "@iamlespa",
-    images: ["/global_assets/lespa_social_share.webp"],
+    images: ["/global_assets/social_share.webp"],
   },
   robots: {
     index: true,

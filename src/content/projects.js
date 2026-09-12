@@ -76,9 +76,9 @@ export const projects = [
       "Brand and web design for a tech collective I co-founded, offering five services under one identity.",
     // Qiroke aqua — sampled from the delivered icon.
     accentVar: "--project-qiroke",
-    image: "/qiroke_images/qiroke_brand_design.png",
+    image: "/qiroke_images/qiroke_brand_design.webp",
     imageAlt: "The Qiroke icon, a flowing Q.",
-    hoverImage: "/qiroke_images/qiroke_fullmark.jpg",
+    hoverImage: "/qiroke_images/qiroke_fullmark.webp",
     hoverImageAlt: "The Qiroke icon, a flowing Q.",
     backdrop: "/qiroke_images/qiroke_homepage.webp",
   },
