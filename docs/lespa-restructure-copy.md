@@ -58,26 +58,36 @@ I taught myself design because I didn't like how the interfaces I was coding loo
 ## 5. PROCESS — LOCKED
 
 **Reach Out**
-Tell me the idea — what you're building, or what you want designed. I read every message myself, and I reply within a day.
+Tell me the idea of whatever you're building or want designed. I will read every message myself, and get back to you within a day.
+
+**Reach Out — Sample Exchange** (chat-bubble showcase, Brice Clain reference style)
+
+Client: Hi Lespa, I need a logo and flyer for my business.
+Client: Not an AI logo, please, I want something professional.
+Lespa: Say no more, I design everything by hand.
+Client: And then, is it also possible to have a website or something like that for the whole business?
+Lespa: Very possible. I'll handle everything. I will do a proposal first, then I build it once it's approved.
+Client: So what's the way forward?
+Lespa: Tell me more about the business, and we start from there.
 
 **Research**
-Before I touch anything visual, I look into what actually fits you — who you're speaking to, what's already out there, what's been tried and didn't work. Not just moodboards. Real digging.
+Then, I'll look into what actually fits you, who you're talking to, what's already out there, what's been tried before. Not just moodboards, real digging.
 
 **Define**
-Then I sketch. Concepts, flow, structure — for the brand, the site, or the app. This is where the idea starts taking real shape, before a single pixel is final.
+Then I sketch it out. The concepts, the flow, the structure, whether it's your brand, your site, or your app. This is where your idea starts taking real shape.
 
 **Design/Build**
-Once we agree on direction, I build it — design and code, myself. Nothing gets lost between the sketch and the real thing, because there's no handoff.
+Once we agree on the direction, I then head on to implement. I design, code and build it.
 
 **Present and Deploy**
-I show you how it actually feels, not just how it looks in a mockup. Then we ship it — live, working, yours.
+Lastly, I show you how it actually feels and how to use it, not just how it looks in a mockup. Then we ship it live so you or others can start using.
 
 **Closing line (after all 5 steps):**
 At every step, we talk it through — together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.
 
 ## 6. ABOUT — LOCKED
 
-I'm Mbah Lesky, but call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.
+I'm Mbah Lesky, but you can call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.
 
 I started building simple websites in 2019. They worked, but I didn't like how they looked, mine or most other people's. So in 2021 I got into graphic design, chasing better colors, fonts, and structure. But even with that, something didn't click. The feel was missing. A nice interface still isn't the same as an easy one. So in 2022 I moved into UI/UX to fix that. By late 2022, I'd picked up Flutter and mobile development too.
 

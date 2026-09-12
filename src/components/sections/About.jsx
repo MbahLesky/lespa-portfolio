@@ -30,7 +30,7 @@ export function About() {
                 new one is shot. */}
             <div className="relative aspect-portrait overflow-hidden rounded-lg">
               <Image
-                src="/global_assets/hero-photo-dark.webp"
+                src="/global_assets/social_share.webp"
                 alt="Mbah Lesky, known as Lespa."
                 fill
                 sizes="(min-width: 1024px) 320px, 100vw"
@@ -132,24 +132,16 @@ export function About() {
 function SplitBackdrop() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="mask-fade-r absolute inset-y-0 left-0 w-1/2 opacity-10">
+      <div className="mask-fade-r absolute inset-y-0 left-0 w-full opacity-10">
         <Image
-          src="/monilog_case_study_images/construction_diagram.webp"
+          src="/global_assets/lespa_workspace1.webp"
           alt=""
           fill
           sizes="50vw"
           className="object-cover"
         />
       </div>
-      <div className="mask-fade-l absolute inset-y-0 right-0 w-1/2 opacity-10">
-        <Image
-          src="/monilog_case_study_images/pencil_sketch.webp"
-          alt=""
-          fill
-          sizes="50vw"
-          className="object-cover"
-        />
-      </div>
+
     </div>
   );
 }

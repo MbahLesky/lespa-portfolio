@@ -26,14 +26,17 @@ export function Intro() {
 
         {/* Blended, not a card: masked and faded so it reads as part of the page.
             Hidden below lg, where it would crowd the copy rather than frame it. */}
-        <Reveal className="relative aspect-card" delay={0.15}>
+        <Reveal
+          className="relative hidden aspect-[1.15] w-full max-w-[34rem] lg:block md:justify-self-end"
+          delay={0.15}
+        >
           <div aria-hidden="true" className="mask-fade-l absolute inset-0 opacity-100">
             <Image
-              src="/global_assets/lespa_intro_image.png"
+              src="/global_assets/lespa_laptop_design.webp"
               alt=""
               fill
               sizes="(min-width: 1024px) 480px, 0px"
-              className="object-contain"
+              className="object-cover"
             />
           </div>
         </Reveal>

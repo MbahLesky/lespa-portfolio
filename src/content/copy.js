@@ -252,7 +252,7 @@ export const contact = {
    */
   direct: {
     heading: "Or reach me directly",
-    email: "mbahlesky4@gmail.com",
+    email: "mbahlesky2@gmail.com",
     phone: "+237 6 79 68 26 26",
   },
 };
@@ -268,11 +268,11 @@ export const footer = {
  * each profile URL before launch.
  */
 export const socials = [
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/iamlespa" },
-  { label: "GitHub", href: "https://github.com/iamlespa" },
-  { label: "Facebook", href: "https://www.facebook.com/iamlespa" },
-  { label: "X", href: "https://x.com/iamlespa" },
-  { label: "TikTok", href: "https://www.tiktok.com/@iamlespa" },
-  { label: "Behance", href: "https://www.behance.net/iamlespa" },
-  { label: "Dribbble", href: "https://dribbble.com/iamlespa" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/iamlespa", username: "iamlespa" },
+  { label: "GitHub", href: "https://github.com/MbahLesky", username: "MbahLesky" },
+  { label: "Facebook", href: "https://www.facebook.com/iamlespa", username: "iamlespa" },
+  { label: "X", href: "https://x.com/iamlespa", username: "iamlespa" },
+  { label: "TikTok", href: "https://www.tiktok.com/@iamlespa", username: "iamlespa" },
+  { label: "Behance", href: "https://www.behance.net/iamlespa", username: "iamlespa" },
+  { label: "Dribbble", href: "https://dribbble.com/iamlespa", username: "iamlespa" },
 ];

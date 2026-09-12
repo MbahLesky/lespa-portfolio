@@ -153,7 +153,7 @@ function DirectRoutes() {
                 {social.label}
               </span>
               <span className="text-body-sm text-content transition-colors duration-fast group-hover:text-accent">
-                {footer.handle}
+                {social.username}
               </span>
             </a>
           </li>
