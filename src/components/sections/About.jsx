@@ -41,7 +41,7 @@ export function About() {
                   the new one is shot. */}
               <div className="relative aspect-portrait overflow-hidden rounded-lg">
                 <Image
-                  src="/global_assets/lespa_social_share.webp"
+                  src="/global_assets/social_share.webp"
                 alt="Mbah Lesky, known as Lespa."
                 fill
                 sizes="(min-width: 1024px) 320px, 100vw"

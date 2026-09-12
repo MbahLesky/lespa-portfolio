@@ -39,7 +39,7 @@ export function buildJsonLd() {
     jobTitle,
     description: about.bio[0].body,
     url: siteUrl,
-    image: `${siteUrl}/global_assets/lespa_social_share.webp`,
+    image: `${siteUrl}/global_assets/social_share.webp`,
     address: {
       "@type": "PostalAddress",
       addressLocality: locality,
