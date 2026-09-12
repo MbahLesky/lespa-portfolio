@@ -69,6 +69,12 @@ Phase 3. Dark mode is fixed on `<html>`; there is no theme toggle in Phase 1.
   and the Selected Work images are cards. Everything else — the pattern on Intro,
   What I Do and Process, and the split design/code compositions behind the Hero
   and About — is blended into the background with no border and no shadow.
+- **Process lays each step's description over its media,** not above it, so the
+  pane costs one image's height rather than two blocks. `max-h-pane` caps it so
+  no step can push the section past the viewport.
+- **About's left column is sticky** while the story scrolls past it. Neither it
+  nor the Process pane can stick if an ancestor has `overflow-hidden`, which is
+  why neither section carries it — the backdrops clip themselves instead.
 - **Reach Out shows a sample exchange, not an image.** The other four Process
   steps reveal an image; the first reveals `process.reachOutExchange` drawn as a
   messaging thread (`ChatExchange`). The message text is locked copy; the times
@@ -96,4 +102,13 @@ The contact form validates on both sides but does not deliver yet —
 `src/app/api/contact/route.js` logs and acknowledges. Wire a mail provider and
 test end to end before launch.
 
-See `docs/README.md` for which documents are current and which are superseded.
+## SEO
+
+`src/lib/seo.js` builds the description and the JSON-LD from the same content
+modules the page renders, so a search result and the page cannot describe
+different things. The graph is a Person, a WebSite, a ProfilePage and an ItemList
+of the six projects; `sameAs` comes from the footer's own social list. Metadata,
+Open Graph and Twitter cards live in `app/layout.jsx`, alongside `sitemap.js`
+and `robots.js`.
+
+See `docs/README.md` for what each remaining document is for.

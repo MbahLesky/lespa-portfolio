@@ -34,7 +34,7 @@ export const projects = [
     imageAlt: "Monilog's mobile app screens beside its brand mark.",
     hoverImage: "/monilog_images/monilog-logo-green.webp",
     hoverImageAlt: "Monilog's mark sketched by hand.",
-    backdrop: "/monilog_images/monilog_sketch.jpg",
+    backdrop: "/monilog_images/monilog_sketch.webp",
   },
   {
     slug: "diwa",
@@ -47,9 +47,9 @@ export const projects = [
     liveUrl: "https://diwa-air.com",
     image: "/diwa_images/diwa_logo_on_dress.webp",
     imageAlt: "The Diwa mark applied to a garment.",
-    hoverImage: "/diwa_images/diwa_fullmark_on_white.jpg",
+    hoverImage: "/diwa_images/diwa_fullmark_on_white.webp",
     hoverImageAlt: "Diwa's annotated concept sheet.",
-    backdrop: "/diwa_images/diwa_concepts.jpg",
+    backdrop: "/diwa_images/diwa_concepts.webp",
   },
   {
     slug: "ronixe",
@@ -91,9 +91,9 @@ export const projects = [
     // PikamGo International Orange — docs/pikamgo-case-study.md (#FF5900),
     // lifted slightly for AA on #0E1110.
     accentVar: "--project-pikamgo",
-    image: "/pikamgo_images/pikamgo_t-shirt.png",
+    image: "/pikamgo_images/pikamgo_t-shirt.webp",
     imageAlt: "PikamGo's delivery tracking screens.",
-    hoverImage: "/pikamgo_images/pikamgo_wordmark_primary.png",
+    hoverImage: "/pikamgo_images/pikamgo_wordmark_primary.webp",
     hoverImageAlt: "The PikamGo wordmark on dark.",
     backdrop: "/pikamgo_images/pikamgo-wordmark-dark.webp",
   },

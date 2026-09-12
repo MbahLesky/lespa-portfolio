@@ -79,7 +79,7 @@ export const hero = {
 };
 
 export const intro = {
-  body: "I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both — so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across — from idea to product.",
+  body: "I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across, from idea to product.",
   emphasis: ["I taught myself", "I kept both", "from idea to product"],
 };
 
@@ -88,12 +88,12 @@ export const whatIDo = {
   cards: [
     {
       label: "Graphic Design",
-      body: "I design logos, visuals, and full brand systems — colors, typography, the whole identity — for individuals and businesses. Not just a logo on its own, but everything that has to work together around it.",
+      body: "I design logos, visuals, and full brand systems; colors, typography, the whole identity for individuals and businesses. Not just a logo on its own, but everything that has to work together around it.",
       emphasis: ["full brand systems"],
     },
     {
       label: "Web Development",
-      body: "I code websites for individuals and businesses, from simple one-page sites to full platform web apps — all by hand. No templates, no page builders.",
+      body: "I code websites for individuals and businesses, from simple one-page sites to full platform web apps, I build all by hand. No templates, no page builders.",
       emphasis: ["all by hand"],
     },
     {
@@ -172,10 +172,20 @@ export const process = {
         text: "Tell me more about the business, and we start from there.",
         time: "9:11 am",
       },
+      {
+        from: "client",
+        text: "Alright then...",
+        time: "9:11 am",
+      },
+      {
+        from: "client",
+        text: "...",
+        time: "9:12 am",
+      },
     ],
   },
   closing: {
-    body: "At every step, we talk it through — together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.",
+    body: "At every step, we talk it through together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.",
     emphasis: ["feels like you", "From your roots"],
   },
 };
@@ -185,7 +195,7 @@ export const about = {
   bio: [
     {
       body: "I'm Mbah Lesky, but you can call me Lespa. I'm a graphic designer and software engineer based in Bamenda, Cameroon.",
-      emphasis: ["Bamenda, Cameroon"],
+      emphasis: ["Mbah Lesky", "Lespa", "Bamenda, Cameroon"],
     },
     {
       body: "I started building simple websites in 2019. They worked, but I didn't like how they looked, mine or most other people's. So in 2021 I got into graphic design, chasing better colors, fonts, and structure. But even with that, something didn't click. The feel was missing. A nice interface still isn't the same as an easy one. So in 2022 I moved into UI/UX to fix that. By late 2022, I'd picked up Flutter and mobile development too.",
@@ -282,7 +292,7 @@ export const contact = {
     message: "Message",
   },
   submit: "Send message",
-  success: "Thanks — your message is in. I'll reply within a day.",
+  success: "Thanks, your message is in. I'll reply within a day.",
   failure: "That didn't send. Try again, or email me directly.",
   /**
    * Direct routes, beside the form. The footer keeps its icon row; here the same

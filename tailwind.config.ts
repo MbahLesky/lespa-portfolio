@@ -59,6 +59,7 @@ const config: Config = {
         "gradient-dark-surface": "var(--gradient-dark-surface)",
         "gradient-warm": "var(--gradient-warm)",
         pattern: "var(--pattern-url)",
+        "scrim-up": "var(--scrim-up)",
       },
 
       fontFamily: {
@@ -119,6 +120,11 @@ const config: Config = {
         "20": "5rem", //  80
         "24": "6rem", //  96
         "30": "7.5rem", // 120
+      },
+
+      /* A detail pane stays inside the viewport, whatever it holds. */
+      maxHeight: {
+        pane: "60svh",
       },
 
       maxWidth: {

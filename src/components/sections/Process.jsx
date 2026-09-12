@@ -17,9 +17,9 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
  * Process — five steps, list on one side and the hovered step's detail on the
- * other (itssharl.ee/work reference). Each step reveals its own image alongside
- * the detail text (Brice Clain reference): the description leads, the image fills
- * the pane beneath it.
+ * other (itssharl.ee/work reference). Each step reveals its own image (Brice
+ * Clain reference), with the description laid over it rather than stacked above
+ * it, so the pane costs one image's height instead of two blocks.
  *
  * Hover drives the selection on a precise pointer; tap and keyboard focus drive
  * it otherwise, and the detail renders inline beneath the tapped step on narrow
@@ -41,7 +41,7 @@ const STEP_IMAGES = [
   "/global_assets/lespa_researching.webp",
   "/monilog_images/monilog_sketch.webp",
   "/global_assets/lespa_android_studio.webp",
-  "/monilog_case_study_images/landing_page.webp",
+  "/monilog_images/lespa_monilog_web.webp",
 ];
 
 export function Process() {
@@ -50,7 +50,7 @@ export function Process() {
   const active = processCopy.steps[activeIndex];
 
   return (
-    <section id="process" className="snap-section relative overflow-hidden py-24 md:py-30">
+    <section id="process" className="snap-section relative py-24 md:py-30">
       <PatternBackdrop />
 
       <div className="relative mx-auto flex max-w-content flex-col gap-12 px-6 md:px-8">
@@ -124,58 +124,60 @@ export function Process() {
 }
 
 /**
- * The hovered step's detail: the description first, then the image filling the
- * rest of the pane beneath it.
+ * The hovered step's detail: one pane, with the description laid over the media
+ * rather than stacked above it.
  *
- * Both move in rather than appearing — the text leads, the image follows a beat
- * later, so switching steps reads as a change rather than a flicker. The
- * component is keyed on the step at the call site, so changing step remounts it
- * and the entry animation replays.
+ * Stacking them made the section taller than the viewport, which defeats the
+ * point of a pane you hover to change. Overlaying costs no vertical space at
+ * all, and `max-h-pane` caps the pane itself so no step can push the section
+ * past the screen whatever it holds.
+ *
+ * The text sits on a scrim that is opaque where the words are and gone by the
+ * top of the pane, so the image still reads as an image.
+ *
+ * The component is keyed on the step at the call site, so changing step remounts
+ * it and the entry animation replays.
  */
 function StepDetail({ step, image, exchange }) {
   const reducedMotion = useReducedMotion();
 
-  const enter = (delay) =>
-    reducedMotion
-      ? {}
-      : {
-          initial: { opacity: 0, y: 12 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.4, delay, ease: [0.16, 1, 0.3, 1] },
-        };
+  const enter = reducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 12 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+      };
 
   return (
-    <div className="flex flex-col gap-6">
-      <motion.p {...enter(0)} className="text-body text-content-secondary">
-        <EmphasizedText text={step.body} emphasis={step.emphasis} />
-      </motion.p>
-
+    <motion.div
+      {...enter}
+      className="glass relative aspect-video max-h-pane w-full overflow-hidden rounded-xl border border-border sm:aspect-card"
+    >
       {/* Reach Out shows the sample exchange in the slot the other steps give to
           an image — what reaching out actually looks like, rather than a picture
-          of it. */}
+          of it. The thread is padded at the bottom so its last message can
+          scroll clear of the description. */}
       {exchange ? (
-        <motion.div {...enter(0.1)}>
-          <ChatExchange
-            exchange={exchange}
-            label={`A sample first exchange for the ${step.title} step.`}
-          />
-        </motion.div>
+        <ChatExchange
+          exchange={exchange}
+          label={`A sample first exchange for the ${step.title} step.`}
+          className="h-full"
+          contentClassName="pb-24"
+        />
       ) : (
-        // Fills the remaining width of the pane. Shorter on mobile, where the
-        // detail sits inside the list and the pane is the full column.
-        <motion.div
-          {...enter(0.1)}
-          className="glass relative aspect-video w-full overflow-hidden rounded-xl border border-border sm:aspect-card"
-        >
-          <Image
-            src={image}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 640px, 100vw"
-            className="object-cover"
-          />
-        </motion.div>
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 640px, 100vw"
+          className="object-cover"
+        />
       )}
-    </div>
+
+      <p className="absolute inset-x-0 bottom-0 bg-scrim-up p-4 pt-12 text-body text-content md:p-6 md:pt-16">
+        <EmphasizedText text={step.body} emphasis={step.emphasis} />
+      </p>
+    </motion.div>
   );
 }

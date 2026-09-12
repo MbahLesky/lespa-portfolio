@@ -32,7 +32,7 @@ See my work / About me
 
 ## 2. INTRO — LOCKED
 
-I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both — so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across — from idea to product.
+I taught myself design because I didn't like how the interfaces I was coding looked. Then I kept both so a brand I design doesn't fall apart the moment someone else has to build it. Let me help carry your vision across, from idea to product.
 
 ---
 
@@ -51,8 +51,8 @@ I taught myself design because I didn't like how the interfaces I was coding loo
 
 | Card | Label | Copy |
 |---|---|---|
-| 1 | Graphic Design | I design logos, visuals, and full brand systems — colors, typography, the whole identity — for individuals and businesses. Not just a logo on its own, but everything that has to work together around it. |
-| 2 | Web Development | I code websites for individuals and businesses, from simple one-page sites to full platform web apps — all by hand. No templates, no page builders. |
+| 1 | Graphic Design | I design logos, visuals, and full brand systems; colors, typography, the whole identity for individuals and businesses. Not just a logo on its own, but everything that has to work together around it. |
+| 2 | Web Development | I code websites for individuals and businesses, from simple one-page sites to full platform web apps, I build all by hand. No templates, no page builders. |
 | 3 | Mobile Development | I build custom Android and iOS applications for productivity or business use. |
 
 ## 5. PROCESS — LOCKED
@@ -73,7 +73,7 @@ Lespa: Tell me more about the business, and we start from there.
 **Research**
 Then, I'll look into what actually fits you, who you're talking to, what's already out there, what's been tried before. Not just moodboards, real digging.
 
-**Define**
+**Define/Sketch**
 Then I sketch it out. The concepts, the flow, the structure, whether it's your brand, your site, or your app. This is where your idea starts taking real shape.
 
 **Design/Build**
@@ -83,7 +83,7 @@ Once we agree on the direction, I then head on to implement. I design, code and 
 Lastly, I show you how it actually feels and how to use it, not just how it looks in a mockup. Then we ship it live so you or others can start using.
 
 **Closing line (after all 5 steps):**
-At every step, we talk it through — together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.
+At every step, we talk it through together. The goal was never something generic, something that feels like a template you've scrolled past before. It's something that feels like you. Intentional. From your roots.
 
 ## 6. ABOUT — LOCKED
 

@@ -18,19 +18,30 @@ import { about } from "@/content/copy";
  */
 export function About() {
   return (
-    <section id="about" className="snap-section relative overflow-hidden py-24 md:py-30">
+    // No `overflow-hidden` on the section: it would disable the sticky column
+    // below. SplitBackdrop clips itself, so the section does not need to.
+    <section id="about" className="snap-section relative py-24 md:py-30">
       <SplitBackdrop />
 
-      <div className="relative mx-auto grid max-w-content gap-12 px-6 md:px-8 lg:grid-cols-[320px_1fr] lg:gap-16">
-        <Reveal className="flex flex-col gap-8">
-          {/* The photo is a card — the exception to the blended rule here. */}
-          <figure className="overflow-hidden glass rounded-xl border border-border p-2">
-            {/* TODO: asset needed — assets doc §6, "Your photo (card-mounted, not
-                blended) — professional". Using the existing portrait until the
-                new one is shot. */}
-            <div className="relative aspect-portrait overflow-hidden rounded-lg">
-              <Image
-                src="/global_assets/social_share.webp"
+      <div className="relative mx-auto grid max-w-content items-start gap-12 px-6 md:px-8 lg:grid-cols-[320px_1fr] lg:gap-16">
+        {/* The photo and the tool lists hold still while the story scrolls past
+            them, and release only when the section ends (structure doc §6: "The
+            left side is sticky/fixed when scrolling, while the right side
+            scrolls for this section").
+
+            The sticky sits on this wrapper rather than on Reveal, which animates
+            a transform. `self-start` is what makes it work at all — a grid item
+            stretches to its row by default, leaving nothing to stick. */}
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <Reveal className="flex flex-col gap-8">
+            {/* The photo is a card — the exception to the blended rule here. */}
+            <figure className="glass overflow-hidden rounded-xl border border-border p-2">
+              {/* TODO: asset needed — assets doc §6, "Your photo (card-mounted,
+                  not blended) — professional". Using the existing portrait until
+                  the new one is shot. */}
+              <div className="relative aspect-portrait overflow-hidden rounded-lg">
+                <Image
+                  src="/global_assets/lespa_social_share.webp"
                 alt="Mbah Lesky, known as Lespa."
                 fill
                 sizes="(min-width: 1024px) 320px, 100vw"
@@ -39,25 +50,26 @@ export function About() {
             </div>
           </figure>
 
-          {/* Labelled chips, no descriptive copy — structure doc §6. */}
-          {about.tools.map((group) => (
-            <div key={group.heading} className="flex flex-col gap-4">
-              <h3 className="text-caption uppercase tracking-eyebrow text-accent">
-                {group.heading}
-              </h3>
-              <ul className="flex flex-wrap gap-2">
-                {group.items.map((tool) => (
-                  <li
-                    key={tool}
-                    className="glass cursor-default rounded-sm border border-border px-4 py-1 text-caption text-content transition-colors duration-fast hover:border-accent-soft hover:text-accent"
-                  >
-                    {tool}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </Reveal>
+            {/* Labelled chips, no descriptive copy — structure doc §6. */}
+            {about.tools.map((group) => (
+              <div key={group.heading} className="flex flex-col gap-4">
+                <h3 className="text-caption uppercase tracking-eyebrow text-accent">
+                  {group.heading}
+                </h3>
+                <ul className="flex flex-wrap gap-2">
+                  {group.items.map((tool) => (
+                    <li
+                      key={tool}
+                      className="glass cursor-default rounded-sm border border-border px-4 py-1 text-caption text-content transition-colors duration-fast hover:border-accent-soft hover:text-accent"
+                    >
+                      {tool}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </Reveal>
+        </div>
 
         <div className="flex flex-col gap-12">
           <SectionHeading label={about.label} />

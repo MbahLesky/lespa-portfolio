@@ -26,14 +26,12 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  * and each bubble is prefixed with who is speaking so the thread is followable
  * without seeing which side it is on.
  */
-export function ChatExchange({ exchange, label, className = "" }) {
+export function ChatExchange({ exchange, label, className = "", contentClassName = "" }) {
   const reducedMotion = useReducedMotion();
   const { day, messages } = exchange;
 
   return (
-    <figure
-      className={`glass isolate relative flex flex-col gap-2 overflow-hidden rounded-xl border border-border p-4 ${className}`}
-    >
+    <figure className={`isolate relative overflow-hidden ${className}`}>
       {/* The chat wallpaper, behind the thread.
           The file is near-black with faint doodles, so it is screened rather than
           laid down flat: the black base contributes nothing and only the doodles
@@ -52,14 +50,19 @@ export function ChatExchange({ exchange, label, className = "" }) {
 
       <figcaption className="sr-only">{label}</figcaption>
 
-      {/* The day divider — a centred chip, as in the reference. */}
-      <div className="relative flex justify-center pb-2">
-        <span className="glass-strong rounded-sm px-4 py-1 text-caption text-content-secondary">
-          {day}
-        </span>
-      </div>
+      {/* The thread scrolls inside the pane rather than growing it, so a long
+          exchange cannot push the section past the viewport. */}
+      <div
+        className={`no-scrollbar relative h-full overflow-y-auto overscroll-contain p-4 ${contentClassName}`}
+      >
+        {/* The day divider — a centred chip, as in the reference. */}
+        <div className="flex justify-center pb-2">
+          <span className="glass-strong rounded-sm px-4 py-1 text-caption text-content-secondary">
+            {day}
+          </span>
+        </div>
 
-      <ol className="relative flex flex-col gap-1">
+        <ol className="flex flex-col gap-1">
         {messages.map((message, index) => {
           const mine = message.from === "lespa";
           const previous = messages[index - 1];
@@ -113,8 +116,9 @@ export function ChatExchange({ exchange, label, className = "" }) {
               </motion.div>
             </li>
           );
-        })}
-      </ol>
+          })}
+        </ol>
+      </div>
     </figure>
   );
 }
