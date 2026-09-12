@@ -59,7 +59,7 @@ const STAGE = {
  * word by word would take nearly four.
  */
 const READING_PAUSE = 800;
-const SUBTEXT_STAGGER = 0.5;
+const SUBTEXT_STAGGER = 0.25;
 const SUBTEXT_DURATION = 1.0;
 
 export function Hero({ onIntroComplete }) {
