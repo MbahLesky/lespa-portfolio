@@ -118,7 +118,7 @@ export const process = {
       emphasis: ["real digging"],
     },
     {
-      title: "Define",
+      title: "Define/Sketch",
       body: "Then I sketch it out. The concepts, the flow, the structure, whether it's your brand, your site, or your app. This is where your idea starts taking real shape.",
       emphasis: ["taking real shape"],
     },

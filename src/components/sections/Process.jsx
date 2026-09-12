@@ -37,10 +37,10 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  * than an image, so its slot here is unused.
  */
 const STEP_IMAGES = [
-  "/monilog_case_study_images/phone_mockup.webp",
-  "/homepage_project_cards/diwa_concepts.webp",
-  "/homepage_project_cards/yisi_artboard.webp",
-  "/monilog_case_study_images/mobile_with_web.webp",
+  "/global_assets/lespa_whatsapp_bg.webp",
+  "/global_assets/lespa_researching.webp",
+  "/monilog_images/monilog_sketch.webp",
+  "/global_assets/lespa_android_studio.webp",
   "/monilog_case_study_images/landing_page.webp",
 ];
 

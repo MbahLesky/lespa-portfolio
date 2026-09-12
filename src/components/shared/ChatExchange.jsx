@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { CheckCheck } from "lucide-react";
 
@@ -17,8 +18,9 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  * a run keeps its tail, which is what makes a thread read as turns in a
  * conversation instead of a list of lines.
  *
- * Colours come from the same tokens as the rest of the page, so the thread reads
- * as part of this site rather than as a screenshot of another app.
+ * The wallpaper behind the thread is a real asset; every other colour comes from
+ * the same tokens as the rest of the page, so the thread reads as part of this
+ * site rather than as a screenshot of another app.
  *
  * Marked as a figure and captioned for assistive tech: it illustrates the step,
  * and each bubble is prefixed with who is speaking so the thread is followable
@@ -30,18 +32,34 @@ export function ChatExchange({ exchange, label, className = "" }) {
 
   return (
     <figure
-      className={`glass flex flex-col gap-2 overflow-hidden rounded-xl border border-border p-4 ${className}`}
+      className={`glass isolate relative flex flex-col gap-2 overflow-hidden rounded-xl border border-border p-4 ${className}`}
     >
+      {/* The chat wallpaper, behind the thread.
+          The file is near-black with faint doodles, so it is screened rather than
+          laid down flat: the black base contributes nothing and only the doodles
+          lighten the pane. That keeps the site's own ground colour under the
+          thread instead of importing the app's, and it is why the figure is
+          `isolate` — the blend must not reach past this card. */}
+      <div aria-hidden="true" className="absolute inset-0 opacity-90 mix-blend-screen">
+        <Image
+          src="/global_assets/lespa_whatsapp_bg.webp"
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 640px, 100vw"
+          className="object-cover"
+        />
+      </div>
+
       <figcaption className="sr-only">{label}</figcaption>
 
       {/* The day divider — a centred chip, as in the reference. */}
-      <div className="flex justify-center pb-2">
+      <div className="relative flex justify-center pb-2">
         <span className="glass-strong rounded-sm px-4 py-1 text-caption text-content-secondary">
           {day}
         </span>
       </div>
 
-      <ol className="flex flex-col gap-1">
+      <ol className="relative flex flex-col gap-1">
         {messages.map((message, index) => {
           const mine = message.from === "lespa";
           const previous = messages[index - 1];
