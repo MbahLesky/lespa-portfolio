@@ -6,7 +6,6 @@ import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
 import { SectionHeading } from "@/components/shared/SectionHeading";
-import { projects } from "@/content/projects";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
@@ -37,7 +36,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  *
  * A project with no live URL renders no link at all. No placeholder href.
  */
-export function SelectedWork() {
+export function SelectedWork({ projects }) {
   const sectionRef = useRef(null);
   const reducedMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
