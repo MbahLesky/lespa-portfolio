@@ -1,228 +1,171 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-
-import { SectionHeading } from "@/components/shared/SectionHeading";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-/**
- * Selected Work — six projects, one on screen at a time, advanced by scrolling.
- *
- * The section is six viewports tall with a sticky viewport-height stage inside
- * it. Scrolling through that height swaps which project the stage shows, so one
- * project is visible at a time and the wheel moves to the next; reaching the
- * last one lets the page carry on to What I Do, and scrolling back up from the
- * first carries on to Intro. Native scroll throughout — nothing is intercepted,
- * so the trackpad, the keyboard, a touch drag and the scrollbar all behave.
- *
- * Each card is a card: bordered, glass, hoverable. Per the background imagery
- * rule these and the About photo are the only things on the page that should
- * read as placed on top of it.
- *
- * Per-project theming: the card scopes its own primary brand colour as
- * --project, and the title, tags, link and hover glow all read from that. No
- * component knows a literal colour — see src/content/projects.js for where each
- * colour comes from.
- *
- * Two independent hovers, deliberately not the same gesture:
- *
- * - group/card — anywhere on the card fades in that project's blended backdrop
- *   behind everything, and lights the border and glow in its colour.
- * - group/photo — the mockup frame only. Crossfades the mockup to that project's
- *   sketch or working artefact. Hovering the copy does not trigger it.
- *
- * A project with no live URL renders no link at all. No placeholder href.
- */
+const FEATURED_SHOWCASE = [
+  {
+    category: "Graphic Design / Identity",
+    title: "Brand System Studio Workstation",
+    subtext: "Complete visual identity, artboard guidelines, and cohesive design system.",
+    image: "/global_assets/lespa_laptop_design.webp",
+    liveUrl: null,
+  },
+  {
+    category: "Visual Design",
+    title: "Vector & Layout Engineering",
+    subtext: "Precision vector typography, flyer campaigns, and structured layout architecture.",
+    image: "/global_assets/lespa_researching.webp",
+    liveUrl: null,
+  },
+  {
+    category: "Web Application",
+    title: "Custom Frontend Platform",
+    subtext: "Interactive dashboards and responsive high-performance web applications built from scratch.",
+    image: "/global_assets/lespa_skuulabs_web.webp",
+    liveUrl: "https://skuulabs.com",
+  },
+  {
+    category: "Code Aesthetics",
+    title: "Minimalist Tech-Noir Texture",
+    subtext: "Clean, maintainable source code architecture with minimalist dark aesthetics.",
+    image: "/global_assets/lespa_code.webp",
+    liveUrl: null,
+  },
+  {
+    category: "Community & Knowledge",
+    title: "Digital Skills & Tech Workshops in Bamenda",
+    subtext: "Mentoring upcoming software engineers and designers in modern web and mobile stacks.",
+    image: "/global_assets/lespa_at_night.webp",
+    liveUrl: null,
+  },
+];
+
 export function SelectedWork({ projects }) {
-  const sectionRef = useRef(null);
   const reducedMotion = useReducedMotion();
-  const [index, setIndex] = useState(0);
+  const [activeIdx, setActiveIdx] = useState(null);
 
-  // 0 at the moment the stage pins, 1 when it is about to unpin.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
+  // Combine passed projects or use featured showcase list
+  const displayItems =
+    projects && projects.length > 0
+      ? projects.map((p, i) => ({
+          category: p.tags?.[0] ? `${p.tags[0]} / Engineering` : "Digital Craftsmanship",
+          title: p.name,
+          subtext: p.subtext,
+          image: p.image || FEATURED_SHOWCASE[i % FEATURED_SHOWCASE.length].image,
+          liveUrl: p.liveUrl || null,
+          tags: p.tags,
+        }))
+      : FEATURED_SHOWCASE;
 
-  useMotionValueEvent(scrollYProgress, "change", (progress) => {
-    const next = Math.min(projects.length - 1, Math.floor(progress * projects.length));
-    setIndex((current) => (current === next ? current : Math.max(0, next)));
-  });
-
-  // Reduced motion gets the plain list: no pinning, no swapping, just six cards.
-  if (reducedMotion) {
-    return (
-      <section id="work" className="relative py-24 md:py-30">
-        <div className="mx-auto flex max-w-content flex-col gap-12 px-6 md:px-8">
-          <SectionHeading label="Selected Work" />
-          <ul className="flex flex-col gap-8">
-            {projects.map((project) => (
-              <li key={project.slug}>
-                <ProjectCard project={project} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    );
-  }
+  const fadeUp = reducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 24 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+      };
 
   return (
-    <section
-      id="work"
-      ref={sectionRef}
-      className="snap-section relative"
-      // One viewport of scroll per project. The stage inside stays pinned for
-      // all of it, which is what turns vertical scroll into project-stepping.
-      style={{ height: `${projects.length * 100}svh` }}
-    >
-      <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden">
-        <div className="mx-auto flex w-full max-w-content flex-col gap-8 px-6 md:px-8">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading label="Selected Work" />
+    <section id="work" className="snap-section relative overflow-hidden py-20 md:py-28">
+      <div className="relative mx-auto w-full max-w-content px-6 md:px-8">
+        <motion.div {...fadeUp} className="flex flex-col items-start">
+          {/* Eyebrow */}
+          <span className="font-mono text-xs uppercase tracking-widest text-[#00ff88]">
+            {"// 04. DIGITAL CRAFTSMANSHIP"}
+          </span>
 
-            <div className="flex items-center gap-4">
-              <span className="text-caption tabular-nums uppercase tracking-eyebrow text-content-secondary">
-                {String(index + 1).padStart(2, "0")} /{" "}
-                {String(projects.length).padStart(2, "0")}
-              </span>
+          {/* Heading */}
+          <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+            Selected Visuals &amp; Systems
+          </h2>
+        </motion.div>
 
-              {/* Progress through the six, not a control — scrolling is the control. */}
-              <ul aria-hidden="true" className="flex items-center gap-2">
-                {projects.map((project, projectIndex) => (
-                  <li
-                    key={project.slug}
-                    style={{ "--project": `var(${project.accentVar})` }}
-                    className={`h-1 rounded-sm transition-all duration-slow ease-out ${
-                      projectIndex === index ? "w-8 bg-project" : "w-4 bg-border-strong"
-                    }`}
-                  />
-                ))}
-              </ul>
-            </div>
-          </div>
+        {/* 2-Column Responsive Grid */}
+        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          {displayItems.map((item, idx) => {
+            const isWide = idx === 4 && displayItems.length === 5;
+            const isHovered = activeIdx === idx;
 
-          {/* All six share one grid cell, so the stage is as tall as the tallest
-              card and stepping between them never shifts the layout. They stay
-              mounted — hiding the five inactive ones would be cheaper, but then
-              only one project would exist in the HTML for a crawler to read.
-              Inactive cards are hidden from assistive tech and untabbable. */}
-          <div className="grid">
-            {projects.map((project, projectIndex) => {
-              const active = projectIndex === index;
-
-              return (
-                <motion.div
-                  key={project.slug}
-                  aria-hidden={!active}
-                  animate={{ opacity: active ? 1 : 0, y: active ? 0 : 24 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className={`col-start-1 row-start-1 ${
-                    active ? "" : "pointer-events-none"
+            return (
+              <motion.div
+                key={item.title + idx}
+                {...fadeUp}
+                transition={{
+                  duration: 0.5,
+                  delay: (idx % 2) * 0.1,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                onMouseEnter={() => setActiveIdx(idx)}
+                onMouseLeave={() => setActiveIdx(null)}
+                className={`tech-card group flex flex-col overflow-hidden transition-all duration-300 ${
+                  isWide ? "sm:col-span-2" : ""
+                } ${
+                  isHovered
+                    ? "border-[#00ff88] shadow-[0_0_30px_rgba(0,255,136,0.18)]"
+                    : "border-[#00ff88]/15"
+                }`}
+              >
+                {/* Image Container */}
+                <div
+                  className={`relative w-full overflow-hidden bg-[#070b09] p-3 ${
+                    isWide ? "aspect-[21/9]" : "aspect-[16/10]"
                   }`}
-                  // Keeps the inactive cards out of the tab order without
-                  // removing them from the document.
-                  inert={!active}
                 >
-                  <ProjectCard project={project} />
-                </motion.div>
-              );
-            })}
-          </div>
+                  <div className="relative h-full w-full overflow-hidden rounded-lg">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      sizes="(min-width: 1024px) 600px, 100vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                </div>
+
+                {/* Content info */}
+                <div className="flex flex-1 flex-col justify-between p-6 sm:p-7">
+                  <div>
+                    {/* Category */}
+                    <span className="font-mono text-xs tracking-wider text-[#00ff88]">
+                      {item.category}
+                    </span>
+
+                    {/* Title */}
+                    <h3 className="mt-2 font-heading text-xl sm:text-2xl font-bold text-white">
+                      {item.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="mt-2 text-sm text-content-secondary leading-relaxed">
+                      {item.subtext}
+                    </p>
+                  </div>
+
+                  {/* Optional Live link */}
+                  {item.liveUrl ? (
+                    <div className="mt-4 pt-4 border-t border-white/5">
+                      <a
+                        href={item.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 font-mono text-xs text-[#00ff88] hover:underline"
+                      >
+                        <span>Visit live site</span>
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </a>
+                    </div>
+                  ) : null}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
-  );
-}
-
-/** "https://monilog.vercel.app" → "monilog.vercel.app". */
-function hostOf(url) {
-  return new URL(url).host.replace(/^www\./, "");
-}
-
-function ProjectCard({ project }) {
-  return (
-    <article
-      // The project's own primary colour, scoped to this card only.
-      style={{ "--project": `var(${project.accentVar})` }}
-      className="project-card group/card glass relative grid gap-8 overflow-hidden rounded-2xl border border-border p-6 md:grid-cols-2 md:items-center md:p-10"
-    >
-      {/* Fills the card behind everything, and only on hover. Low opacity and
-          masked, so it blends into the card rather than competing with the copy.
-          The mockup in its own frame below is untouched by this. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-slow ease-out group-hover/card:opacity-100 group-focus-within/card:opacity-100"
-      >
-        <div className="mask-fade-l absolute inset-0 opacity-20">
-          <Image
-            src={project.backdrop}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 1200px, 100vw"
-            className="object-cover"
-          />
-        </div>
-      </div>
-
-      {/* The mockup frame — its own hover, independent of the card's.
-          `group/photo` scopes it to this frame, so crossfading to the sketch
-          happens only when the pointer is over the image itself. Hovering the
-          copy or the card's padding leaves the mockup alone and moves only the
-          card-wide backdrop above.
-          TODO: asset needed — assets doc §3, "Updated project mockup/image …
-          one per project (6 total)". Both views use existing real project images;
-          only Monilog has a true hand sketch so far. */}
-      <div className="group/photo glass-strong relative aspect-card overflow-hidden rounded-xl border border-border">
-        <Image
-          src={project.image}
-          alt={project.imageAlt}
-          fill
-          sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
-          className="object-cover transition-opacity duration-slow ease-out group-hover/photo:opacity-0"
-        />
-        <Image
-          src={project.hoverImage}
-          alt={project.hoverImageAlt}
-          fill
-          sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
-          className="object-cover opacity-0 transition-opacity duration-slow ease-out group-hover/photo:opacity-100"
-        />
-      </div>
-
-      <div className="relative flex flex-col gap-6">
-        <ul className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <li
-              key={tag}
-              className="rounded-sm border border-project-soft px-4 py-1 text-caption uppercase tracking-label text-project"
-            >
-              {tag}
-            </li>
-          ))}
-        </ul>
-
-        <h3 className="text-h3-m text-project md:text-h3">{project.name}</h3>
-
-        <p className="max-w-reading text-body text-content-secondary">{project.subtext}</p>
-
-        {/* Link only where a live site exists, labelled with the host itself —
-            the copy doc specifies no link text, so none is invented. */}
-        {project.liveUrl ? (
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex w-fit items-center gap-2 border-b border-project-soft pb-1 text-body-sm text-project transition-colors duration-fast hover:border-project"
-          >
-            {hostOf(project.liveUrl)}
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          </a>
-        ) : null}
-      </div>
-    </article>
   );
 }

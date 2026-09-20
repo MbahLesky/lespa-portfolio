@@ -1,226 +1,118 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-
-import { Typewriter } from "@/components/shared/Typewriter";
-import { WordReveal } from "@/components/shared/WordReveal";
-import { hero } from "@/content/copy";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-
-/**
- * Hero.
- *
- * Sequence, per the structure doc: headline types in → role statement types in
- * → subtext moves in (slide/fade, not typed) → CTAs and nav animate in last.
- * Each line is typed exactly once; nothing loops and nothing toggles between
- * variants. The roles themselves are the keywords of the sentence, so they type
- * in the accent colour and carry a hover.
- *
- * Centred, not left-aligned.
- *
- * Background is the dark neutral gradient, painted page-wide on <body>, with two
- * blended fragments at the sides — design on the left, code on the right,
- * mirroring the split the copy makes. Blended, not cards: no border, no shadow.
- *
- * NOTE — this departs from the assets doc (§1, "Background is a CSS gradient …
- * not an image"), on Lespa's instruction to carry the same split composition the
- * About section uses up into the hero. The structure doc's BACKGROUND IMAGERY
- * RULE, which lists Hero among the blended-imagery sections, agrees with this.
- */
-
-/** Named stages, so the order of the sequence is readable. */
-const STAGE = {
-  HEADLINE: 0,
-  ROLE_ONE: 1,
-  ROLE_TWO: 2,
-  SUBTEXT: 3,
-  ACTIONS: 4,
-};
-
-/**
- * ── Hero timing. Tune the sequence here. ──────────────────────────────────────
- *
- * READING_PAUSE is the one to change for "give me longer before the buttons
- * appear": it is the gap, in milliseconds, between the subtext's last word
- * settling and the CTAs plus the nav arriving. Raise it to hold the hero on the
- * sentence for longer; lower it to get to the buttons sooner.
- *
- * The other two shape the subtext's own reveal. It arrives a phrase at a time —
- * the phrases are `hero.subtextPhrases` in src/content/copy.js, and regrouping
- * them there changes the rhythm without touching this file. SUBTEXT_STAGGER is
- * the gap between one phrase and the next, and SUBTEXT_DURATION is how long a
- * single phrase takes to fade up. Both in seconds, because that is what Framer
- * Motion takes.
- *
- * Five phrases at 0.2s apart is ~1s to land the line. The same stagger applied
- * word by word would take nearly four.
- */
-const READING_PAUSE = 800;
-const SUBTEXT_STAGGER = 0.25;
-const SUBTEXT_DURATION = 1.0;
 
 export function Hero({ onIntroComplete }) {
   const reducedMotion = useReducedMotion();
-  const [stage, setStage] = useState(STAGE.HEADLINE);
-  const [subtextSettled, setSubtextSettled] = useState(false);
 
-  const advanceTo = useCallback(
-    (next) => {
-      setStage((current) => (current >= next ? current : next));
-      if (next === STAGE.ACTIONS) onIntroComplete?.();
-    },
-    [onIntroComplete],
-  );
-
-  // The subtext gets the stage to itself for a beat. Only then do the CTAs and
-  // the nav arrive, so the reader is not handed buttons mid-sentence.
   useEffect(() => {
-    if (!subtextSettled) return;
+    onIntroComplete?.();
+  }, [onIntroComplete]);
 
-    const timer = window.setTimeout(() => advanceTo(STAGE.ACTIONS), READING_PAUSE);
-    return () => window.clearTimeout(timer);
-  }, [advanceTo, subtextSettled]);
-
-  const moveIn = reducedMotion
+  const fadeUp = reducedMotion
     ? {}
     : {
-        initial: { opacity: 0, y: 16 },
-        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
       };
 
   return (
     <section
       id="hero"
-      className="snap-section relative flex min-h-screen items-center overflow-hidden"
+      className="snap-section relative flex min-h-screen items-center overflow-hidden pt-24 pb-16 lg:pt-28 lg:pb-20"
     >
-      <SplitBackdrop />
-      <div className="relative mx-auto flex w-full max-w-content flex-col items-center px-6 pb-24 pt-30 text-center md:px-8">
-        {/* The full lines live in aria-label; the typed characters are hidden from
-            assistive tech so nothing is read out half-finished. */}
-        <h1
-          className="flex flex-col items-center text-h1 text-content md:text-h1"
-          aria-label={hero.headline}
-        >
-          <Typewriter
-            text={hero.headlineSegments}
-            active
-            speed={58}
-            segmentPause={460}
-            onDone={() => advanceTo(STAGE.ROLE_ONE)}
-          />
-        </h1>
-
-        <p
-          className="mt-6 flex flex-col items-center gap-1 text-h3-m text-content-secondary md:text-h4"
-          aria-label={hero.roleLines.join(" ")}
-        >
-          {/* The beat before each line is the pause the reader needs to take
-              the previous one in. */}
-          <Typewriter
-            text={hero.roleSegments[0]}
-            active={stage >= STAGE.ROLE_ONE}
-            startDelay={520}
-            onDone={() => advanceTo(STAGE.ROLE_TWO)}
-          />
-          <Typewriter
-            text={hero.roleSegments[1]}
-            active={stage >= STAGE.ROLE_TWO}
-            startDelay={420}
-            onDone={() => advanceTo(STAGE.SUBTEXT)}
-          />
-        </p>
-
-        {/* Holds a beat after the last role line lands, then arrives a phrase at
-            a time, each lifting from just below — not typed. The CTAs and nav
-            wait out READING_PAUSE after its last phrase settles.
-
-            Drop the `groups` line to go back to one word at a time. */}
-        <WordReveal
-          text={hero.subtext}
-          groups={hero.subtextPhrases}
-          active={stage >= STAGE.SUBTEXT}
-          startDelay={0.5}
-          stagger={SUBTEXT_STAGGER}
-          duration={SUBTEXT_DURATION}
-          onDone={() => setSubtextSettled(true)}
-          className="mt-8 max-w-reading text-balance text-body-lg text-content-secondary"
-        />
-
-        <motion.div
-          {...moveIn}
-          animate={
-            stage >= STAGE.ACTIONS ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }
-          }
-          className="mt-12 flex flex-wrap items-center justify-center gap-4"
-        >
-          <a
-            href={hero.ctas.primary.href}
-            className="inline-flex items-center gap-2 rounded-md bg-action px-8 py-4 text-body-sm uppercase tracking-label text-action-fg transition-colors duration-fast hover:bg-action-hover"
-          >
-            {hero.ctas.primary.label}
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          </a>
-          <a
-            href={hero.ctas.secondary.href}
-            className="inline-flex items-center gap-2 rounded-md border border-border-strong px-8 py-4 text-body-sm uppercase tracking-label text-content transition-colors duration-fast hover:border-accent hover:text-accent"
-          >
-            {hero.ctas.secondary.label}
-          </a>
-        </motion.div>
-      </div>
-
-      <motion.div
-        {...moveIn}
-        animate={stage >= STAGE.ACTIONS ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-        className="pointer-events-none absolute inset-x-0 bottom-12 flex justify-center"
+      {/* Background subtle radial glow */}
+      <div
         aria-hidden="true"
-      >
-        <ArrowDown className="h-4 w-4 animate-pulse-down text-content-secondary" />
-      </motion.div>
-    </section>
-  );
-}
+        className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#00ff88]/5 blur-[120px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 -right-40 h-[600px] w-[600px] rounded-full bg-[#00e575]/5 blur-[140px]"
+      />
 
-/**
- * The hero's blended split: design on the left, code on the right, mirroring the
- * two roles the copy names and echoing the same composition the About section
- * uses.
- *
- * Both fragments are real Lespa work. They are faded hard and masked towards the
- * centre so the centred text always has clear ground under it, and they carry no
- * frame of any kind — they are the background, not images placed on it. Narrower
- * and fainter below lg, where the text reaches closer to the edges.
- *
- * TODO: asset needed — assets doc §6 names the split composition for About only;
- * the hero now uses the same treatment. A dedicated pair — a real code fragment
- * rather than a built UI on the right — would be better than these stand-ins.
- */
-function SplitBackdrop() {
-  return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="hidden md:block mask-fade-r absolute md:inset-y-0 md:-left-1/4 w-full md:opacity-70 md:w-1/2">
-        <Image
-          src="/qiroke_images/lespa_qiroke_brandguide.webp"
-          alt=""
-          fill
-          sizes="60vw"
-          priority
-          className="object-contain lg:object-contain"
-        />
+      <div className="relative mx-auto w-full max-w-content px-6 md:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+          {/* Left Column: Headline & Bio & Action */}
+          <motion.div {...fadeUp} className="flex flex-col items-start text-left">
+            {/* System Status Pill */}
+            <div className="tech-pill mb-6">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00ff88] opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00ff88]" />
+              </span>
+              <span>SYSTEM OPERATIONAL // BAMENDA, CM</span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.12] tracking-tight text-white">
+              I design brands and interfaces that{" "}
+              <span className="inline-block text-[#00ff88] drop-shadow-[0_0_24px_rgba(0,255,136,0.35)]">
+                feel like you.
+              </span>
+            </h1>
+
+            {/* Subtext */}
+            <p className="mt-6 max-w-xl text-base sm:text-lg text-content-secondary leading-relaxed">
+              End-to-end brand identity design, custom web development, and mobile applications
+              engineered entirely from scratch by designer &amp; developer Mbah Lesky.
+            </p>
+
+            {/* CTA Button */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a
+                href="#what-i-do"
+                className="inline-flex items-center gap-2.5 rounded-lg border border-[#00ff88]/30 bg-[#00ff88]/10 px-6 py-3.5 font-mono text-xs font-semibold uppercase tracking-widest text-[#00ff88] transition-all duration-300 hover:border-[#00ff88] hover:bg-[#00ff88]/20 hover:shadow-[0_0_25px_rgba(0,255,136,0.35)]"
+              >
+                <span>EXPLORE CAPABILITIES</span>
+                <span className="text-sm">↓</span>
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Right Column: Laptop Mockup & Avatar Badge */}
+          <motion.div
+            {...fadeUp}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="relative flex flex-col items-center lg:items-end"
+          >
+            <div className="tech-card relative w-full overflow-hidden p-3 sm:p-4">
+              {/* Laptop screen preview */}
+              <div className="relative aspect-[16/11] w-full overflow-hidden rounded-lg bg-[#070b09]">
+                <Image
+                  src="/global_assets/lespa_android_studio.webp"
+                  alt="Workstation with code and mobile application"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 520px, 100vw"
+                  className="object-cover transition-transform duration-500 hover:scale-[1.02]"
+                />
+              </div>
+
+              {/* Floating Badge below mockup */}
+              <div className="mt-3.5 flex items-center gap-3 rounded-lg border border-white/10 bg-[#080c0a]/90 p-2.5 backdrop-blur-md">
+                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border border-[#00ff88]/40">
+                  <Image
+                    src="/global_assets/lespa_pic1.webp"
+                    alt="Mbah Lesky"
+                    fill
+                    sizes="40px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold text-white">Mbah Lesky</span>
+                  <span className="font-mono text-xs text-[#00ff88]/80">Founder &amp; Engineer</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
-      <div className="opacity-30 sm:opacity-20 mask-fade-l absolute inset-y-0 md:-right-1/4 w-full md:opacity-70 md:w-1/2">
-        <Image
-          src="/global_assets/lespa_code.webp"
-          alt=""
-          fill
-          sizes="60vw"
-          priority
-          className="object-contain lg:object-contain"
-        />
-      </div>
-    </div>
+    </section>
   );
 }

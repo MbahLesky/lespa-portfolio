@@ -1,4 +1,5 @@
 import localFont from "next/font/local";
+import { JetBrains_Mono } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
@@ -12,6 +13,12 @@ import {
 } from "@/lib/seo";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 const saira = localFont({
   src: "../fonts/Saira-Variable-latin.woff2",
@@ -104,7 +111,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#0E1110",
+  themeColor: "#080c0a",
 };
 
 /**
@@ -114,7 +121,7 @@ export const viewport = {
  */
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${saira.variable} ${ibmPlexSans.variable} dark`}>
+    <html lang="en" className={`${saira.variable} ${ibmPlexSans.variable} ${jetbrainsMono.variable} dark`}>
       <head>
         {/* Structured data — who this is, what the site is, and the work on it.
             Built from the same content modules the page renders, so it cannot

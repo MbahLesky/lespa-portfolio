@@ -11,10 +11,11 @@
  */
 
 export const nav = [
-  { label: "Work", href: "#work" },
-  { label: "What I Do", href: "#what-i-do" },
-  { label: "Process", href: "#process" },
   { label: "About", href: "#about" },
+  { label: "Values", href: "#values" },
+  { label: "Services", href: "#what-i-do" },
+  { label: "Work", href: "#work" },
+  { label: "Process", href: "#process" },
   { label: "Contact", href: "#contact" },
 ];
 

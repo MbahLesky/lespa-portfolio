@@ -50,40 +50,40 @@ export function SiteHeader({ revealed = false }) {
     >
       <div className="mx-auto flex max-w-content items-center justify-between gap-4 px-6 py-2 md:gap-6 md:px-8 md:pt-4">
         {/* Small screens: the mark alone is the way home. */}
-        <a href="#hero" aria-label="Lespa — back to top" className="flex items-center">
+        <a href="#hero" aria-label="Lespa — back to top" className="flex items-center gap-3">
           <Image
-            src="/global_assets/lespa_icon_green_dark.svg"
+            src="/global_assets/lespa_wordmark_green_dark.svg"
             alt="Lespa"
-            width={28}
+            width={92}
             height={28}
             priority
-            className="md:hidden"
+            className="h-7 w-auto"
           />
-          <span className="hidden items-center gap-4 md:flex">
-            <Avatar className="h-8 w-8" />
-            <Image
-              src="/global_assets/lespa_wordmark_green_dark.svg"
-              alt="Lespa"
-              width={80}
-              height={24}
-              priority
-            />
-          </span>
         </a>
 
-        <nav aria-label="Sections">
-          <ul className="hidden items-center gap-6 md:flex">
+        <nav aria-label="Sections" className="flex items-center gap-6">
+          <ul className="hidden items-center gap-8 lg:flex">
             {nav.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="text-caption uppercase tracking-eyebrow text-content-secondary transition-colors duration-fast hover:text-accent"
+                  className="font-mono text-sm tracking-wide text-content-secondary transition-colors duration-fast hover:text-accent"
                 >
                   {link.label}
                 </a>
               </li>
             ))}
           </ul>
+
+          {/* Desktop Right CTA: [Your link here] */}
+          <div className="hidden md:block">
+            <a
+              href="#contact"
+              className="glow-btn inline-flex items-center justify-center rounded-lg px-5 py-2.5 font-mono text-xs tracking-wider uppercase transition-all duration-fast"
+            >
+              [Your link here]
+            </a>
+          </div>
 
           {/* Icons below md, where the labels stop fitting. */}
           <ul className="flex items-center gap-2 md:hidden">
@@ -92,7 +92,7 @@ export function SiteHeader({ revealed = false }) {
                 <a
                   href={link.href}
                   aria-label={link.label}
-                  className="flex h-10 w-10 items-center justify-center rounded-md border border-border text-content-secondary transition-colors duration-fast hover:border-accent hover:text-accent"
+                  className="flex h-9 w-9 items-center justify-center rounded-md border border-border text-content-secondary transition-colors duration-fast hover:border-accent hover:text-accent"
                 >
                   <link.icon className="h-4 w-4" aria-hidden="true" />
                 </a>
@@ -100,11 +100,10 @@ export function SiteHeader({ revealed = false }) {
             ))}
             <li>
               <a
-                href="#about"
-                aria-label="About"
-                className="flex items-center rounded-full border border-border transition-colors duration-fast hover:border-accent"
+                href="#contact"
+                className="glow-btn inline-flex items-center justify-center rounded-md px-2.5 py-1.5 font-mono text-[11px] tracking-tight"
               >
-                <Avatar className="h-10 w-10" />
+                [Link]
               </a>
             </li>
           </ul>
@@ -118,21 +117,5 @@ export function SiteHeader({ revealed = false }) {
         className="h-1 origin-left bg-accent"
       />
     </motion.header>
-  );
-}
-
-function Avatar({ className = "" }) {
-  return (
-    <span
-      className={`relative block shrink-0 overflow-hidden rounded-full border border-border-strong ${className}`}
-    >
-      <Image
-        src="/global_assets/hero-photo-dark.webp"
-        alt="Mbah Lesky, known as Lespa."
-        fill
-        sizes="40px"
-        className="object-cover"
-      />
-    </span>
   );
 }

@@ -14,19 +14,19 @@
  * but unused until a theme toggle lands.
  */
 :root {
-  /* Brand */
-  --brand-light: #0f8a36;
-  --brand: #0d6d2b;
-  --brand-dark: #075520;
-  --brand-soft: #e6f2eb;
-  --brand-muted: #9bbfa9;
+  /* Brand - Tech Cyber Green */
+  --brand-light: #00ff88;
+  --brand: #00e575;
+  --brand-dark: #008f44;
+  --brand-soft: #e6f9ef;
+  --brand-muted: #8b9990;
 
   /* Neutral — dark mode */
-  --dark-background: #0e1110;
-  --dark-surface: #141a17;
-  --dark-text: #e7ece9;
-  --dark-muted: #9aa5a0;
-  --dark-accent: #2fa86a;
+  --dark-background: #070b09;
+  --dark-surface: #0e1511;
+  --dark-text: #e8edea;
+  --dark-muted: #8b9990;
+  --dark-accent: #00ff88;
 
   /* Neutral — light mode (recorded for Phase 2's theme toggle, unused now) */
   --light-background: #fafbf9;
@@ -45,33 +45,24 @@
   --text-secondary: var(--dark-muted);
   --accent: var(--dark-accent);
 
-  /**
-   * CORE VISUAL specifies a border colour for light mode only (#E4EAE6) and
-   * names no dark-mode equivalent. Derived here from Text Primary at 10%, which
-   * reads as a hairline on both Background and Surface. Flagged rather than
-   * invented silently — replace if a dark border token is added to the doc.
-   */
-  --border: rgb(231 236 233 / 10%);
-  --border-strong: rgb(231 236 233 / 18%);
+  --border: rgba(0, 255, 136, 0.12);
+  --border-strong: rgba(0, 255, 136, 0.28);
 
-  /**
-   * Glass surfaces. Cards and chrome are a translucent white veil over the page
-   * gradient rather than a solid fill, so the gradient reads through them.
-   */
-  --glass: rgb(231 236 233 / 4%);
-  --glass-strong: rgb(231 236 233 / 7%);
-  --glass-chrome: color-mix(in srgb, var(--background) 72%, transparent);
+  /* Glass surfaces */
+  --glass: rgba(14, 21, 17, 0.7);
+  --glass-strong: rgba(14, 21, 17, 0.9);
+  --glass-chrome: rgba(7, 11, 9, 0.88);
 
-  /* Action — CTA surfaces. Brand green never carries text on dark (contrast). */
-  --action: var(--brand);
-  --action-hover: var(--brand-light);
-  --action-active: var(--brand-dark);
-  --action-fg: #ffffff;
+  /* Action — CTA surfaces */
+  --action: #00ff88;
+  --action-hover: #1aff96;
+  --action-active: #00cc6a;
+  --action-fg: #050806;
 
-  /* Gradients — CORE VISUAL §Gradients, all 135deg */
-  --gradient-brand-deep: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
-  --gradient-brand-lift: linear-gradient(135deg, var(--brand) 0%, var(--dark-accent) 100%);
-  --gradient-dark-surface: linear-gradient(135deg, var(--dark-background) 0%, var(--dark-surface) 100%);
+  /* Gradients */
+  --gradient-brand-deep: linear-gradient(135deg, #00e575 0%, #008f44 100%);
+  --gradient-brand-lift: linear-gradient(135deg, #00e575 0%, #00ff88 100%);
+  --gradient-dark-surface: linear-gradient(180deg, #070b09 0%, #0a110d 100%);
   --gradient-warm: linear-gradient(135deg, var(--light-background) 0%, var(--accent-warm) 100%);
 
   /**
@@ -388,5 +379,60 @@ textarea {
 
   .mask-fade-l {
     mask-image: linear-gradient(to left, black, transparent);
+  }
+
+  .tech-card {
+    background: #0d1411;
+    border: 1px solid rgba(0, 255, 136, 0.14);
+    border-radius: 0.75rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .tech-card:hover {
+    border-color: rgba(0, 255, 136, 0.5);
+    box-shadow: 0 0 25px -5px rgba(0, 255, 136, 0.2);
+  }
+
+  .tech-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 255, 136, 0.25);
+    background: rgba(0, 255, 136, 0.06);
+    color: #00ff88;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .tech-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(0, 255, 136, 0.25);
+    background: rgba(0, 255, 136, 0.05);
+    color: #00ff88;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .glow-btn {
+    background: #00ff88;
+    color: #050806;
+    font-family: var(--font-mono), monospace;
+    font-weight: 600;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    transition: all 0.2s ease;
+  }
+
+  .glow-btn:hover {
+    background: #1aff96;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.65);
+    transform: translateY(-1px);
   }
 }
