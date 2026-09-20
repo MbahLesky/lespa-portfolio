@@ -75,13 +75,13 @@ export function SiteHeader({ revealed = false }) {
             ))}
           </ul>
 
-          {/* Desktop Right CTA: [Your link here] */}
+          {/* Desktop Right CTA: Contact */}
           <div className="hidden md:block">
             <a
               href="#contact"
               className="glow-btn inline-flex items-center justify-center rounded-lg px-5 py-2.5 font-mono text-xs tracking-wider uppercase transition-all duration-fast"
             >
-              [Your link here]
+              Contact
             </a>
           </div>
 
@@ -101,9 +101,9 @@ export function SiteHeader({ revealed = false }) {
             <li>
               <a
                 href="#contact"
-                className="glow-btn inline-flex items-center justify-center rounded-md px-2.5 py-1.5 font-mono text-[11px] tracking-tight"
+                className="glow-btn inline-flex items-center justify-center rounded-md px-3 py-1.5 font-mono text-xs tracking-tight uppercase"
               >
-                [Link]
+                Contact
               </a>
             </li>
           </ul>

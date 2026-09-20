@@ -39,6 +39,7 @@
   --accent-warm: #ede7db;
 
   /* Semantic — dark-first. Phase 1 maps these to the dark palette. */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --background: var(--dark-background);
   --surface: var(--dark-surface);
   --text-primary: var(--dark-text);

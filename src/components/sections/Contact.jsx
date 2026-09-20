@@ -13,16 +13,14 @@ import {
   Mail,
   MapPin,
   Phone,
-  Send,
 } from "lucide-react";
 
-import { contact, socials } from "@/content/copy";
+import { contact } from "@/content/copy";
 import { contactSchema } from "@/lib/contact-schema";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export function Contact() {
   const [status, setStatus] = useState("idle");
-  const [showForm, setShowForm] = useState(false);
   const reducedMotion = useReducedMotion();
 
   const {
@@ -67,7 +65,7 @@ export function Contact() {
         <motion.div {...fadeUp} className="flex flex-col items-start">
           {/* Eyebrow */}
           <span className="font-mono text-xs uppercase tracking-widest text-[#00ff88]">
-            // 06. INITIATE CONTACT
+            {"// 06. CONTACT"}
           </span>
 
           {/* Heading */}
@@ -75,185 +73,74 @@ export function Contact() {
             Let&apos;s Build Something Built To Last
           </h2>
 
-          {/* Subtext */}
+          {/* Intro line from original copy */}
           <p className="mt-4 max-w-2xl text-base text-content-secondary leading-relaxed">
-            Direct, transparent collaboration. Contact Mbah Lesky to discuss brand identity
-            design, web engineering, or mobile apps.
+            {contact.introLine}
           </p>
         </motion.div>
 
-        {/* 2-Column Grid: Contact Information on Left, Code Box on Right */}
+        {/* Row 1: Contact Form on Left, Code Element on Right */}
         <div className="mt-12 grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-16">
-          {/* Left Column: Direct Route Cards & Social Icons */}
-          <motion.div {...fadeUp} className="flex flex-col gap-6">
-            {/* 1. Location Card */}
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#00ff88]/30 bg-[#00ff88]/10 text-[#00ff88]">
-                <MapPin className="h-5 w-5" />
+          {/* Left Column: Form displayed directly */}
+          <motion.div {...fadeUp} className="tech-card flex flex-col p-6 sm:p-8">
+            <h3 className="font-heading text-xl font-bold text-white mb-6">
+              Send a Message
+            </h3>
+
+            <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
+              <div>
+                <label htmlFor="name" className="font-mono text-xs uppercase tracking-wider text-content-secondary">
+                  {contact.fields.name}
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="Your name"
+                  {...register("name")}
+                  className="mt-2 w-full rounded-md border border-white/10 bg-[#070b09] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#00ff88]"
+                />
+                {errors.name && (
+                  <p className="mt-1.5 font-mono text-xs text-red-400">{errors.name.message}</p>
+                )}
               </div>
-              <div className="flex flex-col">
-                <span className="font-mono text-xs uppercase tracking-wider text-content-secondary">
-                  LOCATION
-                </span>
-                <span className="text-base font-semibold text-white">
-                  Mile III Nkwen, Bamenda, North West, CM
-                </span>
+
+              <div>
+                <label htmlFor="email" className="font-mono text-xs uppercase tracking-wider text-content-secondary">
+                  {contact.fields.email}
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="your.email@example.com"
+                  {...register("email")}
+                  className="mt-2 w-full rounded-md border border-white/10 bg-[#070b09] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#00ff88]"
+                />
+                {errors.email && (
+                  <p className="mt-1.5 font-mono text-xs text-red-400">{errors.email.message}</p>
+                )}
               </div>
-            </div>
 
-            {/* 2. Email Card */}
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#00ff88]/30 bg-[#00ff88]/10 text-[#00ff88]">
-                <Mail className="h-5 w-5" />
+              <div>
+                <label htmlFor="message" className="font-mono text-xs uppercase tracking-wider text-content-secondary">
+                  {contact.fields.message}
+                </label>
+                <textarea
+                  id="message"
+                  rows={5}
+                  placeholder="Tell me about your project or vision..."
+                  {...register("message")}
+                  className="mt-2 w-full rounded-md border border-white/10 bg-[#070b09] px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#00ff88]"
+                />
+                {errors.message && (
+                  <p className="mt-1.5 font-mono text-xs text-red-400">{errors.message.message}</p>
+                )}
               </div>
-              <div className="flex flex-col">
-                <span className="font-mono text-xs uppercase tracking-wider text-content-secondary">
-                  EMAIL DIRECT
-                </span>
-                <a
-                  href="mailto:mbahlesky2@gmail.com"
-                  className="text-base font-semibold text-white transition-colors duration-200 hover:text-[#00ff88]"
-                >
-                  mbahlesky2@gmail.com
-                </a>
-              </div>
-            </div>
 
-            {/* 3. Phone Card */}
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#00ff88]/30 bg-[#00ff88]/10 text-[#00ff88]">
-                <Phone className="h-5 w-5" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-mono text-xs uppercase tracking-wider text-content-secondary">
-                  PHONE / WHATSAPP
-                </span>
-                <a
-                  href="tel:+237679682626"
-                  className="text-base font-semibold text-white transition-colors duration-200 hover:text-[#00ff88]"
-                >
-                  +237 679 682 626
-                </a>
-              </div>
-            </div>
-
-            {/* Social Icons Row */}
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <a
-                href="https://www.facebook.com/iamlespa"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook"
-                className="tech-card flex h-11 w-11 items-center justify-center text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
-              >
-                <Facebook className="h-4 w-4" />
-              </a>
-              <a
-                href="https://www.instagram.com/iamlespa"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="tech-card flex h-11 w-11 items-center justify-center text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
-              >
-                <Instagram className="h-4 w-4" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/iamlespa"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-                className="tech-card flex h-11 w-11 items-center justify-center text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
-              >
-                <Linkedin className="h-4 w-4" />
-              </a>
-              <a
-                href="https://github.com/MbahLesky"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="GitHub"
-                className="tech-card flex h-11 w-11 items-center justify-center text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
-              >
-                <Github className="h-4 w-4" />
-              </a>
-              <a
-                href="https://www.tiktok.com/@iamlespa"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="TikTok"
-                className="tech-card flex h-11 w-11 items-center justify-center font-mono text-xs text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
-              >
-                TT
-              </a>
-            </div>
-
-            {/* Quick Send Message Button toggle */}
-            <div className="mt-4">
-              <button
-                type="button"
-                onClick={() => setShowForm((prev) => !prev)}
-                className="inline-flex items-center gap-2 rounded-lg border border-[#00ff88]/40 bg-[#00ff88]/10 px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[#00ff88] transition-all hover:bg-[#00ff88]/20 hover:border-[#00ff88]"
-              >
-                <Send className="h-3.5 w-3.5" />
-                <span>{showForm ? "Hide Message Form" : "Send A Message Here"}</span>
-              </button>
-            </div>
-
-            {/* Contact Form */}
-            {showForm && (
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-                className="tech-card mt-4 flex flex-col gap-4 p-6 sm:p-7"
-              >
-                <div>
-                  <label htmlFor="name" className="font-mono text-xs uppercase text-content-secondary">
-                    {contact.fields.name}
-                  </label>
-                  <input
-                    id="name"
-                    type="text"
-                    {...register("name")}
-                    className="mt-1.5 w-full rounded-md border border-white/10 bg-[#070b09] px-4 py-3 text-sm text-white outline-none focus:border-[#00ff88]"
-                  />
-                  {errors.name && (
-                    <p className="mt-1 font-mono text-xs text-red-400">{errors.name.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="font-mono text-xs uppercase text-content-secondary">
-                    {contact.fields.email}
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    {...register("email")}
-                    className="mt-1.5 w-full rounded-md border border-white/10 bg-[#070b09] px-4 py-3 text-sm text-white outline-none focus:border-[#00ff88]"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 font-mono text-xs text-red-400">{errors.email.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="font-mono text-xs uppercase text-content-secondary">
-                    {contact.fields.message}
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    {...register("message")}
-                    className="mt-1.5 w-full rounded-md border border-white/10 bg-[#070b09] px-4 py-3 text-sm text-white outline-none focus:border-[#00ff88]"
-                  />
-                  {errors.message && (
-                    <p className="mt-1 font-mono text-xs text-red-400">{errors.message.message}</p>
-                  )}
-                </div>
-
+              <div className="mt-2 flex flex-wrap items-center gap-4">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="glow-btn mt-2 inline-flex items-center justify-center gap-2 rounded-lg py-3 font-mono text-xs uppercase tracking-wider disabled:opacity-50"
+                  className="glow-btn inline-flex items-center justify-center gap-2 rounded-lg px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-wider disabled:opacity-50"
                 >
                   <span>{isSubmitting ? "Sending..." : contact.submit}</span>
                   <ArrowUpRight className="h-4 w-4" />
@@ -265,11 +152,11 @@ export function Contact() {
                 {status === "failed" && (
                   <p className="font-mono text-xs text-red-400">{contact.failure}</p>
                 )}
-              </form>
-            )}
+              </div>
+            </form>
           </motion.div>
 
-          {/* Right Column: The Code Manifest Box */}
+          {/* Right Column: Code Element Box */}
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
@@ -277,7 +164,7 @@ export function Contact() {
           >
             {/* Terminal Topbar */}
             <div className="mb-6 flex items-center justify-between border-b border-white/5 pb-4">
-              <span className="text-xs text-[#8b9990] italic">// Lespa System Manifest</span>
+              <span className="text-xs text-[#8b9990] italic">{"// Lespa System Manifest"}</span>
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-red-500/60" />
                 <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/60" />
@@ -330,6 +217,115 @@ export function Contact() {
             </div>
           </motion.div>
         </div>
+
+        {/* Row 2: Add the other details below the form and the code element */}
+        <motion.div
+          {...fadeUp}
+          transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-12 border-t border-white/10 pt-10"
+        >
+          <div className="grid gap-8 md:grid-cols-3">
+            {/* 1. Location */}
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#00ff88]/30 bg-[#00ff88]/10 text-[#00ff88]">
+                <MapPin className="h-5 w-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-mono text-xs uppercase tracking-wider text-content-secondary">
+                  LOCATION
+                </span>
+                <span className="text-sm sm:text-base font-semibold text-white">
+                  Mile III Nkwen, Bamenda, North West, CM
+                </span>
+              </div>
+            </div>
+
+            {/* 2. Email */}
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#00ff88]/30 bg-[#00ff88]/10 text-[#00ff88]">
+                <Mail className="h-5 w-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-mono text-xs uppercase tracking-wider text-content-secondary">
+                  EMAIL DIRECT
+                </span>
+                <a
+                  href={`mailto:${contact.direct.email}`}
+                  className="text-sm sm:text-base font-semibold text-white transition-colors duration-200 hover:text-[#00ff88]"
+                >
+                  {contact.direct.email}
+                </a>
+              </div>
+            </div>
+
+            {/* 3. Phone */}
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#00ff88]/30 bg-[#00ff88]/10 text-[#00ff88]">
+                <Phone className="h-5 w-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-mono text-xs uppercase tracking-wider text-content-secondary">
+                  PHONE / WHATSAPP
+                </span>
+                <a
+                  href={`tel:${contact.direct.phone.replace(/\s+/g, "")}`}
+                  className="text-sm sm:text-base font-semibold text-white transition-colors duration-200 hover:text-[#00ff88]"
+                >
+                  {contact.direct.phone}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Icons Row */}
+          <div className="mt-8 flex flex-wrap items-center justify-start gap-3">
+            <a
+              href="https://www.facebook.com/iamlespa"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
+              className="tech-card flex h-11 w-11 items-center justify-center text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
+            >
+              <Facebook className="h-4 w-4" />
+            </a>
+            <a
+              href="https://www.instagram.com/iamlespa"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram"
+              className="tech-card flex h-11 w-11 items-center justify-center text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
+            >
+              <Instagram className="h-4 w-4" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/iamlespa"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              className="tech-card flex h-11 w-11 items-center justify-center text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
+            >
+              <Linkedin className="h-4 w-4" />
+            </a>
+            <a
+              href="https://github.com/MbahLesky"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+              className="tech-card flex h-11 w-11 items-center justify-center text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
+            >
+              <Github className="h-4 w-4" />
+            </a>
+            <a
+              href="https://www.tiktok.com/@iamlespa"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="TikTok"
+              className="tech-card flex h-11 w-11 items-center justify-center font-mono text-xs text-content-secondary hover:text-[#00ff88] hover:border-[#00ff88]"
+            >
+              TT
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -6,7 +6,7 @@ import { about } from "@/content/copy";
 
 export function About() {
   return (
-    <section id="story" className="snap-section relative py-20 md:py-28">
+    <section id="about" className="snap-section relative py-20 md:py-28">
       <div className="relative mx-auto grid max-w-content items-start gap-12 px-6 md:px-8 lg:grid-cols-[320px_1fr] lg:gap-16">
         {/* Left Sticky Column: Portrait & Tools */}
         <div className="lg:sticky lg:top-28 lg:self-start">
@@ -23,7 +23,7 @@ export function About() {
               </div>
             </figure>
 
-            {/* Tool Chips */}
+            {/* Tool Chips: Design Tools, Development Tools, then Specializations */}
             {about.tools.map((group) => (
               <div key={group.heading} className="flex flex-col gap-3">
                 <h3 className="font-mono text-xs uppercase tracking-wider text-[#00ff88]">
@@ -41,11 +41,11 @@ export function About() {
           </Reveal>
         </div>
 
-        {/* Right Column: Bio Prose & Principles */}
+        {/* Right Column: Bio Prose, Roles, and Boundaries */}
         <div className="flex flex-col gap-12">
           <div>
             <span className="font-mono text-xs uppercase tracking-widest text-[#00ff88]">
-              // PERSPECTIVE &amp; ROOTS
+              {"// 05. ABOUT"}
             </span>
             <h2 className="mt-3 font-heading text-3xl sm:text-4xl font-bold tracking-tight text-white">
               The Journey Behind The Code

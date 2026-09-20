@@ -3,38 +3,30 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { whatIDo } from "@/content/copy";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const CAPABILITIES = [
+const CAPABILITY_IMAGES = [
   {
-    tag: "01 // BRANDING",
-    title: "Graphic Design",
-    description:
-      "Designs logos, visuals, and complete brand systems including colors, typography, and visual identity for individuals and businesses.",
     image: "/global_assets/lespa_laptop_design.webp",
-    alt: "Brand identity design on laptop workstation",
+    tag: "01 // BRANDING",
+    alt: "Graphic design and brand identity",
   },
   {
-    tag: "02 // ENGINEERING",
-    title: "Web Development",
-    description:
-      "Codes custom websites and web applications from scratch, ranging from one-page sites to full platform web apps.",
     image: "/global_assets/lespa_code.webp",
-    alt: "Code and web development on screen",
+    tag: "02 // ENGINEERING",
+    alt: "Web development and code architecture",
   },
   {
-    tag: "03 // MOBILE",
-    title: "Mobile Development",
-    description:
-      "Builds custom Android and iOS mobile applications tailored for productivity or business needs.",
     image: "/monilog_images/phone_mockup.webp",
-    alt: "Smartphone displaying mobile application interface",
+    tag: "03 // MOBILE",
+    alt: "Custom mobile application development",
   },
 ];
 
 export function WhatIDo() {
   const reducedMotion = useReducedMotion();
-  const [activeCard, setActiveCard] = useState(2); // Card 3 selected by default or on hover
+  const [activeCard, setActiveCard] = useState(1);
 
   const fadeUp = reducedMotion
     ? {}
@@ -51,22 +43,24 @@ export function WhatIDo() {
         <motion.div {...fadeUp} className="flex flex-col items-start">
           {/* Eyebrow */}
           <span className="font-mono text-xs uppercase tracking-widest text-[#00ff88]">
-            {"// 03. PRODUCTS & SERVICES"}
+            {"// 03. WHAT I DO"}
           </span>
 
-          {/* Heading */}
+          {/* Heading: What I Do */}
           <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
-            End-to-End Capabilities
+            {whatIDo.label}
           </h2>
         </motion.div>
 
         {/* 3 Cards Grid */}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {CAPABILITIES.map((item, idx) => {
+          {whatIDo.cards.map((item, idx) => {
+            const meta = CAPABILITY_IMAGES[idx];
             const isHovered = activeCard === idx;
+
             return (
               <motion.div
-                key={item.tag}
+                key={item.label}
                 {...fadeUp}
                 transition={{
                   duration: 0.5,
@@ -84,8 +78,8 @@ export function WhatIDo() {
                 <div className="relative aspect-[16/11] w-full overflow-hidden bg-[#070b09] p-3">
                   <div className="relative h-full w-full overflow-hidden rounded-lg">
                     <Image
-                      src={item.image}
-                      alt={item.alt}
+                      src={meta.image}
+                      alt={meta.alt}
                       fill
                       sizes="(min-width: 1024px) 380px, 100vw"
                       className="object-contain transition-transform duration-500 group-hover:scale-105"
@@ -93,21 +87,21 @@ export function WhatIDo() {
                   </div>
                 </div>
 
-                {/* Card Info */}
+                {/* Card Content */}
                 <div className="flex flex-1 flex-col p-6 sm:p-7">
                   {/* Category Tag */}
                   <span className="font-mono text-xs tracking-wider text-[#00ff88]">
-                    {item.tag}
+                    {meta.tag}
                   </span>
 
                   {/* Title */}
                   <h3 className="mt-3 font-heading text-2xl font-bold text-white">
-                    {item.title}
+                    {item.label}
                   </h3>
 
-                  {/* Description */}
+                  {/* Description from original copy */}
                   <p className="mt-3 text-sm text-content-secondary leading-relaxed">
-                    {item.description}
+                    {item.body}
                   </p>
                 </div>
               </motion.div>

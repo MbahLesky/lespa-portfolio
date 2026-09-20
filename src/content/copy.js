@@ -11,11 +11,10 @@
  */
 
 export const nav = [
-  { label: "About", href: "#about" },
-  { label: "Values", href: "#values" },
-  { label: "Services", href: "#what-i-do" },
   { label: "Work", href: "#work" },
+  { label: "What I Do", href: "#what-i-do" },
   { label: "Process", href: "#process" },
+  { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -74,8 +73,8 @@ export const hero = {
   roleLines: roleSegments.map(joinSegments),
   subtext: subtextPhrases.join(" "),
   ctas: {
-    primary: { label: "See my work", href: "#work" },
-    secondary: { label: "About me", href: "#about" },
+    primary: { label: "View Projects", href: "#work" },
+    secondary: { label: "About Me", href: "#about" },
   },
 };
 
@@ -279,6 +278,20 @@ export const about = {
         "Flutter",
         "XAMPP",
         "Firebase / Supabase",
+      ],
+    },
+    {
+      heading: "Specializations",
+      items: [
+        "Graphic Designer",
+        "Logo",
+        "Brand Identity",
+        "Software Engineer",
+        "Web Design",
+        "Web Developer",
+        "Mobile App",
+        "Flutter",
+        "Next.js",
       ],
     },
   ],

@@ -39,12 +39,12 @@ export function Process() {
         <motion.div {...fadeUp} className="flex flex-col items-start">
           {/* Eyebrow */}
           <span className="font-mono text-xs uppercase tracking-widest text-[#00ff88]">
-            {"// 05. METHODOLOGY"}
+            {"// 04. PROCESS"}
           </span>
 
           {/* Heading */}
           <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
-            How We Build
+            {processCopy.label}
           </h2>
         </motion.div>
 
@@ -151,7 +151,7 @@ function StepContent({ step, index, image, exchange }) {
           <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#00ff88]">
             Step {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="text-white/20">//</span>
+          <span className="text-white/20">{"//"}</span>
           <h3 className="font-heading text-xl font-bold text-white sm:text-2xl">
             {step.title}
           </h3>
