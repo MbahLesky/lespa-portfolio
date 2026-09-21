@@ -36,7 +36,7 @@ export function Intro() {
 
             {/* Intro Copy with original text and emphasis */}
             <div className="mt-6 border-l-2 border-[#00ff88] pl-5 sm:pl-6">
-              <p className="text-lg sm:text-xl font-normal text-white leading-relaxed">
+              <p className="text-lg sm:text-xl font-normal text-gray-400 leading-relaxed">
                 <EmphasizedText text={intro.body} emphasis={intro.emphasis} />
               </p>
             </div>

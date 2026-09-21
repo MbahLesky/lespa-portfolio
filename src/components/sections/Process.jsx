@@ -147,7 +147,7 @@ function StepContent({ step, index, image, exchange }) {
     <motion.div {...enter} className="tech-card flex flex-col p-6 sm:p-8">
       {/* 1. Text displays ABOVE (before) the image */}
       <div className="flex flex-col gap-2 pb-6">
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
           <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#00ff88]">
             Step {String(index + 1).padStart(2, "0")}
           </span>
@@ -155,7 +155,7 @@ function StepContent({ step, index, image, exchange }) {
           <h3 className="font-heading text-xl font-bold text-white sm:text-2xl">
             {step.title}
           </h3>
-        </div>
+        </div> */}
 
         <p className="mt-2 text-sm sm:text-base text-content-secondary leading-relaxed">
           <EmphasizedText text={step.body} emphasis={step.emphasis} />
