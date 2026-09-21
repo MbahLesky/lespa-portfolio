@@ -131,7 +131,7 @@ export function Process() {
  * Renders the step description ABOVE the image, and the image directly below/beside it.
  * No text overlaid with scrim on top of the image.
  */
-function StepContent({ step, index, image, exchange }) {
+function StepContent({ step, image, exchange }) {
   const reducedMotion = useReducedMotion();
 
   const enter = reducedMotion
