@@ -31,7 +31,15 @@ const options = { next: { revalidate: 30 } };
  * state (intro animation, cursor follower, scroll-driven work carousel).
  */
 export default async function Home() {
-  const projects = await client.fetch(PROJECTS_QUERY, {}, options);
+  let projects = [];
+
+  try {
+    if (client) {
+      projects = (await client.fetch(PROJECTS_QUERY, {}, options)) || [];
+    }
+  } catch (err) {
+    console.warn("Failed to fetch projects from Sanity, using fallback content:", err);
+  }
 
   return <HomeShell projects={projects} />;
 }
