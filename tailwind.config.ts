@@ -65,6 +65,7 @@ const config: Config = {
       fontFamily: {
         heading: ["var(--font-heading)", "system-ui", "sans-serif"], // Saira
         body: ["var(--font-body)", "system-ui", "sans-serif"], // IBM Plex Sans
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
       },
 
       /* [size, { lineHeight, letterSpacing, fontWeight }]

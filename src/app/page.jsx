@@ -1,52 +1,37 @@
-"use client";
+import { defineQuery } from "next-sanity";
 
-import { useState } from "react";
+import { client } from "@/sanity/client";
+import { HomeShell } from "@/components/HomeShell";
 
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { About } from "@/components/sections/About";
-import { Contact } from "@/components/sections/Contact";
-import { Hero } from "@/components/sections/Hero";
-import { Intro } from "@/components/sections/Intro";
-import { Process } from "@/components/sections/Process";
-import { SelectedWork } from "@/components/sections/SelectedWork";
-import { WhatIDo } from "@/components/sections/WhatIDo";
-import { BackdropField } from "@/components/shared/BackdropField";
-import { CursorFollower } from "@/components/shared/CursorFollower";
+const PROJECTS_QUERY = defineQuery(
+  `*[_type == "project"] | order(orderRank asc){
+    _id,
+    name,
+    "slug": slug.current,
+    tags,
+    subtext,
+    accentVar,
+    liveUrl,
+    image,
+    imageAlt,
+    hoverImage,
+    hoverImageAlt,
+    backdrop,
+    orderRank
+  }`
+);
+
+const options = { next: { revalidate: 30 } };
 
 /**
  * Phase 1 — the whole site, on one page.
  *
- * Section order is fixed by the structure doc: Hero, Intro, Selected Work, What
- * I Do, Process, About, Contact. The footer is persistent and lives in the
- * layout, not here.
- *
- * The nav animates in last, after the hero's typed sequence finishes, so the
- * hero owns that signal and hands it up.
+ * This is a Server Component: it fetches project data from Sanity, then hands
+ * everything to <HomeShell />, the client component that owns the interactive
+ * state (intro animation, cursor follower, scroll-driven work carousel).
  */
-export default function Home() {
-  const [introComplete, setIntroComplete] = useState(false);
+export default async function Home() {
+  const projects = await client.fetch(PROJECTS_QUERY, {}, options);
 
-  return (
-    <>
-      {/* The page gradient's pointer-reactive light. Behind everything. */}
-      <BackdropField />
-
-      {/* Starts at the hero and persists for everything below it. */}
-      <CursorFollower />
-
-      <SiteHeader revealed={introComplete} />
-
-      {/* Clears the pinned footer: one icon row below lg, a full row above it.
-          Above the backdrop field, which is fixed at z-0. */}
-      <main id="main" className="relative z-10 pb-16 lg:pb-20">
-        <Hero onIntroComplete={() => setIntroComplete(true)} />
-        <Intro />
-        <SelectedWork />
-        <WhatIDo />
-        <Process />
-        <About />
-        <Contact />
-      </main>
-    </>
-  );
+  return <HomeShell projects={projects} />;
 }

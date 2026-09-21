@@ -2,66 +2,36 @@ import Image from "next/image";
 
 import { EmphasizedText } from "@/components/shared/EmphasizedText";
 import { Reveal } from "@/components/shared/Reveal";
-import { SectionHeading } from "@/components/shared/SectionHeading";
 import { about } from "@/content/copy";
 
-/**
- * About — a section, not a page, in Phase 1.
- *
- * Two background treatments meet here, and they are deliberately different:
- *
- * - The photo sits in a card (bordered, elevated). With the Selected Work images
- *   it is one of only two things on the page that look placed on top of it.
- * - Everything behind it is blended: a real wireframe fragment on one side and a
- *   real sketch fragment on the other, faded into the background with no card, no
- *   border and no shadow, mirroring the Designer/Developer split.
- */
 export function About() {
   return (
-    // No `overflow-hidden` on the section: it would disable the sticky column
-    // below. SplitBackdrop clips itself, so the section does not need to.
-    <section id="about" className="snap-section relative py-24 md:py-30">
-      <SplitBackdrop />
-
+    <section id="about" className="snap-section relative py-20 md:py-28">
       <div className="relative mx-auto grid max-w-content items-start gap-12 px-6 md:px-8 lg:grid-cols-[320px_1fr] lg:gap-16">
-        {/* The photo and the tool lists hold still while the story scrolls past
-            them, and release only when the section ends (structure doc §6: "The
-            left side is sticky/fixed when scrolling, while the right side
-            scrolls for this section").
-
-            The sticky sits on this wrapper rather than on Reveal, which animates
-            a transform. `self-start` is what makes it work at all — a grid item
-            stretches to its row by default, leaving nothing to stick. */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        {/* Left Sticky Column: Portrait & Tools */}
+        <div className="lg:sticky lg:top-28 lg:self-start">
           <Reveal className="flex flex-col gap-8">
-            {/* The photo is a card — the exception to the blended rule here. */}
-            <figure className="glass overflow-hidden rounded-xl border border-border p-2">
-              {/* TODO: asset needed — assets doc §6, "Your photo (card-mounted,
-                  not blended) — professional". Using the existing portrait until
-                  the new one is shot. */}
-              <div className="relative aspect-portrait overflow-hidden rounded-lg">
+            <figure className="tech-card overflow-hidden p-2.5 shadow-xl">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-[#070b09]">
                 <Image
                   src="/global_assets/social_share.webp"
-                alt="Mbah Lesky, known as Lespa."
-                fill
-                sizes="(min-width: 1024px) 320px, 100vw"
-                className="object-cover"
-              />
-            </div>
-          </figure>
+                  alt="Mbah Lesky, known as Lespa."
+                  fill
+                  sizes="(min-width: 1024px) 320px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            </figure>
 
-            {/* Labelled chips, no descriptive copy — structure doc §6. */}
+            {/* Tool Chips: Design Tools, Development Tools, then Specializations */}
             {about.tools.map((group) => (
-              <div key={group.heading} className="flex flex-col gap-4">
-                <h3 className="text-caption uppercase tracking-eyebrow text-accent">
+              <div key={group.heading} className="flex flex-col gap-3">
+                <h3 className="font-mono text-xs uppercase tracking-wider text-[#00ff88]">
                   {group.heading}
                 </h3>
                 <ul className="flex flex-wrap gap-2">
                   {group.items.map((tool) => (
-                    <li
-                      key={tool}
-                      className="glass cursor-default rounded-sm border border-border px-4 py-1 text-caption text-content transition-colors duration-fast hover:border-accent-soft hover:text-accent"
-                    >
+                    <li key={tool} className="tech-badge cursor-default">
                       {tool}
                     </li>
                   ))}
@@ -71,27 +41,35 @@ export function About() {
           </Reveal>
         </div>
 
+        {/* Right Column: Bio Prose, Roles, and Boundaries */}
         <div className="flex flex-col gap-12">
-          <SectionHeading label={about.label} />
+          <div>
+            <span className="font-mono text-xs uppercase tracking-widest text-[#00ff88]">
+              {"// 05. ABOUT"}
+            </span>
+            <h2 className="mt-3 font-heading text-3xl sm:text-4xl font-bold tracking-tight text-white">
+              The Journey Behind The Code
+            </h2>
+          </div>
 
           <Reveal className="flex max-w-reading flex-col gap-4">
             {about.bio.map((paragraph) => (
-              <p key={paragraph.body} className="text-body text-content-secondary">
+              <p key={paragraph.body} className="text-base text-content-secondary leading-relaxed">
                 <EmphasizedText text={paragraph.body} emphasis={paragraph.emphasis} />
               </p>
             ))}
           </Reveal>
 
-          {/* Two short bullet lists, not prose — Adham Dannaway split structure. */}
-          <Reveal className="grid gap-8 md:grid-cols-2">
+          {/* Role Split */}
+          <Reveal className="grid gap-6 sm:grid-cols-2">
             {about.roleSplit.map((role) => (
-              <div key={role.heading} className="flex flex-col gap-4 border-t border-border pt-6">
-                <h3 className="font-heading text-h5 text-content">{role.heading}</h3>
-                <ul className="flex flex-col gap-2">
+              <div key={role.heading} className="tech-card flex flex-col p-6">
+                <h3 className="font-heading text-lg font-bold text-white">{role.heading}</h3>
+                <ul className="mt-4 flex flex-col gap-2">
                   {role.items.map((item) => (
                     <li
                       key={item}
-                      className="text-body text-content-secondary before:mr-2 before:text-accent before:content-['—']"
+                      className="text-sm text-content-secondary before:mr-2 before:text-[#00ff88] before:content-['—']"
                     >
                       {item}
                     </li>
@@ -101,23 +79,14 @@ export function About() {
             ))}
           </Reveal>
 
-          <Reveal>
-            <p className="max-w-reading text-body text-content-secondary">
-              <EmphasizedText
-                text={about.offHours.body}
-                emphasis={about.offHours.emphasis}
-              />
-            </p>
-          </Reveal>
-
-          {/* Its own distinct block, after the role-split lists. */}
-          <Reveal className="flex flex-col gap-6 border-t border-border pt-8">
-            <h3 className="font-heading text-h4-m text-content md:text-h4">
+          {/* Boundaries / What I Don't Do */}
+          <Reveal className="tech-card flex flex-col gap-4 p-6 sm:p-8">
+            <h3 className="font-heading text-xl font-bold text-white">
               {about.boundaries.heading}
             </h3>
-            <div className="flex max-w-reading flex-col gap-4">
+            <div className="flex max-w-reading flex-col gap-3">
               {about.boundaries.paragraphs.map((paragraph) => (
-                <p key={paragraph.body} className="text-body text-content-secondary">
+                <p key={paragraph.body} className="text-sm text-content-secondary leading-relaxed">
                   <EmphasizedText text={paragraph.body} emphasis={paragraph.emphasis} />
                 </p>
               ))}
@@ -126,34 +95,5 @@ export function About() {
         </div>
       </div>
     </section>
-  );
-}
-
-/**
- * The blended split composition: wireframe on the left, sketch on the right.
- *
- * Both fragments are real Lespa work, not stock. They are faded hard and masked
- * towards the centre so they never reach the copy, and they carry no frame of any
- * kind — they are the background, not an image placed on it.
- *
- * TODO: asset needed — assets doc §6, "Background split composition — real Lespa
- * work, blended: a code/wireframe fragment on one side, a design/sketch fragment
- * on the other". Standing in with the Monilog construction diagram and pencil
- * sketch until the dedicated fragments are exported.
- */
-function SplitBackdrop() {
-  return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="mask-fade-r absolute inset-y-0 left-0 w-full opacity-10">
-        <Image
-          src="/global_assets/lespa_workspace1.webp"
-          alt=""
-          fill
-          sizes="50vw"
-          className="object-cover"
-        />
-      </div>
-
-    </div>
   );
 }

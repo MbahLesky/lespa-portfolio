@@ -1,119 +1,113 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { Brush, Code2, Smartphone } from "lucide-react";
-
-import { EmphasizedText } from "@/components/shared/EmphasizedText";
-import { PatternBackdrop } from "@/components/shared/PatternBackdrop";
-import { SectionHeading } from "@/components/shared/SectionHeading";
+import { motion } from "framer-motion";
 import { whatIDo } from "@/content/copy";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-/**
- * What I Do — three hover-to-reveal tracks (Tamal Sen reference).
- *
- * At rest a card is only its title and icon with its padding — compact, no empty
- * space held open for copy that is not showing. Hovering expands it: the card
- * grows to fit the detail copy, the copy fades up, and a blended work fragment
- * appears behind it. Each card is a button, so hover, focus and tap all reach the
- * same reveal; a pointer is not required.
- *
- * The section background is the blended pattern: no border and no shadow on the
- * pattern itself. The cards above it stay restrained — glass and a hairline that
- * warms on hover, no heavy elevation — so the pattern still reads as the page
- * rather than as something framed.
- */
-const ICONS = [Brush, Code2, Smartphone];
-
-/**
- * One blended fragment per track, behind the copy on hover.
- *
- * Real Lespa work rather than decoration: a brand sheet for the design track, a
- * built dashboard for web, app screens for mobile.
- */
-const BACKDROPS = [
-  "/global_assets/lespa_laptop_design.webp",
-  "/global_assets/lespa_skuulabs_web.webp",
-  "/global_assets/lespa_android_studio.webp",
+const CAPABILITY_IMAGES = [
+  {
+    image: "/global_assets/lespa_laptop_design.webp",
+    tag: "01 // BRANDING",
+    alt: "Graphic design and brand identity",
+  },
+  {
+    image: "/global_assets/lespa_code.webp",
+    tag: "02 // ENGINEERING",
+    alt: "Web development and code architecture",
+  },
+  {
+    image: "/monilog_images/phone_mockup.webp",
+    tag: "03 // MOBILE",
+    alt: "Custom mobile application development",
+  },
 ];
 
 export function WhatIDo() {
-  const [openIndex, setOpenIndex] = useState(null);
-  const baseId = useId();
+  const reducedMotion = useReducedMotion();
+  const [activeCard, setActiveCard] = useState(1);
+
+  const fadeUp = reducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 24 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+      };
 
   return (
-    <section id="what-i-do" className="snap-section relative overflow-hidden py-24 md:py-30">
-      <PatternBackdrop />
+    <section id="what-i-do" className="snap-section relative overflow-hidden py-20 md:py-28">
+      <div className="relative mx-auto w-full max-w-content px-6 md:px-8">
+        <motion.div {...fadeUp} className="flex flex-col items-start">
+          {/* Eyebrow */}
+          <span className="font-mono text-xs uppercase tracking-widest text-[#00ff88]">
+            {"// 03. WHAT I DO"}
+          </span>
 
-      <div className="relative mx-auto flex max-w-content flex-col gap-12 px-6 md:px-8">
-        <SectionHeading label={whatIDo.label} />
+          {/* Heading: What I Do */}
+          <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+            {whatIDo.label}
+          </h2>
+        </motion.div>
 
-        <ul className="grid items-start gap-6 md:grid-cols-3">
-          {whatIDo.cards.map((card, index) => {
-            const Icon = ICONS[index];
-            const open = openIndex === index;
-            const bodyId = `${baseId}-${index}`;
+        {/* 3 Cards Grid */}
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {whatIDo.cards.map((item, idx) => {
+            const meta = CAPABILITY_IMAGES[idx];
+            const isHovered = activeCard === idx;
 
             return (
-              <li key={card.label} className="contents">
-                <button
-                  type="button"
-                  aria-expanded={open}
-                  aria-controls={bodyId}
-                  onMouseEnter={() => setOpenIndex(index)}
-                  onMouseLeave={() => setOpenIndex(null)}
-                  onFocus={() => setOpenIndex(index)}
-                  onBlur={() => setOpenIndex(null)}
-                  onClick={() => setOpenIndex(open ? null : index)}
-                  className={`glass relative flex flex-col overflow-hidden rounded-xl border p-6 text-left transition-colors duration-slow ease-out ${
-                    open ? "border-accent-soft" : "border-border"
-                  }`}
-                >
-                  {/* Blended fragment, only while the card is open. */}
-                  <span
-                    aria-hidden="true"
-                    className={`pointer-events-none absolute inset-0 transition-opacity duration-slow ease-out ${
-                      open ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    <span className="mask-fade-l absolute inset-0 block opacity-30">
-                      <Image
-                        src={BACKDROPS[index]}
-                        alt=""
-                        fill
-                        sizes="(min-width: 768px) 380px, 100vw"
-                        className="object-cover"
-                      />
-                    </span>
-                  </span>
-
-                  <span className="relative flex items-center justify-between gap-6">
-                    <span className="font-heading text-h5 text-content">{card.label}</span>
-                    <Icon
-                      className={`h-6 w-6 shrink-0 transition-colors duration-slow ${
-                        open ? "text-accent" : "text-content-secondary"
-                      }`}
-                      aria-hidden="true"
+              <motion.div
+                key={item.label}
+                {...fadeUp}
+                transition={{
+                  duration: 0.5,
+                  delay: idx * 0.1,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                onMouseEnter={() => setActiveCard(idx)}
+                className={`tech-card group flex flex-col overflow-hidden transition-all duration-300 ${
+                  isHovered
+                    ? "border-[#00ff88] shadow-[0_0_30px_rgba(0,255,136,0.18)]"
+                    : "border-[#00ff88]/15"
+                }`}
+              >
+                {/* Mockup Preview Area */}
+                <div className="relative aspect-[16/11] w-full overflow-hidden bg-[#070b09] p-3">
+                  <div className="relative h-full w-full overflow-hidden rounded-lg">
+                    <Image
+                      src={meta.image}
+                      alt={meta.alt}
+                      fill
+                      sizes="(min-width: 1024px) 380px, 100vw"
+                      className="object-contain transition-transform duration-500 group-hover:scale-105"
                     />
+                  </div>
+                </div>
+
+                {/* Card Content */}
+                <div className="flex flex-1 flex-col p-6 sm:p-7">
+                  {/* Category Tag */}
+                  <span className="font-mono text-xs tracking-wider text-[#00ff88]">
+                    {meta.tag}
                   </span>
 
-                  {/* Collapsed to nothing at rest, so the card is only as tall as
-                      its title. grid-rows keeps the copy in the document — it is
-                      never unmounted — while still animating to zero height. */}
-                  <span
-                    className={`relative grid transition-all duration-slow ease-out ${
-                      open ? "grid-rows-expanded pt-6 opacity-100" : "grid-rows-collapsed pt-0 opacity-0"
-                    }`}
-                  >
-                    <span id={bodyId} className="overflow-hidden text-body text-content-secondary">
-                      <EmphasizedText text={card.body} emphasis={card.emphasis} />
-                    </span>
-                  </span>
-                </button>
-              </li>
+                  {/* Title */}
+                  <h3 className="mt-3 font-heading text-2xl font-bold text-white">
+                    {item.label}
+                  </h3>
+
+                  {/* Description from original copy */}
+                  <p className="mt-3 text-sm text-content-secondary leading-relaxed">
+                    {item.body}
+                  </p>
+                </div>
+              </motion.div>
             );
           })}
-        </ul>
+        </div>
       </div>
     </section>
   );

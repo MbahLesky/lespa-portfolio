@@ -1,45 +1,66 @@
+"use client";
+
 import Image from "next/image";
-
+import { motion } from "framer-motion";
 import { EmphasizedText } from "@/components/shared/EmphasizedText";
-import { PatternBackdrop } from "@/components/shared/PatternBackdrop";
-import { Reveal } from "@/components/shared/Reveal";
 import { intro } from "@/content/copy";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-/**
- * Intro — the "design and code are one job" position, in three sentences.
- *
- * Blended throughout: the abstract pattern behind the section, and a real work
- * fragment on the right that fades into the page rather than sitting in a card.
- * No card, no border, no shadow (structure doc, BACKGROUND IMAGERY RULE).
- */
 export function Intro() {
+  const reducedMotion = useReducedMotion();
+
+  const fadeUp = reducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 24 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-80px" },
+        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+      };
+
   return (
-    <section id="intro" className="snap-section relative overflow-hidden py-24 md:py-30">
-      <PatternBackdrop />
+    <section id="intro" className="snap-section relative overflow-hidden py-20 md:py-28">
+      <div className="relative mx-auto w-full max-w-content px-6 md:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          {/* Left Column: Intro Copy */}
+          <motion.div {...fadeUp} className="flex flex-col items-start">
+            {/* Eyebrow */}
+            <span className="font-mono text-xs uppercase tracking-widest text-[#00ff88]">
+              {"// 01. INTRO"}
+            </span>
 
-      <div className="relative mx-auto grid max-w-content items-center gap-12 px-6 md:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-        <Reveal>
-          <p className="max-w-reading text-balance text-h5-m text-content md:text-h5">
-            <EmphasizedText text={intro.body} emphasis={intro.emphasis} />
-          </p>
-        </Reveal>
+            {/* Title */}
+            <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+              Design &amp; Code As One Job
+            </h2>
 
-        {/* Blended, not a card: masked and faded so it reads as part of the page.
-            Hidden below lg, where it would crowd the copy rather than frame it. */}
-        <Reveal
-          className="relative hidden aspect-[1.15] w-full max-w-[34rem] lg:block md:justify-self-end"
-          delay={0.15}
-        >
-          <div aria-hidden="true" className="mask-fade-l absolute inset-0 opacity-100">
-            <Image
-              src="/global_assets/lespa_laptop_design.webp"
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 480px, 0px"
-              className="object-cover"
-            />
-          </div>
-        </Reveal>
+            {/* Intro Copy with original text and emphasis */}
+            <div className="mt-6 border-l-2 border-[#00ff88] pl-5 sm:pl-6">
+              <p className="text-lg sm:text-xl font-normal text-gray-400 leading-relaxed">
+                <EmphasizedText text={intro.body} emphasis={intro.emphasis} />
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Right Column: Only Computer / Laptop Image */}
+          <motion.div
+            {...fadeUp}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="relative flex flex-col items-center justify-center lg:items-end"
+          >
+            <div className="tech-card relative w-full max-w-[480px] overflow-hidden p-3 shadow-2xl">
+              <div className="relative aspect-[16/11] w-full overflow-hidden rounded-lg bg-[#070b09]">
+                <Image
+                  src="/global_assets/lespa_laptop_design.webp"
+                  alt="Laptop workstation displaying design and code architecture"
+                  fill
+                  sizes="(min-width: 1024px) 480px, 100vw"
+                  className="object-cover transition-transform duration-500 hover:scale-[1.03]"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
