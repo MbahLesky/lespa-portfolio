@@ -19,9 +19,17 @@ import { contact } from "@/content/copy";
 import { contactSchema } from "@/lib/contact-schema";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-export function Contact() {
+export function Contact({ content }) {
   const [status, setStatus] = useState("idle");
   const reducedMotion = useReducedMotion();
+
+  const introLine = content?.contactIntroLine || contact.introLine;
+  const directHeading = content?.contactDirectHeading || contact.direct.heading;
+  const directEmail = content?.contactEmail || contact.direct.email;
+  const directPhone = content?.contactPhone || contact.direct.phone;
+  const submitLabel = content?.contactSubmitLabel || contact.submit;
+  const successMsg = content?.contactSuccessMessage || contact.success;
+  const failureMsg = content?.contactFailureMessage || contact.failure;
 
   const {
     register,
@@ -73,9 +81,9 @@ export function Contact() {
             Let&apos;s Build Something Built To Last
           </h2>
 
-          {/* Intro line from original copy */}
+          {/* Intro line */}
           <p className="mt-4 max-w-2xl text-base text-content-secondary leading-relaxed">
-            {contact.introLine}
+            {introLine}
           </p>
         </motion.div>
 
@@ -142,15 +150,15 @@ export function Contact() {
                   disabled={isSubmitting}
                   className="glow-btn inline-flex items-center justify-center gap-2 rounded-lg px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-wider disabled:opacity-50"
                 >
-                  <span>{isSubmitting ? "Sending..." : contact.submit}</span>
+                  <span>{isSubmitting ? "Sending..." : submitLabel}</span>
                   <ArrowUpRight className="h-4 w-4" />
                 </button>
 
                 {status === "sent" && (
-                  <p className="font-mono text-xs text-[#00ff88]">{contact.success}</p>
+                  <p className="font-mono text-xs text-[#00ff88]">{successMsg}</p>
                 )}
                 {status === "failed" && (
-                  <p className="font-mono text-xs text-red-400">{contact.failure}</p>
+                  <p className="font-mono text-xs text-red-400">{failureMsg}</p>
                 )}
               </div>
             </form>
@@ -247,13 +255,13 @@ export function Contact() {
               </div>
               <div className="flex flex-col">
                 <span className="font-mono text-xs uppercase tracking-wider text-content-secondary">
-                  EMAIL DIRECT
+                  {directHeading || "EMAIL DIRECT"}
                 </span>
                 <a
-                  href={`mailto:${contact.direct.email}`}
+                  href={`mailto:${directEmail}`}
                   className="text-sm sm:text-base font-semibold text-white transition-colors duration-200 hover:text-[#00ff88]"
                 >
-                  {contact.direct.email}
+                  {directEmail}
                 </a>
               </div>
             </div>
@@ -268,10 +276,10 @@ export function Contact() {
                   PHONE / WHATSAPP
                 </span>
                 <a
-                  href={`tel:${contact.direct.phone.replace(/\s+/g, "")}`}
+                  href={`tel:${directPhone.replace(/\s+/g, "")}`}
                   className="text-sm sm:text-base font-semibold text-white transition-colors duration-200 hover:text-[#00ff88]"
                 >
-                  {contact.direct.phone}
+                  {directPhone}
                 </a>
               </div>
             </div>

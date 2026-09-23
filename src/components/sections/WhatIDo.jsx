@@ -24,7 +24,7 @@ const CAPABILITY_IMAGES = [
   },
 ];
 
-export function WhatIDo() {
+export function WhatIDo({ content }) {
   const reducedMotion = useReducedMotion();
   const [activeCard, setActiveCard] = useState(1);
 
@@ -37,6 +37,9 @@ export function WhatIDo() {
         transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
       };
 
+  const sectionLabel = content?.whatIDoLabel || whatIDo.label;
+  const cards = content?.whatIDoCards?.length ? content.whatIDoCards : whatIDo.cards;
+
   return (
     <section id="what-i-do" className="snap-section relative overflow-hidden py-20 md:py-28">
       <div className="relative mx-auto w-full max-w-content px-6 md:px-8">
@@ -48,14 +51,14 @@ export function WhatIDo() {
 
           {/* Heading: What I Do */}
           <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
-            {whatIDo.label}
+            {sectionLabel}
           </h2>
         </motion.div>
 
         {/* 3 Cards Grid */}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {whatIDo.cards.map((item, idx) => {
-            const meta = CAPABILITY_IMAGES[idx];
+          {cards.map((item, idx) => {
+            const meta = CAPABILITY_IMAGES[idx % CAPABILITY_IMAGES.length];
             const isHovered = activeCard === idx;
 
             return (

@@ -4,7 +4,15 @@ import { EmphasizedText } from "@/components/shared/EmphasizedText";
 import { Reveal } from "@/components/shared/Reveal";
 import { about } from "@/content/copy";
 
-export function About() {
+export function About({ content }) {
+  const tools = content?.aboutTools?.length ? content.aboutTools : about.tools;
+  const bio = content?.aboutBio?.length ? content.aboutBio : about.bio;
+  const roleSplit = content?.aboutRoleSplit?.length ? content.aboutRoleSplit : about.roleSplit;
+  const boundariesHeading = content?.aboutBoundariesHeading || about.boundaries.heading;
+  const boundariesParagraphs = content?.aboutBoundariesParagraphs?.length
+    ? content.aboutBoundariesParagraphs
+    : about.boundaries.paragraphs;
+
   return (
     <section id="about" className="snap-section relative py-20 md:py-28">
       <div className="relative mx-auto grid max-w-content items-start gap-12 px-6 md:px-8 lg:grid-cols-[320px_1fr] lg:gap-16">
@@ -24,13 +32,13 @@ export function About() {
             </figure>
 
             {/* Tool Chips: Design Tools, Development Tools, then Specializations */}
-            {about.tools.map((group) => (
+            {tools.map((group) => (
               <div key={group.heading} className="flex flex-col gap-3">
                 <h3 className="font-mono text-xs uppercase tracking-wider text-[#00ff88]">
                   {group.heading}
                 </h3>
                 <ul className="flex flex-wrap gap-2">
-                  {group.items.map((tool) => (
+                  {group.items?.map((tool) => (
                     <li key={tool} className="tech-badge cursor-default">
                       {tool}
                     </li>
@@ -53,8 +61,8 @@ export function About() {
           </div>
 
           <Reveal className="flex max-w-reading flex-col gap-4">
-            {about.bio.map((paragraph) => (
-              <p key={paragraph.body} className="text-base text-content-secondary leading-relaxed">
+            {bio.map((paragraph, idx) => (
+              <p key={paragraph.body || idx} className="text-base text-content-secondary leading-relaxed">
                 <EmphasizedText text={paragraph.body} emphasis={paragraph.emphasis} />
               </p>
             ))}
@@ -62,11 +70,11 @@ export function About() {
 
           {/* Role Split */}
           <Reveal className="grid gap-6 sm:grid-cols-2">
-            {about.roleSplit.map((role) => (
-              <div key={role.heading} className="tech-card flex flex-col p-6">
+            {roleSplit.map((role, idx) => (
+              <div key={role.heading || idx} className="tech-card flex flex-col p-6">
                 <h3 className="font-heading text-lg font-bold text-white">{role.heading}</h3>
                 <ul className="mt-4 flex flex-col gap-2">
-                  {role.items.map((item) => (
+                  {role.items?.map((item) => (
                     <li
                       key={item}
                       className="text-sm text-content-secondary before:mr-2 before:text-[#00ff88] before:content-['—']"
@@ -82,11 +90,11 @@ export function About() {
           {/* Boundaries / What I Don't Do */}
           <Reveal className="tech-card flex flex-col gap-4 p-6 sm:p-8">
             <h3 className="font-heading text-xl font-bold text-white">
-              {about.boundaries.heading}
+              {boundariesHeading}
             </h3>
             <div className="flex max-w-reading flex-col gap-3">
-              {about.boundaries.paragraphs.map((paragraph) => (
-                <p key={paragraph.body} className="text-sm text-content-secondary leading-relaxed">
+              {boundariesParagraphs.map((paragraph, idx) => (
+                <p key={paragraph.body || idx} className="text-sm text-content-secondary leading-relaxed">
                   <EmphasizedText text={paragraph.body} emphasis={paragraph.emphasis} />
                 </p>
               ))}

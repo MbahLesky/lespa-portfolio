@@ -6,7 +6,7 @@ import { EmphasizedText } from "@/components/shared/EmphasizedText";
 import { intro } from "@/content/copy";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-export function Intro() {
+export function Intro({ content }) {
   const reducedMotion = useReducedMotion();
 
   const fadeUp = reducedMotion
@@ -17,6 +17,9 @@ export function Intro() {
         viewport: { once: true, margin: "-80px" },
         transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
       };
+
+  const bodyText = content?.introBody || intro.body;
+  const emphasisPhrases = content?.introEmphasis || intro.emphasis;
 
   return (
     <section id="intro" className="snap-section relative overflow-hidden py-20 md:py-28">
@@ -37,7 +40,7 @@ export function Intro() {
             {/* Intro Copy with original text and emphasis */}
             <div className="mt-6 border-l-2 border-[#00ff88] pl-5 sm:pl-6">
               <p className="text-lg sm:text-xl font-normal text-gray-400 leading-relaxed">
-                <EmphasizedText text={intro.body} emphasis={intro.emphasis} />
+                <EmphasizedText text={bodyText} emphasis={emphasisPhrases} />
               </p>
             </div>
           </motion.div>

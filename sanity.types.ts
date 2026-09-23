@@ -15,6 +15,13 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
 export type Project = {
   _id: string;
   _type: "project";
@@ -27,6 +34,29 @@ export type Project = {
   subtext?: string;
   accentVar?: string;
   liveUrl?: string;
+  coverImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  hoverImageAsset?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  backdropAsset?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   image?: string;
   imageAlt?: string;
   hoverImage?: string;
@@ -35,10 +65,126 @@ export type Project = {
   orderRank?: string;
 };
 
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
 export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
+};
+
+export type SiteContent = {
+  _id: string;
+  _type: "siteContent";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  heroPill?: string;
+  heroGreeting?: string;
+  heroName?: string;
+  heroDesignerRole?: string;
+  heroDeveloperRole?: string;
+  heroSubtext?: string;
+  heroPrimaryCta?: {
+    label?: string;
+    href?: string;
+  };
+  heroSecondaryCta?: {
+    label?: string;
+    href?: string;
+  };
+  heroImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  heroBadgeName?: string;
+  heroBadgeRole?: string;
+  heroBadgeLocation?: string;
+  introBody?: string;
+  introEmphasis?: Array<string>;
+  whatIDoLabel?: string;
+  whatIDoCards?: Array<{
+    label?: string;
+    body?: string;
+    emphasis?: Array<string>;
+    _key: string;
+  }>;
+  processLabel?: string;
+  processSteps?: Array<{
+    title?: string;
+    body?: string;
+    emphasis?: Array<string>;
+    _key: string;
+  }>;
+  reachOutExchange?: {
+    day?: string;
+    messages?: Array<{
+      from?: "client" | "lespa";
+      text?: string;
+      time?: string;
+      _key: string;
+    }>;
+  };
+  processClosingBody?: string;
+  processClosingEmphasis?: Array<string>;
+  aboutLabel?: string;
+  aboutBio?: Array<{
+    body?: string;
+    emphasis?: Array<string>;
+    _key: string;
+  }>;
+  aboutRoleSplit?: Array<{
+    heading?: string;
+    items?: Array<string>;
+    _key: string;
+  }>;
+  aboutOffHoursBody?: string;
+  aboutOffHoursEmphasis?: Array<string>;
+  aboutBoundariesHeading?: string;
+  aboutBoundariesParagraphs?: Array<{
+    body?: string;
+    emphasis?: Array<string>;
+    _key: string;
+  }>;
+  aboutTools?: Array<{
+    heading?: string;
+    items?: Array<string>;
+    _key: string;
+  }>;
+  contactLabel?: string;
+  contactIntroLine?: string;
+  contactDirectHeading?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactSubmitLabel?: string;
+  contactSuccessMessage?: string;
+  contactFailureMessage?: string;
+  footerHandle?: string;
+  footerBuiltWith?: string;
+  socials?: Array<{
+    label?: string;
+    href?: string;
+    username?: string;
+    _key: string;
+  }>;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -77,22 +223,6 @@ export type SanityImageMetadata = {
   thumbHash?: string;
   hasAlpha?: boolean;
   isOpaque?: boolean;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
 };
 
 export type SanityFileAsset = {
@@ -155,15 +285,202 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | SanityImageAssetReference
   | Project
+  | SanityImageCrop
+  | SanityImageHotspot
   | Slug
+  | SiteContent
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint;
+
+// Source: ../lespa-portfolio/src/sanity/queries.ts
+// Variable: SITE_CONTENT_QUERY
+// Query: *[_type == "siteContent"][0]{    _id,    heroPill,    heroGreeting,    heroName,    heroDesignerRole,    heroDeveloperRole,    heroSubtext,    heroPrimaryCta,    heroSecondaryCta,    heroImage {      asset->{        _id,        url,        metadata {          lqip,          dimensions { width, height }        }      },      alt,      hotspot,      crop    },    heroBadgeName,    heroBadgeRole,    heroBadgeLocation,    introBody,    introEmphasis,    whatIDoLabel,    whatIDoCards,    processLabel,    processSteps,    reachOutExchange,    processClosingBody,    processClosingEmphasis,    aboutLabel,    aboutBio,    aboutRoleSplit,    aboutOffHoursBody,    aboutOffHoursEmphasis,    aboutBoundariesHeading,    aboutBoundariesParagraphs,    aboutTools,    contactLabel,    contactIntroLine,    contactDirectHeading,    contactEmail,    contactPhone,    contactSubmitLabel,    contactSuccessMessage,    contactFailureMessage,    footerHandle,    footerBuiltWith,    socials  }
+export type SITE_CONTENT_QUERY_RESULT = {
+  _id: string;
+  heroPill: string | null;
+  heroGreeting: string | null;
+  heroName: string | null;
+  heroDesignerRole: string | null;
+  heroDeveloperRole: string | null;
+  heroSubtext: string | null;
+  heroPrimaryCta: {
+    label?: string;
+    href?: string;
+  } | null;
+  heroSecondaryCta: {
+    label?: string;
+    href?: string;
+  } | null;
+  heroImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number | null;
+          height: number | null;
+        } | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  heroBadgeName: string | null;
+  heroBadgeRole: string | null;
+  heroBadgeLocation: string | null;
+  introBody: string | null;
+  introEmphasis: Array<string> | null;
+  whatIDoLabel: string | null;
+  whatIDoCards: Array<{
+    label?: string;
+    body?: string;
+    emphasis?: Array<string>;
+    _key: string;
+  }> | null;
+  processLabel: string | null;
+  processSteps: Array<{
+    title?: string;
+    body?: string;
+    emphasis?: Array<string>;
+    _key: string;
+  }> | null;
+  reachOutExchange: {
+    day?: string;
+    messages?: Array<{
+      from?: "client" | "lespa";
+      text?: string;
+      time?: string;
+      _key: string;
+    }>;
+  } | null;
+  processClosingBody: string | null;
+  processClosingEmphasis: Array<string> | null;
+  aboutLabel: string | null;
+  aboutBio: Array<{
+    body?: string;
+    emphasis?: Array<string>;
+    _key: string;
+  }> | null;
+  aboutRoleSplit: Array<{
+    heading?: string;
+    items?: Array<string>;
+    _key: string;
+  }> | null;
+  aboutOffHoursBody: string | null;
+  aboutOffHoursEmphasis: Array<string> | null;
+  aboutBoundariesHeading: string | null;
+  aboutBoundariesParagraphs: Array<{
+    body?: string;
+    emphasis?: Array<string>;
+    _key: string;
+  }> | null;
+  aboutTools: Array<{
+    heading?: string;
+    items?: Array<string>;
+    _key: string;
+  }> | null;
+  contactLabel: string | null;
+  contactIntroLine: string | null;
+  contactDirectHeading: string | null;
+  contactEmail: string | null;
+  contactPhone: string | null;
+  contactSubmitLabel: string | null;
+  contactSuccessMessage: string | null;
+  contactFailureMessage: string | null;
+  footerHandle: string | null;
+  footerBuiltWith: string | null;
+  socials: Array<{
+    label?: string;
+    href?: string;
+    username?: string;
+    _key: string;
+  }> | null;
+} | null;
+
+// Source: ../lespa-portfolio/src/sanity/queries.ts
+// Variable: PROJECTS_QUERY
+// Query: *[_type == "project"] | order(orderRank asc){    _id,    name,    "slug": slug.current,    tags,    subtext,    accentVar,    liveUrl,    coverImage {      asset->{        _id,        url,        metadata {          lqip,          dimensions { width, height }        }      },      alt,      hotspot,      crop    },    hoverImageAsset {      asset->{        _id,        url,        metadata {          lqip,          dimensions { width, height }        }      },      alt,      hotspot,      crop    },    backdropAsset {      asset->{        _id,        url,        metadata {          lqip,          dimensions { width, height }        }      },      hotspot,      crop    },    image,    imageAlt,    hoverImage,    hoverImageAlt,    backdrop,    orderRank  }
+export type PROJECTS_QUERY_RESULT = Array<{
+  _id: string;
+  name: string | null;
+  slug: string | null;
+  tags: Array<string> | null;
+  subtext: string | null;
+  accentVar: string | null;
+  liveUrl: string | null;
+  coverImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number | null;
+          height: number | null;
+        } | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  hoverImageAsset: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number | null;
+          height: number | null;
+        } | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  backdropAsset: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number | null;
+          height: number | null;
+        } | null;
+      } | null;
+    } | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  image: string | null;
+  imageAlt: string | null;
+  hoverImage: string | null;
+  hoverImageAlt: string | null;
+  backdrop: string | null;
+  orderRank: string | null;
+}>;
+
+// Query TypeMap
+declare global {
+  interface SanityQueries {
+    '*[_type == "siteContent"][0]{\n    _id,\n    heroPill,\n    heroGreeting,\n    heroName,\n    heroDesignerRole,\n    heroDeveloperRole,\n    heroSubtext,\n    heroPrimaryCta,\n    heroSecondaryCta,\n    heroImage {\n      asset->{\n        _id,\n        url,\n        metadata {\n          lqip,\n          dimensions { width, height }\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    heroBadgeName,\n    heroBadgeRole,\n    heroBadgeLocation,\n    introBody,\n    introEmphasis,\n    whatIDoLabel,\n    whatIDoCards,\n    processLabel,\n    processSteps,\n    reachOutExchange,\n    processClosingBody,\n    processClosingEmphasis,\n    aboutLabel,\n    aboutBio,\n    aboutRoleSplit,\n    aboutOffHoursBody,\n    aboutOffHoursEmphasis,\n    aboutBoundariesHeading,\n    aboutBoundariesParagraphs,\n    aboutTools,\n    contactLabel,\n    contactIntroLine,\n    contactDirectHeading,\n    contactEmail,\n    contactPhone,\n    contactSubmitLabel,\n    contactSuccessMessage,\n    contactFailureMessage,\n    footerHandle,\n    footerBuiltWith,\n    socials\n  }': SITE_CONTENT_QUERY_RESULT;
+    '*[_type == "project"] | order(orderRank asc){\n    _id,\n    name,\n    "slug": slug.current,\n    tags,\n    subtext,\n    accentVar,\n    liveUrl,\n    coverImage {\n      asset->{\n        _id,\n        url,\n        metadata {\n          lqip,\n          dimensions { width, height }\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    hoverImageAsset {\n      asset->{\n        _id,\n        url,\n        metadata {\n          lqip,\n          dimensions { width, height }\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    },\n    backdropAsset {\n      asset->{\n        _id,\n        url,\n        metadata {\n          lqip,\n          dimensions { width, height }\n        }\n      },\n      hotspot,\n      crop\n    },\n    image,\n    imageAlt,\n    hoverImage,\n    hoverImageAlt,\n    backdrop,\n    orderRank\n  }': PROJECTS_QUERY_RESULT;
+  }
+}
+// Lets @sanity/client releases that predate the global registry read it too
+declare module "@sanity/client" {
+  interface SanityQueries extends globalThis.SanityQueries {}
+}

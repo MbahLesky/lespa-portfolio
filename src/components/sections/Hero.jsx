@@ -6,13 +6,50 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { hero } from "@/content/copy";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { urlForImage } from "@/sanity/image";
 
-export function Hero({ onIntroComplete }) {
+export function Hero({ onIntroComplete, content }) {
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     onIntroComplete?.();
   }, [onIntroComplete]);
+
+  const pill = content?.heroPill || "DESIGNER & DEVELOPER";
+  const greeting = content?.heroGreeting || "Hi, I am";
+  const name = content?.heroName || "Lespa";
+  const subtext = content?.heroSubtext || hero.subtext;
+  const primaryCta = content?.heroPrimaryCta || hero.ctas.primary;
+  const secondaryCta = content?.heroSecondaryCta || hero.ctas.secondary;
+
+  const heroImageSrc = content?.heroImage
+    ? urlForImage(content.heroImage)?.width(840).height(1050).fit("crop").url() ||
+      content.heroImage.asset?.url ||
+      "/global_assets/lespa_pic1.webp"
+    : "/global_assets/lespa_pic1.webp";
+
+  const heroImageAlt =
+    content?.heroImage?.alt || "Mbah Lesky — Designer & Developer";
+  const badgeName = content?.heroBadgeName || "Mbah Lesky";
+  const badgeRole = content?.heroBadgeRole || "Designer & Developer";
+  const badgeLocation = content?.heroBadgeLocation || "Bamenda, CM";
+
+  const designerRole =
+    content?.heroDesignerRole || "A <Graphic Designer> who builds products.";
+  const developerRole =
+    content?.heroDeveloperRole || "And a <Software Developer> who designs interfaces.";
+
+  const renderRoleLine = (text) => {
+    const match = text.match(/^(.*?)<([^>]+)>(.*)$/);
+    if (!match) return <span>{text}</span>;
+    return (
+      <>
+        {match[1]}
+        <span className="text-[#00ff88]">&lt;{match[2]}&gt;</span>
+        {match[3]}
+      </>
+    );
+  };
 
   const fadeUp = reducedMotion
     ? {}
@@ -47,45 +84,41 @@ export function Hero({ onIntroComplete }) {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00ff88] opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00ff88]" />
               </span>
-              <span>DESIGNER &amp; DEVELOPER</span>
+              <span>{pill}</span>
             </div>
 
             {/* Headline: Hi, I am Lespa */}
             <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white">
-              Hi, I am <span className="text-[#00ff88]">Lespa</span>
+              {greeting} <span className="text-[#00ff88]">{name}</span>
               <span className="sr-only"> — Mbah Lesky, Graphic Designer &amp; Software Engineer in Bamenda, Cameroon</span>
             </h1>
 
             {/* Role Lines */}
             <div className="mt-4 flex flex-col gap-1 font-heading text-xl sm:text-2xl lg:text-[1.75rem] font-semibold text-content-secondary leading-snug">
-              <p>
-                A <span className="text-[#00ff88]">&lt;Graphic Designer&gt;</span> who builds products.
-              </p>
-              <p>
-                And a <span className="text-[#00ff88]">&lt;Software Developer&gt;</span> who designs interfaces.
-              </p>
+              <p>{renderRoleLine(designerRole)}</p>
+              <p>{renderRoleLine(developerRole)}</p>
             </div>
 
             {/* Subtext */}
             <p className="mt-6 max-w-xl text-base sm:text-lg text-content-secondary leading-relaxed">
-              {hero.subtext}
+              {subtext}
             </p>
 
             {/* CTAs: View Projects & About Me */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <a
-                href={hero.ctas.primary.href}
+                href={primaryCta?.href || "#work"}
                 className="glow-btn inline-flex items-center gap-2.5 rounded-lg px-6 py-3.5 font-mono text-xs uppercase tracking-wider transition-all duration-300"
               >
-                <span>{hero.ctas.primary.label}</span>
+                <span>{primaryCta?.label || "View Projects"}</span>
                 <ArrowUpRight className="h-4 w-4" />
               </a>
 
               <a
-                href={hero.ctas.secondary.href}
+                href={secondaryCta?.href || "#about"}
                 className="inline-flex items-center gap-2.5 rounded-lg border border-[#00ff88]/30 bg-[#00ff88]/10 px-6 py-3.5 font-mono text-xs uppercase tracking-wider text-[#00ff88] transition-all duration-300 hover:border-[#00ff88] hover:bg-[#00ff88]/20 hover:shadow-[0_0_20px_rgba(0,255,136,0.25)]"
               >
-                <span>{hero.ctas.secondary.label}</span>
+                <span>{secondaryCta?.label || "About Me"}</span>
               </a>
             </div>
           </motion.div>
@@ -100,8 +133,8 @@ export function Hero({ onIntroComplete }) {
               {/* Creator Photo */}
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-[#070b09]">
                 <Image
-                  src="/global_assets/lespa_pic1.webp"
-                  alt="Mbah Lesky — Designer & Developer"
+                  src={heroImageSrc}
+                  alt={heroImageAlt}
                   fill
                   priority
                   sizes="(min-width: 1024px) 420px, 100vw"
@@ -112,10 +145,10 @@ export function Hero({ onIntroComplete }) {
               {/* Badge below photo */}
               <div className="mt-3 flex items-center justify-between rounded-lg border border-white/10 bg-[#080c0a]/90 p-3 backdrop-blur-md">
                 <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-white">Mbah Lesky</span>
-                  <span className="font-mono text-xs text-[#00ff88]">Designer &amp; Developer</span>
+                  <span className="text-sm font-semibold text-white">{badgeName}</span>
+                  <span className="font-mono text-xs text-[#00ff88]">{badgeRole}</span>
                 </div>
-                <span className="font-mono text-xs text-content-secondary">Bamenda, CM</span>
+                <span className="font-mono text-xs text-content-secondary">{badgeLocation}</span>
               </div>
             </div>
           </motion.div>
