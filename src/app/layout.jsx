@@ -4,8 +4,6 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
   buildJsonLd,
   jobTitle,
-  locality,
-  country,
   personName,
   siteDescription,
   siteName,
@@ -34,13 +32,9 @@ const ibmPlexSans = localFont({
   fallback: ["system-ui", "sans-serif"],
 });
 
-const title = `${personName} | ${jobTitle} in ${locality}, ${country}`;
-
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: title,
-    // Phase 2's project and About pages will set their own.
     default: siteTitle,
     template: `%s | ${siteName}`,
   },
@@ -59,15 +53,9 @@ export const metadata = {
     "Lespa",
     "Lespa portfolio",
     "graphic designer Cameroon",
-    "brand identity designer",
     "brand identity designer Cameroon",
     "logo design Bamenda",
     "web developer Cameroon",
-    "Next.js developer",
-    "Flutter developer",
-    "UI UX designer",
-    "Lespa",
-    "Mbah Lesky",
     "software engineer Cameroon",
     "Flutter developer Cameroon",
     "Next.js developer Cameroon",
@@ -78,7 +66,6 @@ export const metadata = {
     "Lesky Mbah",
   ],
   category: "Design & Development",
-  alternates: { canonical: "/" },
   alternates: {
     canonical: "/",
   },
@@ -93,27 +80,24 @@ export const metadata = {
     username: "iamlespa",
     url: siteUrl,
     siteName,
-    title,
     title: siteTitle,
     description: siteDescription,
     locale: "en_US",
     images: [
       {
-        url: "/global_assets/social_share.webp",
+        url: "/global_assets/lespa_pic1.webp",
         width: 1200,
-        height: 630,
-        alt: `${personName} — ${jobTitle}`,
+        height: 1200,
         alt: `${personName} (${siteName}) — ${jobTitle}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title,
     title: siteTitle,
     description: siteDescription,
     creator: "@iamlespa",
-    images: ["/global_assets/social_share.webp"],
+    images: ["/global_assets/lespa_pic1.webp"],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
@@ -150,8 +134,6 @@ export default function RootLayout({ children }) {
             describe something the page does not say. */}
         <script
           type="application/ld+json"
-          // The payload is our own content, serialised here; nothing user-supplied
-          // reaches it.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd()) }}
         />
       </head>
