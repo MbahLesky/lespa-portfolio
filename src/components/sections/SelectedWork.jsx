@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { projects as fallbackProjects } from "@/content/projects";
+import { urlForImage } from "@/sanity/image";
 
 export function SelectedWork({ projects: initialProjects }) {
   const reducedMotion = useReducedMotion();
@@ -22,6 +23,26 @@ export function SelectedWork({ projects: initialProjects }) {
         viewport: { once: true, margin: "-60px" },
         transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
       };
+
+  const getImageSrc = (proj) => {
+    if (proj?.coverImage) {
+      return (
+        urlForImage(proj.coverImage)?.width(1000).height(625).fit("crop").url() ||
+        proj.coverImage.asset?.url ||
+        proj.image
+      );
+    }
+    return proj?.image || "";
+  };
+
+  const getImageAlt = (proj) => {
+    return (
+      proj?.coverImage?.alt ||
+      proj?.imageAlt ||
+      proj?.name ||
+      "Project mockup"
+    );
+  };
 
   return (
     <section id="work" className="snap-section relative overflow-hidden py-20 md:py-28">
@@ -44,10 +65,14 @@ export function SelectedWork({ projects: initialProjects }) {
             // Hierarchical layout: Item 0 and Item 3 are featured wide cards spanning 2 columns
             const isFeatured = idx === 0 || idx === 3;
             const isHovered = activeIdx === idx;
+            const imageSrc = getImageSrc(project);
+            const imageAlt = getImageAlt(project);
+            const lqip = project.coverImage?.asset?.metadata?.lqip;
 
             return (
               <motion.div
                 key={project.slug || project.name}
+                key={project.slug || project.name || idx}
                 {...fadeUp}
                 transition={{
                   duration: 0.5,
@@ -76,6 +101,17 @@ export function SelectedWork({ projects: initialProjects }) {
                           sizes="(min-width: 1024px) 700px, 100vw"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
+                        {imageSrc && (
+                          <Image
+                            src={imageSrc}
+                            alt={imageAlt}
+                            fill
+                            placeholder={lqip ? "blur" : "empty"}
+                            blurDataURL={lqip || undefined}
+                            sizes="(min-width: 1024px) 700px, 100vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        )}
                       </div>
                     </div>
 
@@ -129,6 +165,17 @@ export function SelectedWork({ projects: initialProjects }) {
                           sizes="(min-width: 1024px) 600px, 100vw"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
+                        {imageSrc && (
+                          <Image
+                            src={imageSrc}
+                            alt={imageAlt}
+                            fill
+                            placeholder={lqip ? "blur" : "empty"}
+                            blurDataURL={lqip || undefined}
+                            sizes="(min-width: 1024px) 600px, 100vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        )}
                       </div>
                     </div>
 

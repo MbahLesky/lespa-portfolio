@@ -25,7 +25,7 @@ import { CursorFollower } from "@/components/shared/CursorFollower";
  * 6. About
  * 7. Contact & Manifest
  */
-export function HomeShell({ projects }) {
+export function HomeShell({ projects, siteContent }) {
   const [introComplete, setIntroComplete] = useState(true);
 
   return (
@@ -40,13 +40,16 @@ export function HomeShell({ projects }) {
 
       {/* Clears the pinned footer */}
       <main id="main" className="relative z-10 pb-16 lg:pb-20">
-        <Hero onIntroComplete={() => setIntroComplete(true)} />
-        <Intro />
+        <Hero
+          onIntroComplete={() => setIntroComplete(true)}
+          content={siteContent}
+        />
+        <Intro content={siteContent} />
         <SelectedWork projects={projects} />
-        <WhatIDo />
-        <Process />
-        <About />
-        <Contact />
+        <WhatIDo content={siteContent} />
+        <Process content={siteContent} />
+        <About content={siteContent} />
+        <Contact content={siteContent} />
       </main>
     </>
   );

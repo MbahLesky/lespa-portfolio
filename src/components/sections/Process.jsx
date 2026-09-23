@@ -18,11 +18,22 @@ const STEP_IMAGES = [
   "/monilog_images/lespa_monilog_web.webp",
 ];
 
-export function Process() {
+export function Process({ content }) {
   const finePointer = useFinePointer();
   const reducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
-  const active = processCopy.steps[activeIndex];
+
+  const sectionLabel = content?.processLabel || processCopy.label;
+  const steps = content?.processSteps?.length ? content.processSteps : processCopy.steps;
+  const reachOutExchange =
+    content?.reachOutExchange?.messages?.length
+      ? content.reachOutExchange
+      : processCopy.reachOutExchange;
+  const closingBody = content?.processClosingBody || processCopy.closing.body;
+  const closingEmphasis =
+    content?.processClosingEmphasis || processCopy.closing.emphasis;
+
+  const active = steps[activeIndex] || steps[0];
 
   const fadeUp = reducedMotion
     ? {}
@@ -44,7 +55,7 @@ export function Process() {
 
           {/* Heading */}
           <h2 className="mt-3 font-heading text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
-            {processCopy.label}
+            {sectionLabel}
           </h2>
         </motion.div>
 
@@ -52,11 +63,11 @@ export function Process() {
         <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_1.3fr] lg:items-start lg:gap-16">
           {/* Left Column: Numbered Step List */}
           <div className="flex flex-col gap-3">
-            {processCopy.steps.map((step, index) => {
+            {steps.map((step, index) => {
               const selected = index === activeIndex;
 
               return (
-                <div key={step.title} className="flex flex-col">
+                <div key={step.title || index} className="flex flex-col">
                   <button
                     type="button"
                     aria-current={selected}
@@ -90,8 +101,8 @@ export function Process() {
                     <StepContent
                       step={step}
                       index={index}
-                      image={STEP_IMAGES[index]}
-                      exchange={index === 0 ? processCopy.reachOutExchange : null}
+                      image={STEP_IMAGES[index % STEP_IMAGES.length]}
+                      exchange={index === 0 ? reachOutExchange : null}
                     />
                   </div>
                 </div>
@@ -103,11 +114,11 @@ export function Process() {
           <div className="hidden lg:sticky lg:top-28 lg:block">
             <AnimatePresence mode="wait">
               <StepContent
-                key={active.title}
+                key={active.title || activeIndex}
                 step={active}
                 index={activeIndex}
-                image={STEP_IMAGES[activeIndex]}
-                exchange={activeIndex === 0 ? processCopy.reachOutExchange : null}
+                image={STEP_IMAGES[activeIndex % STEP_IMAGES.length]}
+                exchange={activeIndex === 0 ? reachOutExchange : null}
               />
             </AnimatePresence>
           </div>
@@ -117,8 +128,8 @@ export function Process() {
         <motion.div {...fadeUp} className="mt-16 max-w-3xl border-t border-white/10 pt-8">
           <p className="text-base sm:text-lg text-content-secondary leading-relaxed">
             <EmphasizedText
-              text={processCopy.closing.body}
-              emphasis={processCopy.closing.emphasis}
+              text={closingBody}
+              emphasis={closingEmphasis}
             />
           </p>
         </motion.div>
