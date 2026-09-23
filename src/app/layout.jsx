@@ -1,4 +1,5 @@
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/react";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
@@ -146,6 +147,7 @@ export default function RootLayout({ children }) {
         </a>
         {children}
         <SiteFooter />
+        <Analytics />
       </body>
     </html>
   );
