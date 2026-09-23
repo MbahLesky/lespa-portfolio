@@ -4,6 +4,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
   buildJsonLd,
   jobTitle,
+  locality,
+  country,
   personName,
   siteDescription,
   siteName,
@@ -32,9 +34,13 @@ const ibmPlexSans = localFont({
   fallback: ["system-ui", "sans-serif"],
 });
 
+const title = `${personName} | ${jobTitle} in ${locality}, ${country}`;
+
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
+    default: title,
+    // Phase 2's project and About pages will set their own.
     default: siteTitle,
     template: `%s | ${siteName}`,
   },
@@ -53,9 +59,15 @@ export const metadata = {
     "Lespa",
     "Lespa portfolio",
     "graphic designer Cameroon",
+    "brand identity designer",
     "brand identity designer Cameroon",
     "logo design Bamenda",
     "web developer Cameroon",
+    "Next.js developer",
+    "Flutter developer",
+    "UI UX designer",
+    "Lespa",
+    "Mbah Lesky",
     "software engineer Cameroon",
     "Flutter developer Cameroon",
     "Next.js developer Cameroon",
@@ -66,6 +78,7 @@ export const metadata = {
     "Lesky Mbah",
   ],
   category: "Design & Development",
+  alternates: { canonical: "/" },
   alternates: {
     canonical: "/",
   },
@@ -80,6 +93,7 @@ export const metadata = {
     username: "iamlespa",
     url: siteUrl,
     siteName,
+    title,
     title: siteTitle,
     description: siteDescription,
     locale: "en_US",
@@ -88,12 +102,14 @@ export const metadata = {
         url: "/global_assets/social_share.webp",
         width: 1200,
         height: 630,
+        alt: `${personName} — ${jobTitle}`,
         alt: `${personName} (${siteName}) — ${jobTitle}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
+    title,
     title: siteTitle,
     description: siteDescription,
     creator: "@iamlespa",
