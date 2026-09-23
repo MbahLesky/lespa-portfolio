@@ -71,7 +71,6 @@ export function SelectedWork({ projects: initialProjects }) {
 
             return (
               <motion.div
-                key={project.slug || project.name}
                 key={project.slug || project.name || idx}
                 {...fadeUp}
                 transition={{
