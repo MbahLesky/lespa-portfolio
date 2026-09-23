@@ -53,6 +53,7 @@ export function Hero({ onIntroComplete }) {
             {/* Headline: Hi, I am Lespa */}
             <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white">
               Hi, I am <span className="text-[#00ff88]">Lespa</span>
+              <span className="sr-only"> — Mbah Lesky, Graphic Designer &amp; Software Engineer in Bamenda, Cameroon</span>
             </h1>
 
             {/* Role Lines */}
