@@ -35,7 +35,7 @@ export function Hero({ onIntroComplete, content }) {
   const badgeLocation = content?.heroBadgeLocation || "Bamenda, CM";
 
   const designerRole =
-    content?.heroDesignerRole || "A <Graphic Designer> who builds products.";
+    content?.heroDesignerRole || "A #Graphic Designer# who builds products.";
   const developerRole =
     content?.heroDeveloperRole || "And a <Software Developer> who designs interfaces.";
 
