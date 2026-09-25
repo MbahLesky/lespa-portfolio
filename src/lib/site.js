@@ -23,7 +23,7 @@ function resolveSiteUrl() {
     return `https://${vercelPreview.replace(/\/$/, "")}`;
   }
 
-  return "https://lespa.vercel.app";
+  return "https://iamlespa.com";
 }
 
 export const siteUrl = resolveSiteUrl();
