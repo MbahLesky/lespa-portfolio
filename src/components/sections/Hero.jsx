@@ -40,13 +40,20 @@ export function Hero({ onIntroComplete, content }) {
     content?.heroDeveloperRole || "And a <Software Developer> who designs interfaces.";
 
   const renderRoleLine = (text) => {
-    const match = text.match(/^(.*?)<([^>]+)>(.*)$/);
+    const match = text.match(/^(.*?)(?:<([^>]+)>|#([^#]+)#)(.*)$/);
     if (!match) return <span>{text}</span>;
+
+    const [, before, angleText, hashText, after] = match;
+    const highlightedText = angleText || hashText;
+    const delimiter = angleText ? ["<", ">"] : ["#", "#"];
+
     return (
       <>
-        {match[1]}
-        <span className="text-[#00ff88]">&lt;{match[2]}&gt;</span>
-        {match[3]}
+        {before}
+        <span className="text-[#00ff88]">
+          {delimiter[0]}{highlightedText}{delimiter[1]}
+        </span>
+        {after}
       </>
     );
   };
@@ -116,7 +123,7 @@ export function Hero({ onIntroComplete, content }) {
 
               <a
                 href={secondaryCta?.href || "#about"}
-                className="inline-flex items-center gap-2.5 rounded-lg border border-[#00ff88]/30 bg-[#00ff88]/10 px-6 py-3.5 font-mono text-xs uppercase tracking-wider text-[#00ff88] transition-all duration-300 hover:border-[#00ff88] hover:bg-[#00ff88]/20 hover:shadow-[0_0_20px_rgba(0,255,136,0.25)]"
+                className="inline-flex items-center gap-2.5 rounded-lg border border-[#00ff88]/30 bg-[#00ff88]/10 px-6 py-3.5 font-mono text-xs uppercase tracking-wider text-[#00ff88] transition-all duration-300"
               >
                 <span>{secondaryCta?.label || "About Me"}</span>
               </a>
