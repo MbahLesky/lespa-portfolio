@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  allowedDevOrigins: [
+    "ais-dev-b5jyngw2ykzm5stbbly344-337647498459.europe-west1.run.app",
+    "*.europe-west1.run.app",
+    "*.run.app",
+  ],
+
   async redirects() {
     return [
       // Contact used to be its own page and is now a section of the home page.

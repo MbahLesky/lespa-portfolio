@@ -259,6 +259,7 @@ export function Contact({ content }) {
                 </span>
                 <a
                   href={`mailto:${directEmail}`}
+                  suppressHydrationWarning
                   className="text-sm sm:text-base font-semibold text-white transition-colors duration-200 hover:text-[#00ff88]"
                 >
                   {directEmail}
@@ -277,6 +278,7 @@ export function Contact({ content }) {
                 </span>
                 <a
                   href={`tel:${directPhone.replace(/\s+/g, "")}`}
+                  suppressHydrationWarning
                   className="text-sm sm:text-base font-semibold text-white transition-colors duration-200 hover:text-[#00ff88]"
                 >
                   {directPhone}

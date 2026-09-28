@@ -57,6 +57,7 @@ export function SiteHeader({ revealed = false }) {
             width={92}
             height={28}
             priority
+            style={{ width: "auto", height: "auto" }}
             className="h-7 w-auto"
           />
         </a>

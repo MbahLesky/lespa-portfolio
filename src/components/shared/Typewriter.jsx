@@ -39,15 +39,20 @@ export function Typewriter({
       typeof segment === "string" ? { text: segment } : segment,
     );
 
-    // Character counts at which a segment ends — the points that hold.
     const stops = new Set();
-    let total = 0;
-    list.forEach((segment, index) => {
-      total += segment.text.length;
-      if (index < list.length - 1) stops.add(total);
-    });
+    const computed = [];
+    let currentTotal = 0;
 
-    return { segments: list, length: total, pauseAt: stops };
+    for (let i = 0; i < list.length; i++) {
+      const seg = list[i];
+      computed.push({ ...seg, start: currentTotal });
+      currentTotal += seg.text.length;
+      if (i < list.length - 1) {
+        stops.add(currentTotal);
+      }
+    }
+
+    return { segments: computed, length: currentTotal, pauseAt: stops };
   }, [text]);
 
   useEffect(() => {
@@ -55,10 +60,12 @@ export function Typewriter({
 
     // Reduced motion gets the finished line with no animation at all.
     if (reducedMotion) {
-      setCount(length);
-      setDone(true);
-      onDone?.();
-      return;
+      const timer = window.setTimeout(() => {
+        setCount(length);
+        setDone(true);
+        onDone?.();
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
 
     let timer;
@@ -83,15 +90,10 @@ export function Typewriter({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, length, pauseAt, reducedMotion, segmentPause, speed, startDelay]);
 
-  // Each segment renders only the part of itself that has been typed, so a
-  // keyword starts taking its colour as it appears rather than after the fact.
-  let consumed = 0;
-
   return (
     <span className={className} aria-hidden="true">
       {segments.map((segment, index) => {
-        const visible = segment.text.slice(0, Math.max(0, count - consumed));
-        consumed += segment.text.length;
+        const visible = segment.text.slice(0, Math.max(0, count - segment.start));
 
         if (!visible) return null;
 
