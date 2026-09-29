@@ -12,6 +12,7 @@ import { SelectedWork } from "@/components/sections/SelectedWork";
 import { WhatIDo } from "@/components/sections/WhatIDo";
 import { BackdropField } from "@/components/shared/BackdropField";
 import { CursorFollower } from "@/components/shared/CursorFollower";
+import { RevealSection } from "@/components/shared/RevealSection";
 
 /**
  * The interactive client shell for the home page.
@@ -44,12 +45,24 @@ export function HomeShell({ projects, siteContent }) {
           onIntroComplete={() => setIntroComplete(true)}
           content={siteContent}
         />
-        <Intro content={siteContent} />
-        <SelectedWork projects={projects} />
-        <WhatIDo content={siteContent} />
-        <Process content={siteContent} />
-        <About content={siteContent} />
-        <Contact content={siteContent} />
+        <RevealSection>
+          <Intro content={siteContent} />
+        </RevealSection>
+        <RevealSection>
+          <SelectedWork projects={projects} />
+        </RevealSection>
+        <RevealSection>
+          <WhatIDo content={siteContent} />
+        </RevealSection>
+        <RevealSection>
+          <Process content={siteContent} />
+        </RevealSection>
+        <RevealSection>
+          <About content={siteContent} />
+        </RevealSection>
+        <RevealSection>
+          <Contact content={siteContent} />
+        </RevealSection>
       </main>
     </>
   );
