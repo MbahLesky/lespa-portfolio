@@ -54,11 +54,10 @@ export function SiteHeader({ revealed = false }) {
           <Image
             src="/global_assets/lespa_wordmark_green_dark.svg"
             alt="Lespa"
-            width={92}
-            height={28}
+            width={80}
+            height={60}
             priority
-            style={{ width: "auto", height: "auto" }}
-            className="h-7 w-auto"
+            className="h-10 w-auto"
           />
         </a>
 
