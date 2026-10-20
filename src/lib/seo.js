@@ -37,7 +37,7 @@ export function buildJsonLd() {
     "@type": "Person",
     "@id": `${siteUrl}/#person`,
     name: personName,
-    alternateName: [siteName, "iamlespa", "Lesky Mbah"],
+    alternateName: [siteName, "iamlespa", "Lesky Mbah", "Lespa"],
     jobTitle: [
       "Graphic Designer",
       "Software Engineer",
