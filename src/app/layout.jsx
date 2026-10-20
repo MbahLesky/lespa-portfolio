@@ -71,8 +71,13 @@ export const metadata = {
     canonical: "/",
   },
   icons: {
-    icon: [{ url: "/global_assets/lespa_icon_green_dark.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/global_assets/lespa_icon_green_dark.svg" }],
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+    ],
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     type: "profile",
@@ -130,6 +135,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${saira.variable} ${ibmPlexSans.variable} dark`}>
       <head>
+        <meta name="p:domain_verify" content="9b933d88d227782861da74726ca75f3d" />
         {/* Structured data — who this is, what the site is, and the work on it.
             Built from the same content modules the page renders, so it cannot
             describe something the page does not say. */}

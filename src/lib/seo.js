@@ -19,7 +19,7 @@ export const countryCode = "CM";
  * Title length: 55-60 characters (avoids truncation on mobile and desktop).
  * Description length: ~155 characters (matches Google SERP snippet display limit).
  */
-export const siteTitle = `${personName} (${siteName}) | Designer & Software Engineer, ${country}`;
+export const siteTitle = `${personName} (${siteName}) | Designer & Software Engineer`;
 
 export const siteDescription = `${personName} (${siteName}) is a graphic designer & software engineer in ${locality}, ${country}, crafting distinctive brand identities, custom websites, and mobile apps.`;
 
